@@ -1,0 +1,217 @@
+* {
+  margin: 0;
+  padding: 0;
+  font-family: "Lexend", sans-serif;
+}
+body {
+  margin: 0 auto;
+  background-color: #307bff;
+}
+.webgl {
+  /* position: fixed; */
+  margin-top: -4px;
+  margin-bottom: -4px;
+  top: 0;
+  left: 0;
+  outline: none;
+}
+#matter {
+  position: fixed;
+  bottom: 0;
+  margin-top: 10px;
+}
+.emblem {
+  width: 60%;
+  transition: 0.5s;
+  fill: white;
+  position: absolute;
+}
+.overlay {
+  height: 0;
+  width: 100%;
+  position: fixed;
+  z-index: 50;
+  bottom: 0;
+  left: 0;
+  background-color: rgb(0, 0, 0);
+  background-color: rgba(0, 0, 0, 0.9);
+  overflow-x: hidden;
+  transition: 0.5s;
+}
+
+.overlay-content {
+  position: relative;
+  width: 100%;
+  text-align: left;
+  color: white;
+  
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.overlay-text{
+  max-width: 600px;
+  width: 85%;
+  /* background-color: red; */
+}
+.overlay-text h3{
+  font-size: 60px;
+}
+.overlay-text p{
+  text-justify: inter-word;
+  text-align: justify;
+}
+
+.overlay a {
+  padding: 8px;
+  text-decoration: none;
+  font-size: 36px;
+  color: #818181;
+  display: block;
+  transition: 0.3s;
+}
+
+.overlay a:hover,
+.overlay a:focus {
+  color: #f1f1f1;
+}
+
+.overlay .closebtn {
+  position: absolute;
+  top: 20px;
+  right: 45px;
+  font-size: 60px;
+}
+
+.scroller {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: fixed;
+  bottom: 0;
+  z-index: 10;
+  width: 100%;
+  height: 70px;
+  pointer-events: none;
+}
+.scroll-button {
+  background-color: white;
+  box-shadow: 20px 20px 50px rgba(0, 9, 0, 0.5);
+  border-radius: 25px;
+  padding: 10px 30px;
+  cursor: pointer;
+  pointer-events: visible;
+  transition: 0.4s;
+  margin: 0 1rem;
+}
+.scroll-button:hover {
+  scale: 1.1;
+  box-shadow: 5px 5px 20px rgba(0, 9, 0, 0.5);
+}
+.container {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  max-width: 1200px;
+  flex-wrap: wrap;
+  z-index: 1;
+  margin-top: -3px;
+  pointer-events: none;
+  min-width: 100vw;
+  min-height: 100vh;
+  margin-top: 100vh;
+  /* background: linear-gradient(0deg, rgba(0,0,0,0.592874649859944) 84%, rgba(0,0,0,0) 100%); */
+}
+.card {
+  position: relative;
+  width: 280px;
+  height: 400px;
+  margin: 30px;
+  pointer-events: visible;
+  border-radius: 15px;
+  background: rgba(0, 0, 0, 0.4);
+  overflow: hidden;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-top: 1px solid rgba(255, 255, 255, 0.3);
+  border-left: 1px solid rgba(255, 255, 255, 0.3);
+  backdrop-filter: blur(5px);
+  -webkit-backdrop-filter: blur(5px);
+  -webkit-transition: background 0.5s;
+  -ms-transition: background 0.5s;
+  transition: background 0.5s;
+  color: white;
+  box-shadow: 0 50px 100px rgba(0, 0, 0, 0.6);
+}
+.card-info {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  text-align: center;
+  width: 80%;
+  transform: translateY(200px);
+  opacity: 0;
+  transition: 0.5s;
+}
+.card:hover .card-info {
+  transform: translateY(0px);
+  opacity: 1;
+}
+.card:hover .emblem {
+  transform: translateY(-200px);
+  opacity: 0;
+}
+.card-info p {
+  font-weight: 300;
+}
+.card-info a {
+  margin-top: 5rem;
+  color: white;
+}
+.github:hover {
+  background: rgba(0, 0, 0, 0.6);
+}
+.behance:hover {
+  background: rgba(5, 62, 255, 0.6);
+}
+.grupify:hover {
+  background: rgba(239, 60, 102, 0.9);
+}
+h2 {
+  font-size: 40px;
+  font-weight: 600;
+}
+#andrzejczak {
+  height: 100vh;
+  width: 80%;
+  position: absolute;
+  -webkit-filter: drop-shadow(10px 10px 10px rgba(0, 0, 0, 0.3));
+  filter: drop-shadow(10px 10px 10px rgba(0, 0, 0, 0.3));
+  z-index: 0;
+  padding: 5rem;
+}
+.mobile-matter {
+  position: fixed;
+  top: 0;
+  width: 100%;
+  height: 100vh;
+  align-items: center;
+  justify-content: center;
+  background-color: #307bff;
+  display: none;
+}
+@media screen and (max-width: 900px) {
+  #matter {
+    display: none;
+  }
+  .mobile-matter {
+    display: flex;
+  }
+  .container {
+    margin-bottom: 5rem;
+  }
+}
