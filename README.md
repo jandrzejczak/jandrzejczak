@@ -1,6 +1,6 @@
 
 # <div align="center">jordan andrzejczak.</div>  
-#### <div align="center">student, web engineer.</div>  
+#### <div align="center">web engineer, graphic designer, student.</div>  
  
 <br/>  
 
