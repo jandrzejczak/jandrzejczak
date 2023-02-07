@@ -59,10 +59,18 @@ function init() {
 
   const controls = new OrbitControls(camera, renderer.domElement);
   controls.addEventListener("change", render); // use if there is no animation loop
+  controls.autoRotate = true;
   controls.minDistance = 0;
   controls.maxDistance = 10;
   controls.target.set(0, 0, -0.2);
   controls.update();
+
+  animate();
+  function animate() {
+    requestAnimationFrame( animate );
+   renderer.render( scene, camera );
+   controls.update();
+   }
 
   window.addEventListener("resize", onWindowResize);
 }
@@ -87,7 +95,7 @@ function render() {
 
 <style scoped>
 .face-bg {
-  z-index: -1;
+  /* z-index: -1; */
   position: fixed;
   top: 0;
   left: 0;

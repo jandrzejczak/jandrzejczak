@@ -1,12 +1,19 @@
 <script setup lang="ts">
 import { RouterLink, RouterView } from "vue-router";
 import HelloWorld from "./components/HelloWorld.vue";
+import gsap from "gsap";
 import FaceBackground from "./components/FaceBackground.vue";
 import Loading from "./components/Loading.vue";
+import { onMounted } from "vue";
+
+
+onMounted(() => {
+ 
+})
 </script>
 
 <template>
-<loading></loading>
+  <loading></loading>
   <face-background></face-background>
 </template>
 
@@ -75,5 +82,5 @@ nav a:first-of-type {
 </style>
 
 <style lang="scss">
-  @import './assets/styles/main.scss';
+@import './assets/styles/main.scss';
 </style>
