@@ -6,18 +6,39 @@ import FaceBackground from "./components/FaceBackground.vue";
 import Loading from "./components/Loading.vue";
 import { onMounted } from "vue";
 
+function setupCursor() {
+  let mouseCursor = document.querySelector(".cursor") as HTMLElement;
+  window.addEventListener("mousemove", (e) => {
+    mouseCursor.style.top = e.pageY + "px";
+    mouseCursor.style.left = e.pageX + "px";
+  });
+}
 
 onMounted(() => {
- 
-})
+  setupCursor();
+ });
 </script>
 
 <template>
+  <div class="cursor"></div>
   <loading></loading>
   <face-background></face-background>
 </template>
 
 <style scoped>
+.cursor {
+  top: 0;
+  left: 0;
+  width: 3rem;
+  height: 3rem;
+  border: 2px solid black;
+  border-radius: 50%;
+  position: fixed;
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+  z-index: 999;
+}
+
 header {
   line-height: 1.5;
   max-height: 100vh;
@@ -82,5 +103,5 @@ nav a:first-of-type {
 </style>
 
 <style lang="scss">
-@import './assets/styles/main.scss';
+@import "./assets/styles/main.scss";
 </style>
