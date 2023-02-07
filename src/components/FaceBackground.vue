@@ -114,7 +114,7 @@ function render() {
 
 <style scoped>
 .face-bg {
-  /* z-index: -1; */
+  z-index: -1;
   position: fixed;
   top: 0;
   left: 0;

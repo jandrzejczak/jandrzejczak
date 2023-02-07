@@ -20,12 +20,17 @@ onMounted(() => {
 </script>
 
 <template>
+  <div class="navigation">
+    <div class="item"></div>
+    <div class="item"></div>
+    <div class="item"></div>
+  </div>
   <div class="cursor"></div>
   <loading></loading>
   <face-background></face-background>
 </template>
 
-<style scoped>
+<style scoped lang="scss">
 .cursor {
   top: 0;
   left: 0;
@@ -38,7 +43,24 @@ onMounted(() => {
   pointer-events: none;
   z-index: 999;
 }
-
+.navigation {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 300px;
+  backdrop-filter: blur(1px) contrast(12) grayscale(1);
+  mix-blend-mode: screen;
+  z-index: 1000;
+  // .item {
+  //   width: 150px;
+  //   height: 50px;
+  //   margin-right: 1rem;
+  //   background-color: green !important;
+  //   position: absolute;
+  //   z-index: 10000;
+  // }
+}
 header {
   line-height: 1.5;
   max-height: 100vh;
