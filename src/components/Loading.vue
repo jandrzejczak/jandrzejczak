@@ -11,6 +11,13 @@ onMounted(() => {
   ml4.durationOut = 600;
   ml4.delay = 500;
 
+  anime({
+      targets: "#andrzejczak path",
+      strokeDashoffset: [anime.setDashoffset, 0],
+      easing: "easeInOutCirc",
+      duration: 7500,
+    });
+
   anime
     .timeline({ loop: true })
     .add({

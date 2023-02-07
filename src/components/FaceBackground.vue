@@ -15,8 +15,6 @@ onMounted(() => {
 
 function init() {
   var container = document.getElementById("face");
-
-  console.log(container);
   camera = new THREE.PerspectiveCamera(
     45,
     window.innerWidth / window.innerHeight,
@@ -28,10 +26,10 @@ function init() {
   scene = new THREE.Scene();
 
   const dracoLoader = new DRACOLoader();
-  dracoLoader.setDecoderPath("../public/jsm/libs/draco/");
+  dracoLoader.setDecoderPath("/jsm/libs/draco/");
 
   new RGBELoader()
-    .setPath("../public/")
+    .setPath("/")
     .load("royal_esplanade_1k.hdr", function (texture) {
       texture.mapping = THREE.EquirectangularReflectionMapping;
 
@@ -40,7 +38,7 @@ function init() {
       render();
 
       // model
-      const loader = new GLTFLoader().setPath("../public/models/");
+      const loader = new GLTFLoader().setPath("/models/");
       loader.setDRACOLoader(dracoLoader);
       loader.load("face.glb", function (gltf) {
         console.log("object ready");
