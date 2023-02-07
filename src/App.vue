@@ -31,7 +31,7 @@ onMounted(() => {
   left: 0;
   width: 3rem;
   height: 3rem;
-  border: 2px solid black;
+  border: 2px solid var(--color-text);
   border-radius: 50%;
   position: fixed;
   transform: translate(-50%, -50%);

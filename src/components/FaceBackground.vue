@@ -6,11 +6,22 @@ import { DRACOLoader } from "three/addons/loaders/DRACOLoader.js";
 import { RGBELoader } from "three/addons/loaders/RGBELoader.js";
 import { onMounted } from "vue";
 
-let camera, scene, renderer;
+let camera, scene, renderer, model;
+
+let mousePosition = {
+  x: 0,
+  y: 0,
+}
 
 onMounted(() => {
   init();
   render();
+
+  window.addEventListener("mousemove", (e) => {
+    mousePosition.x = window.innerWidth/2 - e.pageX;
+    mousePosition.y = window.innerHeight/2 - e.pageY;
+    // console.table({x: mousePosition.x, y: mousePosition.y})
+  });
 });
 
 function init() {
@@ -21,7 +32,7 @@ function init() {
     0.25,
     20
   );
-  camera.position.set(-1.8, 0.6, 2.7);
+  camera.position.set(-1, 0, 0);
 
   scene = new THREE.Scene();
 
@@ -42,6 +53,7 @@ function init() {
       loader.setDRACOLoader(dracoLoader);
       loader.load("face.glb", function (gltf) {
         console.log("object ready");
+        model = gltf.scene;
         scene.add(gltf.scene);
 
         render();
@@ -59,20 +71,25 @@ function init() {
 
   const controls = new OrbitControls(camera, renderer.domElement);
   controls.addEventListener("change", render); // use if there is no animation loop
-  controls.autoRotate = true;
+  // controls.autoRotate = true;
   controls.minDistance = 0;
   controls.maxDistance = 10;
-  controls.target.set(0, 0, -0.2);
+  controls.target.set(1, 0, 0);
   controls.update();
 
   animate();
   function animate() {
-    requestAnimationFrame( animate );
-   renderer.render( scene, camera );
-   controls.update();
-   }
+    if (model) {
+      model.rotation.x = mousePosition.y / (3 * window.innerWidth);
+      model.rotation.y = mousePosition.x / (3 * window.innerHeight);
+    };
+    requestAnimationFrame(animate);
+    renderer.render(scene, camera);
+    controls.update();
+  }
 
   window.addEventListener("resize", onWindowResize);
+  
 }
 
 function onWindowResize() {
@@ -87,6 +104,8 @@ function onWindowResize() {
 function render() {
   renderer.render(scene, camera);
 }
+
+
 </script>
 
 <template>
