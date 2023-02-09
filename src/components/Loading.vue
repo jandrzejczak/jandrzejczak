@@ -77,7 +77,7 @@ onMounted(() => {
   </div>
 </template>
 
-<style scoped>
+<style scoped lang="scss">
 .necuro-logo {
     font-family: 'Questrial', sans-serif;
     font-size: 4rem;
@@ -87,6 +87,18 @@ onMounted(() => {
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
+  z-index: 999;
+  &::after {
+    content: "";
+    position: fixed;
+    left: 50%;
+    top: 50%;
+    width: 100vw;
+    height: 100vh;
+    transform: translate(-50%, -50%);
+    z-index: -1;
+    background-color: var(--color-background);
+  }
 }
 .ml4 {
   position: relative;

@@ -6,26 +6,28 @@ import { DRACOLoader } from "three/addons/loaders/DRACOLoader.js";
 import { RGBELoader } from "three/addons/loaders/RGBELoader.js";
 import { onMounted } from "vue";
 
+const emit = defineEmits(["scene-ready"]);
+
 let camera, scene, renderer, model;
 
 let mousePosition = {
   x: 0,
   y: 0,
-}
+};
 
 onMounted(() => {
   init();
   render();
 
   window.addEventListener("mousemove", (e) => {
-    mousePosition.x = window.innerWidth/2 - e.pageX;
-    mousePosition.y = window.innerHeight/2 - e.pageY;
+    mousePosition.x = window.innerWidth / 2 - e.pageX;
+    mousePosition.y = window.innerHeight / 2 - e.pageY;
     // console.table({x: mousePosition.x, y: mousePosition.y})
   });
 });
 
 function init() {
-  var container = document.getElementById("face");
+  var container = document.getElementById("face") as HTMLElement;
   camera = new THREE.PerspectiveCamera(
     45,
     window.innerWidth / window.innerHeight,
@@ -52,8 +54,21 @@ function init() {
       const loader = new GLTFLoader().setPath("/models/");
       loader.setDRACOLoader(dracoLoader);
       loader.load("face.glb", function (gltf) {
-        console.log("object ready");
+        emit("scene-ready", true);
         model = gltf.scene;
+
+        // const newMaterial = new THREE.MeshPhongMaterial({
+        //   color: 0xff0000,
+        //   shininess: 10,
+        // });
+
+        // model.traverse((o) => {
+        //   o.material = newMaterial;
+        // });
+
+        const light = new THREE.PointLight(0xff0000, 1, 1);
+        light.position.set(0, 0, 0);
+        scene.add(light);
         scene.add(gltf.scene);
 
         render();
@@ -82,14 +97,13 @@ function init() {
     if (model) {
       model.rotation.x = mousePosition.y / (3 * window.innerWidth);
       model.rotation.y = mousePosition.x / (3 * window.innerHeight);
-    };
+    }
     requestAnimationFrame(animate);
     renderer.render(scene, camera);
     controls.update();
   }
 
   window.addEventListener("resize", onWindowResize);
-  
 }
 
 function onWindowResize() {
@@ -104,8 +118,6 @@ function onWindowResize() {
 function render() {
   renderer.render(scene, camera);
 }
-
-
 </script>
 
 <template>

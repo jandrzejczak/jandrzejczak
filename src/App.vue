@@ -1,66 +1,45 @@
 <script setup lang="ts">
 import { RouterLink, RouterView } from "vue-router";
 import HelloWorld from "./components/HelloWorld.vue";
-import gsap from "gsap";
 import FaceBackground from "./components/FaceBackground.vue";
 import Loading from "./components/Loading.vue";
-import { onMounted } from "vue";
+import Cursor from "./components/Cursor.vue";
+import { onMounted, ref, Transition } from "vue";
+import Navigation from "./components/Navigation.vue";
 
-function setupCursor() {
-  let mouseCursor = document.querySelector(".cursor") as HTMLElement;
-  window.addEventListener("mousemove", (e) => {
-    mouseCursor.style.top = e.pageY + "px";
-    mouseCursor.style.left = e.pageX + "px";
-  });
-}
+const loading = ref(true);
 
-onMounted(() => {
-  setupCursor();
- });
+onMounted(() => {});
 </script>
 
 <template>
-  <div class="navigation">
-    <div class="item"></div>
-    <div class="item"></div>
-    <div class="item"></div>
-  </div>
-  <div class="cursor"></div>
-  <loading></loading>
-  <face-background></face-background>
+  <navigation></navigation>
+  <cursor></cursor>
+  <Transition>
+    <loading v-if="loading"></loading>
+  </Transition>
+  <face-background @scene-ready="(e) => (loading = !e)"></face-background>
 </template>
 
 <style scoped lang="scss">
-.cursor {
-  top: 0;
-  left: 0;
-  width: 3rem;
-  height: 3rem;
-  border: 2px solid var(--color-text);
-  border-radius: 50%;
-  position: fixed;
-  transform: translate(-50%, -50%);
-  pointer-events: none;
-  z-index: 999;
-}
-.navigation {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100vw;
-  height: 300px;
-  backdrop-filter: blur(1px) contrast(12) grayscale(1);
-  mix-blend-mode: screen;
-  z-index: 1000;
-  // .item {
-  //   width: 150px;
-  //   height: 50px;
-  //   margin-right: 1rem;
-  //   background-color: green !important;
-  //   position: absolute;
-  //   z-index: 10000;
-  // }
-}
+// .navigation {
+//   position: fixed;
+//   top: 0;
+//   left: 0;
+//   width: 100vw;
+//   height: 300px;
+//   backdrop-filter: blur(1px) contrast(12) grayscale(1);
+//   mix-blend-mode: screen;
+//   z-index: 1000;
+//   // .item {
+//   //   width: 150px;
+//   //   height: 50px;
+//   //   margin-right: 1rem;
+//   //   background-color: green !important;
+//   //   position: absolute;
+//   //   z-index: 10000;
+//   // }
+// }
 header {
   line-height: 1.5;
   max-height: 100vh;
@@ -97,22 +76,6 @@ nav a:first-of-type {
 }
 
 @media (min-width: 1024px) {
-  header {
-    display: flex;
-    place-items: center;
-    padding-right: calc(var(--section-gap) / 2);
-  }
-
-  .logo {
-    margin: 0 2rem 0 0;
-  }
-
-  header .wrapper {
-    display: flex;
-    place-items: flex-start;
-    flex-wrap: wrap;
-  }
-
   nav {
     text-align: left;
     margin-left: -1rem;
