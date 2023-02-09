@@ -12,6 +12,7 @@
     "lint": "eslint . --ext .vue,.js,.jsx,.cjs,.mjs,.ts,.tsx,.cts,.mts --fix --ignore-path .gitignore"
   },
   "dependencies": {
+    "@grcmichael/gscroll": "^1.0.15",
     "animejs": "^3.2.1",
     "gsap": "^3.11.4",
     "pinia": "^2.0.28",

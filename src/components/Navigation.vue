@@ -18,9 +18,9 @@ onMounted(() => {
   <nav class="nav">
     <div class="nav__logo">necuro</div>
     <div class="nav__items">
-      <router-link class="nav__item hoverable" to="">
+      <a class="nav__item hoverable" href="#section1">
         <div>info</div>
-      </router-link>
+      </a>
       <router-link class="nav__item hoverable" to="">
         <div>experience</div>
       </router-link>
@@ -48,6 +48,7 @@ onMounted(() => {
   justify-content: space-between;
   align-items: center;
   padding: 0;
+  z-index: 30;
   &__logo {
     font-family: "Questrial", sans-serif;
     font-size: 2rem;
