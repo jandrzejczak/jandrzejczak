@@ -16,7 +16,7 @@ onMounted(() => {
 
 <template>
   <nav class="nav">
-    <div class="nav__logo">necuro</div>
+    <div class="nav__logo">andrzejczak</div>
     <div class="nav__items">
       <a class="nav__item hoverable" href="#section1">
         <div>info</div>
@@ -41,7 +41,7 @@ onMounted(() => {
 .nav {
   position: fixed;
   top: 0;
-  left: 0;
+  left: 50%;
   margin: 0;
   width: 100vw;
   display: flex;
@@ -49,17 +49,19 @@ onMounted(() => {
   align-items: center;
   padding: 0;
   z-index: 30;
+  max-width: 1600px;
+  transform: translateX(-50%);
+  padding: 0 2rem;
   &__logo {
     font-family: "Questrial", sans-serif;
     font-size: 2rem;
-    padding: 1rem;
+    padding: 1rem 0;
     line-height: 1;
   }
   &__items {
     margin-left: auto;
     display: flex;
     justify-content: space-between;
-    padding-right: 1rem;
   }
   &__item {
     padding: 1rem 2rem;

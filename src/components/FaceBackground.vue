@@ -4,16 +4,22 @@ import { OrbitControls } from "three/addons/controls/OrbitControls.js";
 import { GLTFLoader } from "three/addons/loaders/GLTFLoader.js";
 import { DRACOLoader } from "three/addons/loaders/DRACOLoader.js";
 import { RGBELoader } from "three/addons/loaders/RGBELoader.js";
-import { onMounted } from "vue";
+import { onMounted, ref } from "vue";
 
 const emit = defineEmits(["scene-ready"]);
 
-let camera, scene, renderer, model;
+let camera: any, scene: any, renderer: any, model: any;
 
 let mousePosition = {
   x: 0,
   y: 0,
 };
+
+let orientation = ref({
+    a: 0,
+    b: 0,
+    g: 0,
+  });
 
 onMounted(() => {
   init();
@@ -24,6 +30,38 @@ onMounted(() => {
     mousePosition.y = window.innerHeight / 2 - e.pageY;
     // console.table({x: mousePosition.x, y: mousePosition.y})
   });
+
+  window.addEventListener("deviceorientation", function(event) {
+    orientation.value.a = event.alpha || 0;
+    orientation.value.b = event.beta || 0;
+    orientation.value.g = event.gamma || 0;
+});
+
+  // if (window.DeviceOrientationEvent) {
+  //   window.addEventListener(
+  //     "deviceorientation",
+  //     function (event: any) {
+  //       tilt([event.beta, event.gamma]);
+  //     },
+  //     true
+  //   );
+  // } else if (window.DeviceMotionEvent) {
+  //   window.addEventListener(
+  //     "devicemotion",
+  //     function (event: any) {
+  //       tilt([event.acceleration.x * 2, event.acceleration.y * 2]);
+  //     },
+  //     true
+  //   );
+  // } else {
+  //   window.addEventListener(
+  //     "MozOrientation",
+  //     function (orientation: any) {
+  //       tilt([orientation.x * 50, orientation.y * 50]);
+  //     },
+  //     true
+  //   );
+  // }
 });
 
 function init() {
@@ -34,7 +72,7 @@ function init() {
     0.25,
     20
   );
-  camera.position.set(-1, 0, 0);
+  camera.position.set(-0.5, 0, 0);
 
   scene = new THREE.Scene();
 
@@ -43,7 +81,7 @@ function init() {
 
   new RGBELoader()
     .setPath("/")
-    .load("royal_esplanade_1k.hdr", function (texture) {
+    .load("royal_esplanade_1k.hdr", function (texture: any) {
       texture.mapping = THREE.EquirectangularReflectionMapping;
 
       scene.environment = texture;
@@ -53,7 +91,7 @@ function init() {
       // model
       const loader = new GLTFLoader().setPath("/models/");
       loader.setDRACOLoader(dracoLoader);
-      loader.load("face.glb", function (gltf) {
+      loader.load("face.glb", function (gltf: any) {
         emit("scene-ready", true);
         model = gltf.scene;
 
@@ -121,10 +159,20 @@ function render() {
 </script>
 
 <template>
+  <div class="orient">
+    {{ orientation }}
+  </div>
+
   <div id="face" class="face-bg"></div>
 </template>
 
 <style scoped>
+.orient {
+  font-size: 4rem;
+  position: fixed;
+  top: 0;
+  left: 0;
+}
 .face-bg {
   z-index: -1;
   position: fixed;
