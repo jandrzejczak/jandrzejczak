@@ -1,0 +1,15 @@
+@import "base.scss";
+
+body {
+  font-family: "Cutive Mono", monospace;
+
+  // font-family: 'Oxygen', sans-serif;
+
+  // font-family: 'Questrial', sans-serif;
+}
+
+.hoverable {
+  &__hovered {
+    transform: scale(1.25);
+  }
+}
