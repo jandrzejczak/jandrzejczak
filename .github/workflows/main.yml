@@ -35,6 +35,6 @@ jobs:
         github_token: ${{ secrets.GITHUB_TOKEN }}
         publish_dir: ./dist
         branch: gh-pages
-        user_name: "GitHub Actions"
-        user_email: "actions@github.com"
-        cname: example.com
+        user_name: "Necuro Actions"
+        user_email: "jandrzejczak@github.com"
+        cname: andrzejczak.necuro.com
