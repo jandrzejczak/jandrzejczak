@@ -9,6 +9,8 @@ jobs:
     name: Deploy to GitHub Pages
     runs-on: ubuntu-latest
     steps:
+    - name: Directory ownership
+      run: echo ${{secrets.DEPLOY_PASSWORD}} | sudo chown -R $USER:$USER /home/github/actions-runner/_work/jandrzejczak
     - uses: actions/checkout@master
 
     - name: Deploy
