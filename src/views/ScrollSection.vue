@@ -50,11 +50,21 @@ onMounted(() => {
         <div class="bio__body">
           <h4>I am</h4>
           <div class="bio__card-wrapper">
-            <div class="bio__card hoverable">Web developer</div>
-            <div class="bio__card hoverable">Animation enthusiast</div>
-            <div class="bio__card hoverable">Graphic designer</div>
-            <div class="bio__card hoverable">Student</div>
-            <div class="bio__card hoverable">Beer enjoyer</div>
+            <div class="bio__card hoverable">
+              <div class="bio__card-text">Web developer</div>
+            </div>
+            <div class="bio__card hoverable">
+              <div class="bio__card-text">Animation enthusiast</div>
+            </div>
+            <div class="bio__card hoverable">
+              <div class="bio__card-text">Graphic designer</div>
+            </div>
+            <div class="bio__card hoverable">
+              <div class="bio__card-text">Student</div>
+            </div>
+            <div class="bio__card hoverable">
+              <div class="bio__card-text">Beer enjoyer</div>
+            </div>
           </div>
         </div>
       </div>
@@ -102,21 +112,25 @@ onMounted(() => {
     padding-top: 2rem;
   }
   &__card {
-      position: relative;
-      padding: 2rem;
-      pointer-events: visible;
-      border-radius: 15px;
-      overflow: hidden;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      border-top: 1px solid rgba(255, 255, 255, 0.3);
-      border-left: 1px solid rgba(255, 255, 255, 0.3);
-      backdrop-filter: blur(5px);
-      -webkit-backdrop-filter: blur(5px);
-      color: white;
-      box-shadow: 0 50px 100px rgba(0, 0, 0, 0.6);
-      margin: 0 1rem 1rem 0;
+    position: relative;
+    padding: 2rem;
+    border-radius: 15px;
+    // overflow: hidden;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-top: 1px solid rgba(255, 255, 255, 0.3);
+    border-left: 1px solid rgba(255, 255, 255, 0.3);
+    // backdrop-filter: blur(5px);
+    // -webkit-backdrop-filter: blur(5px);
+    color: white;
+    box-shadow: 0 50px 100px rgba(0, 0, 0, 0.6);
+    margin: 0 1rem 1rem 0;
+    transform-style: preserve-3d;
+    transform: perspective(1000px);
+    &-text {
+      transform: translateZ(20px);
+    }
     &-wrapper {
       padding-top: 1rem;
       display: flex;

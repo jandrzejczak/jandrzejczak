@@ -8,7 +8,7 @@ onMounted(() => {
   VanillaTilt.init(element, {
 		max: 25,
 		speed: 400,
-    scale: 1.25,
+    scale: 1.125,
     glare: true,
 	});
 });
@@ -19,19 +19,19 @@ onMounted(() => {
     <div class="nav__logo">andrzejczak</div>
     <div class="nav__items">
       <a class="nav__item hoverable" href="#section1">
-        <div>info</div>
+        <div class="nav__item-text">info</div>
       </a>
       <router-link class="nav__item hoverable" to="">
-        <div>experience</div>
+        <div class="nav__item-text">experience</div>
       </router-link>
       <router-link class="nav__item hoverable" to="">
-        <div>education</div>
+        <div class="nav__item-text">education</div>
       </router-link>
       <router-link class="nav__item hoverable" to="">
-        <div>skills</div>
+        <div class="nav__item-text">skills</div>
       </router-link>
       <router-link class="nav__item hoverable" to="">
-        <div>contact</div>
+        <div class="nav__item-text">contact</div>
       </router-link>
     </div>
   </nav>
@@ -68,8 +68,11 @@ onMounted(() => {
     text-decoration: none;
     color: var(--color-text);
     border-radius: 32px;
-    div {
+    transform-style: preserve-3d;
+    transform: perspective(1000px);
+    &-text {
       line-height: 1;
+      transform: translateZ(10px);
     }
   }
 }
