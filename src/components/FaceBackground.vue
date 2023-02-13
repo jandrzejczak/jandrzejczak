@@ -1,8 +1,12 @@
 <script setup lang="ts">
 import * as THREE from "three";
+// @ts-ignore
 import { OrbitControls } from "three/addons/controls/OrbitControls.js";
+// @ts-ignore
 import { GLTFLoader } from "three/addons/loaders/GLTFLoader.js";
+// @ts-ignore
 import { DRACOLoader } from "three/addons/loaders/DRACOLoader.js";
+// @ts-ignore
 import { RGBELoader } from "three/addons/loaders/RGBELoader.js";
 import { onMounted, ref } from "vue";
 
@@ -106,6 +110,15 @@ function init() {
 
         const light = new THREE.PointLight(0xff0000, 1, 1);
         light.position.set(0, 0, 0);
+
+        const geometry = new THREE.IcosahedronGeometry(0.1, 10);
+        const material = new THREE.MeshPhysicalMaterial({  
+          roughness: 0.2,  
+          transmission: 0.4,  
+        });
+        const mesh = new THREE.Mesh(geometry, material)
+        scene.add(mesh);
+
         scene.add(light);
         scene.add(gltf.scene);
 
@@ -159,10 +172,6 @@ function render() {
 </script>
 
 <template>
-  <div class="orient">
-    {{ orientation }}
-  </div>
-
   <div id="face" class="face-bg"></div>
 </template>
 
@@ -174,7 +183,7 @@ function render() {
   left: 0;
 }
 .face-bg {
-  z-index: -1;
+  /* z-index: -1; */
   position: fixed;
   top: 0;
   left: 0;
