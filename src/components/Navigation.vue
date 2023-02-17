@@ -3,14 +3,21 @@ import { RouterLink } from "vue-router";
 import VanillaTilt from "vanilla-tilt";
 import { onMounted } from "vue";
 
+const props = defineProps({
+  isMobile : {
+    type: Boolean,
+    required: true,
+  }
+})
+
 onMounted(() => {
   const element = document.querySelectorAll(".hoverable") as any;
   VanillaTilt.init(element, {
     max: 25,
     speed: 400,
-    scale: 1.125,
-    glare: true,
-    gyroscope: true,
+    scale: props.isMobile ? 1 : 1.125,
+    glare: !props.isMobile,
+    gyroscope: props.isMobile,
   });
 });
 </script>

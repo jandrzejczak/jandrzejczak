@@ -87,7 +87,7 @@ initGyroscope();
     <loading v-if="loading"></loading>
   </Transition>
   <div class="layout">
-    <navigation></navigation>
+    <navigation :is-mobile="isMobileDevice"></navigation>
     <scroll-section id="scroll-section"></scroll-section>
     <face-background v-if="!isMobileDevice()" @scene-ready="(e) => (loading = !e)"></face-background>
   </div>
