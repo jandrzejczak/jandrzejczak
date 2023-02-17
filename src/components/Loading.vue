@@ -1,6 +1,53 @@
 <script setup lang="ts">
 import { onMounted } from "vue";
-import anime from "animejs/lib/anime.es.js";
+
+const props = defineProps({
+  isMobile : {
+    type: Boolean,
+    required: true,
+  }
+})
+
+const emit = defineEmits(["loading-finished"]);
+
+function handleOrientation(event: any) {
+  updateFieldIfNotNull('Orientation_a', event.alpha);
+  updateFieldIfNotNull('Orientation_b', event.beta);
+  updateFieldIfNotNull('Orientation_g', event.gamma);
+}
+
+function updateFieldIfNotNull(fieldName: string, value: Number, precision=10){
+  if (value != null)
+    console.log(fieldName, value.toFixed(precision));
+}
+
+let is_running = false;
+function initGyroscope() {
+  // Request permission for iOS 13+ devices
+  if (
+    DeviceMotionEvent &&
+    // @ts-ignore
+    typeof DeviceMotionEvent.requestPermission === "function"
+  ) {
+    // @ts-ignore
+    DeviceMotionEvent.requestPermission();
+  }
+  
+  if (is_running){
+    // window.removeEventListener("devicemotion", handleMotion);
+    window.removeEventListener("deviceorientation", handleOrientation);
+    is_running = false;
+  } else {
+    // window.addEventListener("devicemotion", handleMotion);
+    window.addEventListener("deviceorientation", handleOrientation);
+    is_running = true;
+  }
+};
+
+function initMobileExperience() {
+  initGyroscope();
+  emit("loading-finished", true);
+}
 
 onMounted(() => {
   
@@ -10,6 +57,7 @@ onMounted(() => {
 <template>
   <div class="loading-wrapper">
     <div class="necuro-logo">andrzejczak</div>
+    <div><button @click="initMobileExperience()">Give me full experience</button></div>
   </div>
 </template>
 

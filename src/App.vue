@@ -22,59 +22,8 @@ const isMobileDevice = (): boolean => {
   return (typeof window.orientation !== "undefined") || (navigator.userAgent.indexOf('IEMobile') !== -1);
 }
 
-function handleOrientation(event: any) {
-  updateFieldIfNotNull('Orientation_a', event.alpha);
-  updateFieldIfNotNull('Orientation_b', event.beta);
-  updateFieldIfNotNull('Orientation_g', event.gamma);
-}
-
-
-function updateFieldIfNotNull(fieldName: string, value: Number, precision=10){
-  if (value != null)
-    console.log(fieldName, value.toFixed(precision));
-}
-
-// function handleMotion(event: any) {
-//   updateFieldIfNotNull('Accelerometer_gx', event.accelerationIncludingGravity.x);
-//   updateFieldIfNotNull('Accelerometer_gy', event.accelerationIncludingGravity.y);
-//   updateFieldIfNotNull('Accelerometer_gz', event.accelerationIncludingGravity.z);
-
-//   updateFieldIfNotNull('Accelerometer_x', event.acceleration.x);
-//   updateFieldIfNotNull('Accelerometer_y', event.acceleration.y);
-//   updateFieldIfNotNull('Accelerometer_z', event.acceleration.z);
-
-//   updateFieldIfNotNull('Accelerometer_i', event.interval, 2);
-
-//   updateFieldIfNotNull('Gyroscope_z', event.rotationRate.alpha);
-//   updateFieldIfNotNull('Gyroscope_x', event.rotationRate.beta);
-//   updateFieldIfNotNull('Gyroscope_y', event.rotationRate.gamma);
-// }
-
-let is_running = false;
-function initGyroscope() {
-  // Request permission for iOS 13+ devices
-  if (
-    DeviceMotionEvent &&
-    // @ts-ignore
-    typeof DeviceMotionEvent.requestPermission === "function"
-  ) {
-    // @ts-ignore
-    DeviceMotionEvent.requestPermission();
-  }
-  
-  if (is_running){
-    // window.removeEventListener("devicemotion", handleMotion);
-    window.removeEventListener("deviceorientation", handleOrientation);
-    is_running = false;
-  } else {
-    // window.addEventListener("devicemotion", handleMotion);
-    window.addEventListener("deviceorientation", handleOrientation);
-    is_running = true;
-  }
-};
 
 onMounted(() => {
-initGyroscope();
  if (isMobileDevice()) {
   loading.value = false;
  }
@@ -84,10 +33,10 @@ initGyroscope();
 <template>
   <cursor></cursor>
   <Transition>
-    <loading v-if="loading"></loading>
+    <loading :is-mobile="isMobileDevice" v-if="loading"></loading>
   </Transition>
   <div class="layout">
-    <navigation :is-mobile="isMobileDevice"></navigation>
+    <navigation :is-mobile="isMobileDevice" @loading-finished="(e) => (loading = !e)"></navigation>
     <scroll-section id="scroll-section"></scroll-section>
     <face-background v-if="!isMobileDevice()" @scene-ready="(e) => (loading = !e)"></face-background>
   </div>
