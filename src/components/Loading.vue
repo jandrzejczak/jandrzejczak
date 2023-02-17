@@ -8,7 +8,7 @@ const props = defineProps({
   }
 })
 
-const emit = defineEmits(["loading-finished"]);
+const emit = defineEmits(["loadingFinished"]);
 
 function handleOrientation(event: any) {
   updateFieldIfNotNull('Orientation_a', event.alpha);
@@ -45,8 +45,8 @@ function initGyroscope() {
 };
 
 function initMobileExperience() {
+  emit("loadingFinished", true);
   initGyroscope();
-  emit("loading-finished", true);
 }
 
 onMounted(() => {
