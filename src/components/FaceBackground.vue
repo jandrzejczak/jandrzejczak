@@ -76,7 +76,7 @@ function init() {
     0.01,
     100
   );
-  camera.position.z = 3;
+  camera.position.z = 1;
 	camera.focalLength = 3;
 
   scene = new THREE.Scene();
@@ -100,16 +100,23 @@ function init() {
         emit("scene-ready", true);
         model = gltf.scene;
 
-        // const newMaterial = new THREE.MeshPhongMaterial({
-        //   color: 0xff0000,
-        //   shininess: 10,
-        // });
+        const newMaterial = new THREE.MeshPhongMaterial({
+          color: 0xff0000,
+          shininess: 10,
+        });
 
-        // model.traverse((o) => {
-        //   o.material = newMaterial;
-        // });
+        model.traverse( function ( child: any ) {
+          if ( child.isMesh ) {
+            child.material.color.set( 0x080808 );
+            child.material.opacity = 0.6;
+            // child.material.transparent = true;
+          }
+        });
 
-        const light = new THREE.PointLight(0xff0000, 1, 1);
+        model.scale.set(15, 15, 15)
+        model.position.set(0, -1, 0);
+
+        const light = new THREE.PointLight(0xfffff, 1, 1);
         light.position.set(0, 0, 0);
 
         const geometry = new THREE.IcosahedronGeometry(1, 10);
@@ -118,11 +125,12 @@ function init() {
           transmission: 0.4,  
         });
         const mesh = new THREE.Mesh(geometry, material);
-        mesh.position.set(2, 2, 2);
-        scene.add(mesh);
-
+        mesh.position.set(1, 6, 2);
+        // scene.add(mesh);
+        
         scene.add(light);
-        // scene.add(gltf.scene);
+
+        scene.add(model);
 
         render();
       });
@@ -170,8 +178,8 @@ function onWindowResize() {
 }
 
 function render() {
-  camera.position.x += ( mousePosition.x - camera.position.x ) * .05;
-  camera.position.y += ( -  mousePosition.y - camera.position.y ) * .05;
+  // camera.position.x += ( mousePosition.x - camera.position.x ) * .01;
+  // camera.position.y += ( -  mousePosition.y - camera.position.y ) * .01;
 
   camera.lookAt( scene.position );
   
