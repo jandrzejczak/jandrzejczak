@@ -107,29 +107,17 @@ function init() {
 
         model.traverse( function ( child: any ) {
           if ( child.isMesh ) {
-            child.material.color.set( 0x080808 );
-            child.material.opacity = 0.6;
-            // child.material.transparent = true;
+            child.material.color.set( 0x0a0a0a );
           }
         });
 
-        model.scale.set(15, 15, 15)
-        model.position.set(0, -1, 0);
+        model.scale.set(20, 20, 20)
+        model.position.set(1, -0.5, 0);
 
         const light = new THREE.PointLight(0xfffff, 1, 1);
-        light.position.set(0, 0, 0);
-
-        const geometry = new THREE.IcosahedronGeometry(1, 10);
-        const material = new THREE.MeshPhysicalMaterial({  
-          roughness: 0.2,  
-          transmission: 0.4,  
-        });
-        const mesh = new THREE.Mesh(geometry, material);
-        mesh.position.set(1, 6, 2);
-        // scene.add(mesh);
+        light.position.set(5, 0, 1);
         
         scene.add(light);
-
         scene.add(model);
 
         render();
