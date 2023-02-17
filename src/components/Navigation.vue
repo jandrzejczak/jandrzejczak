@@ -10,6 +10,7 @@ onMounted(() => {
     speed: 400,
     scale: 1.125,
     glare: true,
+    gyroscope: true,
   });
 });
 </script>
