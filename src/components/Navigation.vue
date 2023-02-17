@@ -6,11 +6,11 @@ import { onMounted } from "vue";
 onMounted(() => {
   const element = document.querySelectorAll(".hoverable") as any;
   VanillaTilt.init(element, {
-		max: 25,
-		speed: 400,
+    max: 25,
+    speed: 400,
     scale: 1.125,
     glare: true,
-	});
+  });
 });
 </script>
 
@@ -49,7 +49,6 @@ onMounted(() => {
   align-items: center;
   padding: 0;
   z-index: 30;
-  max-width: 1600px;
   transform: translateX(-50%);
   padding: 0 2rem;
   &__logo {

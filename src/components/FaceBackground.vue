@@ -30,8 +30,8 @@ onMounted(() => {
   render();
 
   window.addEventListener("mousemove", (e) => {
-    mousePosition.x = window.innerWidth / 2 - e.pageX;
-    mousePosition.y = window.innerHeight / 2 - e.pageY;
+    mousePosition.x = e.pageX - window.innerWidth / 2;
+    mousePosition.y = e.pageY - window.innerHeight / 2;
     // console.table({x: mousePosition.x, y: mousePosition.y})
   });
 
@@ -120,7 +120,7 @@ function init() {
         scene.add(mesh);
 
         scene.add(light);
-        scene.add(gltf.scene);
+        // scene.add(gltf.scene);
 
         render();
       });
@@ -145,6 +145,7 @@ function init() {
 
   animate();
   function animate() {
+
     if (model) {
       model.rotation.x = mousePosition.y / (3 * window.innerWidth);
       model.rotation.y = mousePosition.x / (3 * window.innerHeight);
@@ -167,6 +168,11 @@ function onWindowResize() {
 }
 
 function render() {
+  camera.position.x += ( mousePosition.x - camera.position.x ) * .05;
+  camera.position.y += ( -  mousePosition.y - camera.position.y ) * .05;
+
+  camera.lookAt( scene.position );
+  
   renderer.render(scene, camera);
 }
 </script>

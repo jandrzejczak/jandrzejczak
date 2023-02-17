@@ -40,30 +40,32 @@ onMounted(() => {
 <template>
   <div class="container">
     <section class="bio">
-      <div class="section__body">
-        <div class="line">
-          <h3>my name is</h3>
-        </div>
-        <div class="line">
-          <h1>jordan andrzejczak</h1>
-        </div>
-        <div class="bio__body">
-          <h4>I am</h4>
-          <div class="bio__card-wrapper">
-            <div class="bio__card hoverable">
-              <div class="bio__card-text">Web developer</div>
-            </div>
-            <div class="bio__card hoverable">
-              <div class="bio__card-text">Animation enthusiast</div>
-            </div>
-            <div class="bio__card hoverable">
-              <div class="bio__card-text">Graphic designer</div>
-            </div>
-            <div class="bio__card hoverable">
-              <div class="bio__card-text">Student</div>
-            </div>
-            <div class="bio__card hoverable">
-              <div class="bio__card-text">Beer enjoyer</div>
+      <div class="section__body-wrapper">
+        <div class="section__body">
+          <div class="line">
+            <h3>my name is</h3>
+          </div>
+          <div class="line">
+            <h1>jordan andrzejczak</h1>
+          </div>
+          <div class="bio__body">
+            <h4>I am</h4>
+            <div class="bio__card-wrapper">
+              <div class="bio__card hoverable">
+                <div class="bio__card-text">Web developer</div>
+              </div>
+              <div class="bio__card hoverable">
+                <div class="bio__card-text">Animation enthusiast</div>
+              </div>
+              <div class="bio__card hoverable">
+                <div class="bio__card-text">Graphic designer</div>
+              </div>
+              <div class="bio__card hoverable">
+                <div class="bio__card-text">Student</div>
+              </div>
+              <div class="bio__card hoverable">
+                <div class="bio__card-text">Beer enjoyer</div>
+              </div>
             </div>
           </div>
         </div>
@@ -97,8 +99,7 @@ onMounted(() => {
     scroll-snap-align: start;
     height: 100vh;
     .section__body {
-      padding: 7rem 2rem 2rem;
-      max-width: 1600px;
+      padding: 5rem 2rem 2rem;
       box-sizing: border-box;
       height: 100%;
       width: 100%;
