@@ -29,7 +29,7 @@ function handleOrientation(event: any) {
 }
 
 
-function updateFieldIfNotNull(fieldName, value, precision=10){
+function updateFieldIfNotNull(fieldName: string, value: Number, precision=10){
   if (value != null)
     console.log(fieldName, value.toFixed(precision));
 }
@@ -55,8 +55,10 @@ function initGyroscope() {
   // Request permission for iOS 13+ devices
   if (
     DeviceMotionEvent &&
+    // @ts-ignore
     typeof DeviceMotionEvent.requestPermission === "function"
   ) {
+    // @ts-ignore
     DeviceMotionEvent.requestPermission();
   }
   
