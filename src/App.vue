@@ -24,19 +24,16 @@ const isMobileDevice = (): boolean => {
 
 
 onMounted(() => {
- if (isMobileDevice()) {
-  loading.value = false;
- }
 });
 </script>
 
 <template>
   <cursor></cursor>
   <Transition>
-    <loading :is-mobile="isMobileDevice" v-if="loading"></loading>
+    <loading :is-mobile="isMobileDevice()" v-show="loading"></loading>
   </Transition>
   <div class="layout">
-    <navigation :is-mobile="isMobileDevice" @loading-finished="(e) => (loading = !e)"></navigation>
+    <navigation :is-mobile="isMobileDevice()" @loading-finished="(e) => (loading = !e)"></navigation>
     <scroll-section id="scroll-section"></scroll-section>
     <face-background v-if="!isMobileDevice()" @scene-ready="(e) => (loading = !e)"></face-background>
   </div>

@@ -57,7 +57,7 @@ onMounted(() => {
 <template>
   <div class="loading-wrapper">
     <div class="necuro-logo">andrzejczak</div>
-    <div><button @click="initMobileExperience()">Give me full experience</button></div>
+    <div v-if="isMobile"><button @click="initMobileExperience()">Give me full experience</button></div>
   </div>
 </template>
 
