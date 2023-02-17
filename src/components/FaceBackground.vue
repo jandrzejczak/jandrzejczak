@@ -71,12 +71,13 @@ onMounted(() => {
 function init() {
   var container = document.getElementById("face") as HTMLElement;
   camera = new THREE.PerspectiveCamera(
-    45,
+    60,
     window.innerWidth / window.innerHeight,
-    0.25,
-    20
+    0.01,
+    100
   );
-  camera.position.set(-0.5, 0, 0);
+  camera.position.z = 3;
+	camera.focalLength = 3;
 
   scene = new THREE.Scene();
 
@@ -111,12 +112,13 @@ function init() {
         const light = new THREE.PointLight(0xff0000, 1, 1);
         light.position.set(0, 0, 0);
 
-        const geometry = new THREE.IcosahedronGeometry(0.1, 10);
+        const geometry = new THREE.IcosahedronGeometry(1, 10);
         const material = new THREE.MeshPhysicalMaterial({  
           roughness: 0.2,  
           transmission: 0.4,  
         });
-        const mesh = new THREE.Mesh(geometry, material)
+        const mesh = new THREE.Mesh(geometry, material);
+        mesh.position.set(2, 2, 2);
         scene.add(mesh);
 
         scene.add(light);
@@ -130,8 +132,8 @@ function init() {
   renderer.setClearColor(0x000000, 0); // the default
   renderer.setPixelRatio(window.devicePixelRatio);
   renderer.setSize(window.innerWidth, window.innerHeight);
-  renderer.toneMapping = THREE.ACESFilmicToneMapping;
-  renderer.toneMappingExposure = 1;
+  // renderer.toneMapping = THREE.ACESFilmicToneMapping;
+  // renderer.toneMappingExposure = 1;
   renderer.outputEncoding = THREE.sRGBEncoding;
   container.appendChild(renderer.domElement);
 
