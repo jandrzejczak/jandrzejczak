@@ -60,7 +60,7 @@ onMounted(() => {
   transform: translateX(-50%);
   padding: 0 2rem;
   @media only screen and (max-width: 768px) {
-    padding: 0 1rem;
+    // padding: 0 1rem;
   }
   &__logo {
     font-family: "Questrial", sans-serif;

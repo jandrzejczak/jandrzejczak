@@ -223,7 +223,7 @@ onMounted(() => {
       width: 100%;
       max-width: 40rem;
       @media only screen and (max-width: 768px) {
-        padding: 2rem 1rem 2rem;
+        padding: 2rem 2rem 2rem;
       }
     }
   }
