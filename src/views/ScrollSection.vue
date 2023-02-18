@@ -3,7 +3,7 @@ import gsap from "gsap";
 import ScrollTrigger from "gsap/ScrollTrigger";
 import { onMounted } from "vue";
 
-onMounted(() => {
+function initAnimations() {
   gsap.registerPlugin(ScrollTrigger);
 
   ScrollTrigger.defaults({
@@ -11,11 +11,83 @@ onMounted(() => {
     scroller: ".container",
   });
 
-  gsap.to(".orange p", {
-    scrollTrigger: ".orange",
-    duration: 2,
-    rotation: 360,
+  gsap.from("#bio .line>h3", {
+    scrollTrigger: "#bio",
+    duration: 1,
+    y: "150%",
+    autoAlpha: 0,
+    delay: 0.25,
+    ease: "power3.out",
   });
+
+  gsap.from("#bio .line>h1", {
+    scrollTrigger: "#bio",
+    duration: 1,
+    y: "150%",
+    autoAlpha: 0,
+    delay: 0.5,
+    ease: "power3.out",
+  });
+
+  gsap.from("#bio .line>h4", {
+    scrollTrigger: "#bio",
+    duration: 1,
+    y: "150%",
+    autoAlpha: 0,
+    delay: 0.75,
+    ease: "power3.out",
+  });
+
+  gsap.from("#bio .bio__card-wrapper>.bio__card", {
+    scrollTrigger: "#bio",
+    duration: 1,
+    y: "150%",
+    autoAlpha: 0,
+    delay: 1,
+    ease: "power3.out",
+    stagger: {
+      each: 0.75,
+      amount: 0.5
+    }
+  });
+
+  gsap.from("#timeline .timeline__wrapper>.timeline__line", {
+    scrollTrigger: "#timeline",
+    duration: 1,
+    y: "-100%",
+    autoAlpha: 0,
+    delay: 1,
+    ease: "power3.out",
+    stagger: {
+      each: 1,
+      amount: 2.5,
+    }
+  });
+
+  gsap.from("#timeline .timeline__wrapper>.timeline__line-dot", {
+    scrollTrigger: "#timeline",
+    duration: 1,
+    scale: 0,
+    autoAlpha: 0,
+    delay: 1.5,
+    ease: "power3.out",
+    stagger: {
+      each: 1,
+      amount: 2.5,
+    }
+  });
+
+
+
+  gsap.from(".orange span>span", {
+    scrollTrigger: ".orange",
+    duration: 1,
+    y: "150%",
+    autoAlpha: 0,
+    delay: 0.5,
+    ease: "power3.out",
+  });
+  
 
   gsap.to(".red", {
     scrollTrigger: {
@@ -34,11 +106,16 @@ onMounted(() => {
     yoyo: true,
     ease: "power2",
   });
+}
+
+onMounted(() => {
+  initAnimations();
 });
 </script>
 
 <template>
   <div class="container">
+
     <section id="bio" class="bio">
       <div class="section__body-wrapper">
         <div class="section__body">
@@ -49,7 +126,9 @@ onMounted(() => {
             <h1>jordan andrzejczak</h1>
           </div>
           <div class="bio__body">
-            <h4>I am</h4>
+            <div class="line">
+              <h4>I am</h4>
+            </div>
             <div class="bio__card-wrapper">
               <div class="bio__card hoverable">
                 <div class="bio__card-text">Web developer</div>
@@ -72,16 +151,54 @@ onMounted(() => {
       </div>
     </section>
 
-    <section class="panel orange">
-      <p>This element will spin.</p>
+    <section id="timeline" class="timeline">
+      <div class="section__body-wrapper">
+        <div class="section__body">
+          <div class="timeline__wrapper">
+            <div class="timeline__line"><div class="timeline__line-dot" /></div>
+            <div class="timeline__element">
+              <span><span>
+                Headline
+              </span></span>
+              <p>some text...</p>
+            </div>
+          </div>
+          <div class="timeline__wrapper">
+            <div class="timeline__line"><div class="timeline__line-dot" /></div>
+            <div class="timeline__element">
+              <span><span>
+                Headline
+              </span></span>
+              <p>some text...</p>
+            </div>
+          </div>
+          <div class="timeline__wrapper">
+            <div class="timeline__line"><div class="timeline__line-dot" /></div>
+            <div class="timeline__element">
+              <span><span>
+                Headline
+              </span></span>
+              <p>some text...</p>
+            </div>
+          </div>
+        </div>
+      </div>
     </section>
 
     <section class="panel red">
-      <p>This background color will change</p>
+      <div class="section__body-wrapper">
+        <div class="section__body">
+          <p>This background color will change</p>
+        </div>
+      </div>
     </section>
 
     <section class="panel blue yoyo">
-      <p>Yoyo Text!</p>
+      <div class="section__body-wrapper">
+        <div class="section__body">
+          <p>Yoyo Text!</p>
+        </div>
+      </div>
     </section>
   </div>
 </template>
@@ -100,13 +217,13 @@ onMounted(() => {
     scroll-snap-align: start;
     height: var(--app-height);
     .section__body {
-      padding: 5rem 2rem 2rem;
+      padding: 2rem;
       box-sizing: border-box;
       height: 100%;
       width: 100%;
       max-width: 40rem;
       @media only screen and (max-width: 768px) {
-        padding: 5rem 1rem 2rem;
+        padding: 2rem 1rem 2rem;
       }
     }
   }
@@ -144,7 +261,56 @@ onMounted(() => {
     }
   }
 }
+.timeline {
+  // .section__body {
+  //   position: relative;
+  //   &::after {
+  //     content: '';
+  //     height: 100%;
+  //     width: 1rem;
+  //     background-color: #cf3535;
+  //     position: absolute;
+  //     left: 0;
+  //     top: 0;
+  //   }
+  // }
+  &__line {
+    width: 0.25rem;
+    background-color: var(--color-text);
+    position: relative;
+    &-dot {
+      position: absolute;
+      width: 1rem;
+      height: 1rem;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background-color: #cf3535;
+      border-radius: 100%;
+    }
+  }
+  &__wrapper {
+    padding-left: 2rem;
+    display: flex;
+    overflow: hidden;
+  }
+  &__element {
+    padding: 1rem 1rem 1rem 3rem;
+  }
+}
 
+.line {
+  overflow: hidden;
+  * {
+    display: block;
+  }
+}
+.orange {
+  span {
+    display: block;
+    overflow: hidden;
+  }
+}
 .red {
   background-color: #cf3535;
   background-image: none;

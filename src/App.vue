@@ -39,13 +39,13 @@ onMounted(() => {
 </script>
 
 <template>
-  <cursor v-if="!isMobile"></cursor>
+  <cursor v-if="!isMobile && !loading"></cursor>
   <Transition>
     <loading @loading-finished="(e) => (loading = !e)" :is-mobile="isMobile" v-show="loading"></loading>
   </Transition>
   <div class="layout">
-    <navigation :is-mobile="isMobile"></navigation>
-    <scroll-section id="scroll-section"></scroll-section>
+    <navigation v-if="!loading" :is-mobile="isMobile"></navigation>
+    <scroll-section v-if="!loading" id="scroll-section"></scroll-section>
     <face-background @scene-ready="(e) => (loading = !e)"></face-background>
   </div>
 </template>
