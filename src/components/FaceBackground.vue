@@ -10,10 +10,12 @@ import { DRACOLoader } from "three/addons/loaders/DRACOLoader.js";
 // @ts-ignore
 import { RGBELoader } from "three/addons/loaders/RGBELoader.js";
 import { onMounted, ref } from "vue";
-import { useOrientationStore } from "@/stores/orientation"
+import { useOrientationStore, useDeviceStore } from "@/stores/globalStore"
 
-const store = useOrientationStore();
-const { orientation } = storeToRefs(store)
+const orientationStore = useOrientationStore();
+const deviceStore = useDeviceStore();
+const { orientation } = storeToRefs(orientationStore)
+const { isMobile } = storeToRefs(deviceStore)
 
 const emit = defineEmits(["scene-ready"]);
 
@@ -89,14 +91,26 @@ function init() {
       // model
       const loader = new GLTFLoader().setPath("/models/");
       loader.setDRACOLoader(dracoLoader);
-      loader.load("face2DRACO.glb", function (gltf: any) {
+      loader.load("face4DRACO.glb", function (gltf: any) {
         emit("scene-ready", true);
         model = gltf.scene;
+
+        const material = new THREE.MeshPhysicalMaterial({
+          // color: 0x000000,
+          // transmission: 0.8,
+          //@ts-ignore
+          roughness: 0.4,
+          envMap: texture,
+        });
+
+       
 
         model.traverse( function ( child: any ) {
           if ( child.isMesh ) {
             // child.material = material;
             child.material.color.set( 0x000000 );
+          } if (child.isGeometry) {
+            child.geometry.computeVertexNormals(true);
           }
         });
 
@@ -107,23 +121,22 @@ function init() {
         light.position.set(5, 0, 1);
         
         scene.add(light);
-        // scene.add(model);
 
         // Glass models
 
         const roundedBox = new THREE.TorusKnotGeometry( 0.12, 0.07, 100, 26 ).toNonIndexed();
 
-        const material = new THREE.MeshPhysicalMaterial({
-          color: 0x000000,
-          // transmission: 0.8,
-          //@ts-ignore
-          roughness: 0,
-          envMap: texture,
-        });
+        // const material = new THREE.MeshPhysicalMaterial({
+        //   color: 0x000000,
+        //   // transmission: 0.8,
+        //   //@ts-ignore
+        //   roughness: 0,
+        //   envMap: texture,
+        // });
 
         boxMesh = new THREE.Mesh(roundedBox, material);
 
-        scene.add(boxMesh);
+        scene.add(model);
 
         render();
       });
@@ -149,17 +162,13 @@ function init() {
   animate();
   function animate() {
 
-    if (model) {
+    if (model && !isMobile.value) {
       model.rotation.x = mousePosition.y / (3 * window.innerWidth);
       model.rotation.y = mousePosition.x / (3 * window.innerHeight);
     }
-    // if (boxMesh) {
-    //   boxMesh.rotation.x = mousePosition.y / (3 * window.innerWidth);
-    //   boxMesh.rotation.y = mousePosition.x / (3 * window.innerHeight);
-    // }
-    if (boxMesh) {
-      boxMesh.rotation.x = orientation.value.a ?? 1 / (3 * window.innerWidth);
-      boxMesh.rotation.y = orientation.value.b ?? 1 / (3 * window.innerHeight);
+    if (model && isMobile.value) {
+      model.rotation.y = (orientation.value.g ?? 0) / 20;
+      model.rotation.x = (orientation.value.b ?? 0) / 20;
     }
     requestAnimationFrame(animate);
     renderer.render(scene, camera);
@@ -206,5 +215,6 @@ function render() {
   left: 0;
   height: 100vh;
   width: 100vw;
+  overflow: hidden;
 }
 </style>

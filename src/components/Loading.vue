@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { onMounted } from "vue";
-import { useOrientationStore } from "@/stores/orientation"
+import { useOrientationStore } from "@/stores/globalStore"
 
 const { setOrientation } = useOrientationStore();
 

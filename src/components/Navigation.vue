@@ -69,6 +69,9 @@ onMounted(() => {
     margin-left: auto;
     display: flex;
     justify-content: space-between;
+    @media only screen and (max-width: 768px) {
+      display: none;
+    }
   }
   &__item {
     padding: 1rem 2rem;
@@ -82,7 +85,5 @@ onMounted(() => {
       transform: translateZ(10px);
     }
   }
-}
-@media (min-width: 1024px) {
 }
 </style>

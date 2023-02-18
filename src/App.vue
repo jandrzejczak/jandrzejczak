@@ -6,7 +6,11 @@ import Loading from "./components/Loading.vue";
 import Cursor from "./components/Cursor.vue";
 import { onMounted, ref, Transition } from "vue";
 import Navigation from "./components/Navigation.vue";
+import { storeToRefs } from "pinia";
+import { useDeviceStore } from "@/stores/globalStore";
 
+const store = useDeviceStore();
+const { isMobile } = storeToRefs(store)
 // declare global {
 //   interface DeviceOrientationEvent extends Event {
 //     readonly absolute: boolean | undefined;
@@ -18,30 +22,43 @@ import Navigation from "./components/Navigation.vue";
 
 const loading = ref(true);
 
-const isMobileDevice = (): boolean => {
-  return (typeof window.orientation !== "undefined") || (navigator.userAgent.indexOf('IEMobile') !== -1);
+// const isMobileDevice = (): boolean => {
+//   return (typeof window.orientation !== "undefined") || (navigator.userAgent.indexOf('IEMobile') !== -1);
+// }
+
+const appHeight = () => {
+  const doc = document.documentElement
+  doc.style.setProperty(`--app-height`, `${window.innerHeight}px`)
 }
 
-
 onMounted(() => {
+
+  window.addEventListener('resize', appHeight)
+  appHeight()
 });
 </script>
 
 <template>
-  <cursor></cursor>
+  <cursor v-if="!isMobile"></cursor>
   <Transition>
-    <loading @loading-finished="(e) => (loading = !e)" :is-mobile="isMobileDevice()" v-show="loading"></loading>
+    <loading @loading-finished="(e) => (loading = !e)" :is-mobile="isMobile" v-show="loading"></loading>
   </Transition>
   <div class="layout">
-    <navigation :is-mobile="isMobileDevice()"></navigation>
+    <navigation :is-mobile="isMobile"></navigation>
     <scroll-section id="scroll-section"></scroll-section>
     <face-background @scene-ready="(e) => (loading = !e)"></face-background>
   </div>
 </template>
 
+<style>
+:root {
+  --app-height: 100%;
+}
+</style>
+
 <style scoped lang="scss">
 .layout {
-  max-height: 100vh;
+  max-height: var(--app-height);
   overflow: auto;
 }
 

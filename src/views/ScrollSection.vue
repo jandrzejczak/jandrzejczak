@@ -88,7 +88,7 @@ onMounted(() => {
 
 <style scoped lang="scss">
 .container {
-  max-height: 100vh;
+  max-height: var(--app-height);
   overflow-y: scroll;
   scroll-snap-type: y mandatory;
   overflow-x: hidden;
@@ -97,7 +97,7 @@ onMounted(() => {
     // justify-content: center;
     align-items: center;
     scroll-snap-align: start;
-    height: 100vh;
+    height: var(--app-height);
     .section__body {
       padding: 5rem 2rem 2rem;
       box-sizing: border-box;
@@ -142,7 +142,7 @@ onMounted(() => {
 
 .panel {
   scroll-snap-align: start;
-  height: 100vh;
+  height: var(--app-height);
 }
 
 .red {
