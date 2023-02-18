@@ -39,7 +39,7 @@ onMounted(() => {
 
 <template>
   <div class="container">
-    <section class="bio">
+    <section id="bio" class="bio">
       <div class="section__body-wrapper">
         <div class="section__body">
           <div class="line">
@@ -92,6 +92,7 @@ onMounted(() => {
   overflow-y: scroll;
   scroll-snap-type: y mandatory;
   overflow-x: hidden;
+  scroll-behavior: smooth;
   section {
     display: flex;
     // justify-content: center;
@@ -104,6 +105,9 @@ onMounted(() => {
       height: 100%;
       width: 100%;
       max-width: 40rem;
+      @media only screen and (max-width: 768px) {
+        padding: 5rem 1rem 2rem;
+      }
     }
   }
 }
@@ -129,6 +133,7 @@ onMounted(() => {
     margin: 0 1rem 1rem 0;
     transform-style: preserve-3d;
     transform: perspective(1000px);
+    background-color: rgba(0, 0, 0, 0.25);
     &-text {
       transform: translateZ(20px);
     }
@@ -138,11 +143,6 @@ onMounted(() => {
       flex-wrap: wrap;
     }
   }
-}
-
-.panel {
-  scroll-snap-align: start;
-  height: var(--app-height);
 }
 
 .red {

@@ -26,7 +26,7 @@ onMounted(() => {
   <nav class="nav">
     <div class="nav__logo">andrzejczak</div>
     <div class="nav__items">
-      <a class="nav__item hoverable" href="#section1">
+      <a class="nav__item hoverable" href="#bio">
         <div class="nav__item-text">info</div>
       </a>
       <router-link class="nav__item hoverable" to="">
@@ -59,6 +59,9 @@ onMounted(() => {
   z-index: 30;
   transform: translateX(-50%);
   padding: 0 2rem;
+  @media only screen and (max-width: 768px) {
+    padding: 0 1rem;
+  }
   &__logo {
     font-family: "Questrial", sans-serif;
     font-size: 2rem;

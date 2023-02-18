@@ -167,8 +167,8 @@ function init() {
       model.rotation.y = mousePosition.x / (3 * window.innerHeight);
     }
     if (model && isMobile.value) {
-      model.rotation.y = (orientation.value.g ?? 0) / 20;
-      model.rotation.x = (orientation.value.b ?? 0) / 20;
+      model.rotation.y = ((orientation.value.g ?? 0) / 700);
+      model.rotation.x = (orientation.value.b ?? 0) / 400 - 0.1;
     }
     requestAnimationFrame(animate);
     renderer.render(scene, camera);
