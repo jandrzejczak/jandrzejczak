@@ -2,6 +2,11 @@
 import gsap from "gsap";
 import ScrollTrigger from "gsap/ScrollTrigger";
 import { onMounted } from "vue";
+import { storeToRefs } from 'pinia';
+import { useDeviceStore } from "@/stores/globalStore"
+
+const deviceStore = useDeviceStore();
+const { isMobile } = storeToRefs(deviceStore)
 
 function initAnimations() {
   gsap.registerPlugin(ScrollTrigger);
@@ -130,19 +135,19 @@ onMounted(() => {
               <h4>I am</h4>
             </div>
             <div class="bio__card-wrapper">
-              <div class="bio__card hoverable">
+              <div :class="['bio__card', 'hoverable', {'mobile-card': isMobile}]">
                 <div class="bio__card-text">Web developer</div>
               </div>
-              <div class="bio__card hoverable">
+              <div :class="['bio__card', 'hoverable', {'mobile-card': isMobile}]">
                 <div class="bio__card-text">Animation enthusiast</div>
               </div>
-              <div class="bio__card hoverable">
+              <div :class="['bio__card', 'hoverable', {'mobile-card': isMobile}]">
                 <div class="bio__card-text">Graphic designer</div>
               </div>
-              <div class="bio__card hoverable">
+              <div :class="['bio__card', 'hoverable', {'mobile-card': isMobile}]">
                 <div class="bio__card-text">Student</div>
               </div>
-              <div class="bio__card hoverable">
+              <div :class="['bio__card', 'hoverable', {'mobile-card': isMobile}]">
                 <div class="bio__card-text">Beer enjoyer</div>
               </div>
             </div>
@@ -243,8 +248,6 @@ onMounted(() => {
     align-items: center;
     border-top: 1px solid rgba(255, 255, 255, 0.3);
     border-left: 1px solid rgba(255, 255, 255, 0.3);
-    // backdrop-filter: blur(5px);
-    // -webkit-backdrop-filter: blur(5px);
     color: white;
     box-shadow: 0 50px 100px rgba(0, 0, 0, 0.6);
     margin: 0 1rem 1rem 0;
@@ -260,6 +263,11 @@ onMounted(() => {
       flex-wrap: wrap;
     }
   }
+  .mobile-card {
+      backdrop-filter: blur(5px);
+     -webkit-backdrop-filter: blur(5px);
+     background-color: rgba(0, 0, 0, 0.15);
+    }
 }
 .timeline {
   // .section__body {

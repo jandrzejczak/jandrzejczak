@@ -198,10 +198,10 @@ function render() {
 </script>
 
 <template>
-  <div id="face" class="face-bg"></div>
+  <div id="face" :class="['face-bg', {'mobile-overlay': isMobile}]"></div>
 </template>
 
-<style scoped>
+<style scoped lang="scss">
 .orient {
   font-size: 4rem;
   position: fixed;
@@ -216,5 +216,16 @@ function render() {
   height: 100vh;
   width: 100vw;
   overflow: hidden;
+}
+.mobile-overlay {
+  &::after {
+    content: '';
+    height: 100vh;
+    width: 100vw;
+    position: absolute;
+    top: 0;
+    left: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+  }
 }
 </style>
