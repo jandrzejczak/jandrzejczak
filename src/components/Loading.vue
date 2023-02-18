@@ -1,5 +1,8 @@
 <script setup lang="ts">
 import { onMounted } from "vue";
+import { useOrientationStore } from "@/stores/orientation"
+
+const { setOrientation } = useOrientationStore();
 
 const props = defineProps({
   isMobile : {
@@ -11,12 +14,13 @@ const props = defineProps({
 const emit = defineEmits(["loadingFinished"]);
 
 function handleOrientation(event: any) {
-  updateFieldIfNotNull('Orientation_a', event.alpha);
-  updateFieldIfNotNull('Orientation_b', event.beta);
-  updateFieldIfNotNull('Orientation_g', event.gamma);
+  // updateFieldIfNotNull('Orientation_a', event.alpha);
+  // updateFieldIfNotNull('Orientation_b', event.beta);
+  // updateFieldIfNotNull('Orientation_g', event.gamma);
+  setOrientation(event.alpha, event.beta, event.gamma)
 }
 
-function updateFieldIfNotNull(fieldName: string, value: Number, precision=10){
+function updateFieldIfNotNull(fieldName: string, value: Number, precision = 10){
   if (value != null)
     console.log(fieldName, value.toFixed(precision));
 }
@@ -34,11 +38,9 @@ function initGyroscope() {
   }
   
   if (is_running){
-    // window.removeEventListener("devicemotion", handleMotion);
     window.removeEventListener("deviceorientation", handleOrientation);
     is_running = false;
   } else {
-    // window.addEventListener("devicemotion", handleMotion);
     window.addEventListener("deviceorientation", handleOrientation);
     is_running = true;
   }
@@ -50,7 +52,7 @@ function initMobileExperience() {
 }
 
 onMounted(() => {
-  
+  // setOrientation(23, 243, 546)
 });
 </script>
 

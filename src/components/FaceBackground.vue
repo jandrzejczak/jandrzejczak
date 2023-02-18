@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { storeToRefs } from 'pinia';
 import * as THREE from "three";
 // @ts-ignore
 import { OrbitControls } from "three/addons/controls/OrbitControls.js";
@@ -9,21 +10,19 @@ import { DRACOLoader } from "three/addons/loaders/DRACOLoader.js";
 // @ts-ignore
 import { RGBELoader } from "three/addons/loaders/RGBELoader.js";
 import { onMounted, ref } from "vue";
+import { useOrientationStore } from "@/stores/orientation"
+
+const store = useOrientationStore();
+const { orientation } = storeToRefs(store)
 
 const emit = defineEmits(["scene-ready"]);
 
-let camera: any, scene: any, renderer: any, model: any;
+let camera: any, scene: any, renderer: any, model: any, boxMesh: any;
 
 let mousePosition = {
   x: 0,
   y: 0,
 };
-
-let orientation = ref({
-    a: 0,
-    b: 0,
-    g: 0,
-  });
 
 onMounted(() => {
   init();
@@ -34,12 +33,6 @@ onMounted(() => {
     mousePosition.y = e.pageY - window.innerHeight / 2;
     // console.table({x: mousePosition.x, y: mousePosition.y})
   });
-
-  window.addEventListener("deviceorientation", function(event) {
-    orientation.value.a = event.alpha || 0;
-    orientation.value.b = event.beta || 0;
-    orientation.value.g = event.gamma || 0;
-});
 
   // if (window.DeviceOrientationEvent) {
   //   window.addEventListener(
@@ -85,8 +78,8 @@ function init() {
   dracoLoader.setDecoderPath("/jsm/libs/draco/");
 
   new RGBELoader()
-    .setPath("/")
-    .load("royal_esplanade_1k.hdr", function (texture: any) {
+    .setPath("/images/")
+    .load("empty_warehouse_01_1k.hdr", function (texture: any) {
       texture.mapping = THREE.EquirectangularReflectionMapping;
 
       scene.environment = texture;
@@ -96,18 +89,14 @@ function init() {
       // model
       const loader = new GLTFLoader().setPath("/models/");
       loader.setDRACOLoader(dracoLoader);
-      loader.load("face.glb", function (gltf: any) {
+      loader.load("face2DRACO.glb", function (gltf: any) {
         emit("scene-ready", true);
         model = gltf.scene;
 
-        const newMaterial = new THREE.MeshPhongMaterial({
-          color: 0xff0000,
-          shininess: 10,
-        });
-
         model.traverse( function ( child: any ) {
           if ( child.isMesh ) {
-            child.material.color.set( 0x0a0a0a );
+            // child.material = material;
+            child.material.color.set( 0x000000 );
           }
         });
 
@@ -118,7 +107,23 @@ function init() {
         light.position.set(5, 0, 1);
         
         scene.add(light);
-        scene.add(model);
+        // scene.add(model);
+
+        // Glass models
+
+        const roundedBox = new THREE.TorusKnotGeometry( 0.12, 0.07, 100, 26 ).toNonIndexed();
+
+        const material = new THREE.MeshPhysicalMaterial({
+          color: 0x000000,
+          // transmission: 0.8,
+          //@ts-ignore
+          roughness: 0,
+          envMap: texture,
+        });
+
+        boxMesh = new THREE.Mesh(roundedBox, material);
+
+        scene.add(boxMesh);
 
         render();
       });
@@ -147,6 +152,14 @@ function init() {
     if (model) {
       model.rotation.x = mousePosition.y / (3 * window.innerWidth);
       model.rotation.y = mousePosition.x / (3 * window.innerHeight);
+    }
+    // if (boxMesh) {
+    //   boxMesh.rotation.x = mousePosition.y / (3 * window.innerWidth);
+    //   boxMesh.rotation.y = mousePosition.x / (3 * window.innerHeight);
+    // }
+    if (boxMesh) {
+      boxMesh.rotation.x = orientation.value.a ?? 1 / (3 * window.innerWidth);
+      boxMesh.rotation.y = orientation.value.b ?? 1 / (3 * window.innerHeight);
     }
     requestAnimationFrame(animate);
     renderer.render(scene, camera);
