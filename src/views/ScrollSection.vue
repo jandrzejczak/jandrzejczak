@@ -313,7 +313,7 @@ onMounted(() => {
     }
   }
   &__wrapper {
-    padding-left: 2rem;
+    padding-left: 0.5rem;
     display: flex;
     overflow: hidden;
   }
