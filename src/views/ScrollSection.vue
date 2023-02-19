@@ -2,11 +2,11 @@
 import gsap from "gsap";
 import ScrollTrigger from "gsap/ScrollTrigger";
 import { onMounted } from "vue";
-import { storeToRefs } from 'pinia';
-import { useDeviceStore } from "@/stores/globalStore"
+import { storeToRefs } from "pinia";
+import { useDeviceStore } from "@/stores/globalStore";
 
 const deviceStore = useDeviceStore();
-const { isMobile } = storeToRefs(deviceStore)
+const { isMobile } = storeToRefs(deviceStore);
 
 function initAnimations() {
   gsap.registerPlugin(ScrollTrigger);
@@ -52,37 +52,35 @@ function initAnimations() {
     ease: "power3.out",
     stagger: {
       each: 0.75,
-      amount: 0.5
-    }
+      amount: 0.5,
+    },
   });
 
   gsap.from("#timeline .timeline__wrapper>.timeline__line", {
     scrollTrigger: "#timeline",
     duration: 1,
     y: "-100%",
-    autoAlpha: 0,
+    autoAlpha: 1,
     delay: 1,
-    ease: "power3.out",
+    ease: "back.inOut",
     stagger: {
       each: 1,
       amount: 2.5,
-    }
+    },
   });
 
-  gsap.from("#timeline .timeline__wrapper>.timeline__line-dot", {
+  gsap.from("#timeline .timeline__line>.timeline__line-dot", {
     scrollTrigger: "#timeline",
     duration: 1,
     scale: 0,
     autoAlpha: 0,
-    delay: 1.5,
-    ease: "power3.out",
+    delay: 1.55,
+    ease: "back.inOut",
     stagger: {
-      each: 1,
+      each: 0.5,
       amount: 2.5,
-    }
+    },
   });
-
-
 
   gsap.from(".orange span>span", {
     scrollTrigger: ".orange",
@@ -92,7 +90,6 @@ function initAnimations() {
     delay: 0.5,
     ease: "power3.out",
   });
-  
 
   gsap.to(".red", {
     scrollTrigger: {
@@ -120,7 +117,6 @@ onMounted(() => {
 
 <template>
   <div class="container">
-
     <section id="bio" class="bio">
       <div class="section__body-wrapper">
         <div class="section__body">
@@ -135,19 +131,29 @@ onMounted(() => {
               <h4>I am</h4>
             </div>
             <div class="bio__card-wrapper">
-              <div :class="['bio__card', 'hoverable', {'mobile-card': isMobile}]">
+              <div
+                :class="['bio__card', 'hoverable', { 'mobile-card': isMobile }]"
+              >
                 <div class="bio__card-text">Web developer</div>
               </div>
-              <div :class="['bio__card', 'hoverable', {'mobile-card': isMobile}]">
+              <div
+                :class="['bio__card', 'hoverable', { 'mobile-card': isMobile }]"
+              >
                 <div class="bio__card-text">Animation enthusiast</div>
               </div>
-              <div :class="['bio__card', 'hoverable', {'mobile-card': isMobile}]">
+              <div
+                :class="['bio__card', 'hoverable', { 'mobile-card': isMobile }]"
+              >
                 <div class="bio__card-text">Graphic designer</div>
               </div>
-              <div :class="['bio__card', 'hoverable', {'mobile-card': isMobile}]">
+              <div
+                :class="['bio__card', 'hoverable', { 'mobile-card': isMobile }]"
+              >
                 <div class="bio__card-text">Student</div>
               </div>
-              <div :class="['bio__card', 'hoverable', {'mobile-card': isMobile}]">
+              <div
+                :class="['bio__card', 'hoverable', { 'mobile-card': isMobile }]"
+              >
                 <div class="bio__card-text">Beer enjoyer</div>
               </div>
             </div>
@@ -162,27 +168,36 @@ onMounted(() => {
           <div class="timeline__wrapper">
             <div class="timeline__line"><div class="timeline__line-dot" /></div>
             <div class="timeline__element">
-              <span><span>
-                Headline
-              </span></span>
+              <div class="timeline__header">
+                <div class="line">
+                  <h3>Medior Vue.js Developer</h3>
+                </div>
+                <div class="line">
+                  <h4>AFS Group Netherlands</h4>
+                </div>
+                <div class="line">
+                  <h5>September 2022 – Present</h5>
+                </div>
+              </div>
+              <p>
+                Lorem ipsum dolor sit amet, consectetur adipisicing elit.
+                Repellat similique, eum odit minima sunt dolorum non facere,
+                assumenda corrupti exercitationem recusandae iusto aut ipsam
+                magnam qui! Magni non adipisci eius?
+              </p>
+            </div>
+          </div>
+          <div class="timeline__wrapper">
+            <div class="timeline__line"><div class="timeline__line-dot" /></div>
+            <div class="timeline__element">
+              <span><span> Headline </span></span>
               <p>some text...</p>
             </div>
           </div>
           <div class="timeline__wrapper">
             <div class="timeline__line"><div class="timeline__line-dot" /></div>
             <div class="timeline__element">
-              <span><span>
-                Headline
-              </span></span>
-              <p>some text...</p>
-            </div>
-          </div>
-          <div class="timeline__wrapper">
-            <div class="timeline__line"><div class="timeline__line-dot" /></div>
-            <div class="timeline__element">
-              <span><span>
-                Headline
-              </span></span>
+              <span><span> Headline </span></span>
               <p>some text...</p>
             </div>
           </div>
@@ -264,10 +279,10 @@ onMounted(() => {
     }
   }
   .mobile-card {
-      backdrop-filter: blur(5px);
-     -webkit-backdrop-filter: blur(5px);
-     background-color: rgba(0, 0, 0, 0.15);
-    }
+    backdrop-filter: blur(5px);
+    -webkit-backdrop-filter: blur(5px);
+    background-color: rgba(0, 0, 0, 0.15);
+  }
 }
 .timeline {
   // .section__body {
@@ -283,7 +298,7 @@ onMounted(() => {
   //   }
   // }
   &__line {
-    width: 0.25rem;
+    min-width: 0.1rem;
     background-color: var(--color-text);
     position: relative;
     &-dot {
@@ -304,6 +319,23 @@ onMounted(() => {
   }
   &__element {
     padding: 1rem 1rem 1rem 3rem;
+    &:hover {
+      p {
+        display: block;
+      }
+    }
+  }
+  &__header {
+    h3 {
+      line-height: 1;
+    }
+    h4 {
+      line-height: 1.2;
+    }
+  }
+  p {
+    line-height: 1.2;
+    display: none;
   }
 }
 
