@@ -29,18 +29,18 @@ onMounted(() => {
       <a class="nav__item hoverable" href="#bio">
         <div class="nav__item-text">info</div>
       </a>
-      <router-link class="nav__item hoverable" to="">
+      <a class="nav__item hoverable" href="#timeline">
         <div class="nav__item-text">experience</div>
-      </router-link>
-      <router-link class="nav__item hoverable" to="">
+      </a>
+      <a class="nav__item hoverable" href="#education">
         <div class="nav__item-text">education</div>
-      </router-link>
-      <router-link class="nav__item hoverable" to="">
+      </a>
+      <a class="nav__item hoverable" href="#skills">
         <div class="nav__item-text">skills</div>
-      </router-link>
-      <router-link class="nav__item hoverable" to="">
+      </a>
+      <a class="nav__item hoverable" href="#contact">
         <div class="nav__item-text">contact</div>
-      </router-link>
+      </a>
     </div>
   </nav>
 </template>
@@ -72,9 +72,6 @@ onMounted(() => {
     margin-left: auto;
     display: flex;
     justify-content: space-between;
-    @media only screen and (max-width: 768px) {
-      display: none;
-    }
   }
   &__item {
     padding: 1rem 2rem;
@@ -83,9 +80,25 @@ onMounted(() => {
     border-radius: 32px;
     transform-style: preserve-3d;
     transform: perspective(1000px);
+    transition-property: color;
+    transition: 0.3s ease-in-out;
+    @media only screen and (max-width: 768px) {
+      display: none;
+    }
     &-text {
       line-height: 1;
       transform: translateZ(10px);
+      transition: 0.3s ease-in-out;
+      transition-property: transform;
+    }
+    &.active {
+      @media only screen and (max-width: 768px) {
+        display: block !important;
+      }
+      color: var(--color-heading);
+      > * {
+        transform: translateZ(10px) scale(1.25);
+      }
     }
   }
 }

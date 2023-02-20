@@ -63,6 +63,10 @@ onMounted(() => {
   // }
 });
 
+function ease(start: number, end: number, amt: number): number {
+  return (1 - amt) * start + amt * end
+}
+
 function init() {
   var container = document.getElementById("face") as HTMLElement;
   camera = new THREE.PerspectiveCamera(
@@ -163,12 +167,13 @@ function init() {
   function animate() {
 
     if (model && !isMobile.value) {
-      model.rotation.x = mousePosition.y / (3 * window.innerWidth);
-      model.rotation.y = mousePosition.x / (3 * window.innerHeight);
+      
+      model.rotation.x = ease(model.rotation.x, mousePosition.y / (3 * window.innerWidth), 0.075);
+      model.rotation.y = ease(model.rotation.y, mousePosition.x / (3 * window.innerHeight), 0.075);
     }
     if (model && isMobile.value) {
-      model.rotation.y = ((orientation.value.g ?? 0) / 700);
-      model.rotation.x = (orientation.value.b ?? 0) / 400 - 0.1;
+      model.rotation.x = ease(model.rotation.x, ((orientation.value.b ?? 0) / 300 - 0.2), 0.075)
+      model.rotation.y = ease(model.rotation.y, ((orientation.value.g ?? 0) / 300), 0.075); 
     }
     requestAnimationFrame(animate);
     renderer.render(scene, camera);
@@ -188,9 +193,6 @@ function onWindowResize() {
 }
 
 function render() {
-  // camera.position.x += ( mousePosition.x - camera.position.x ) * .01;
-  // camera.position.y += ( -  mousePosition.y - camera.position.y ) * .01;
-
   camera.lookAt( scene.position );
   
   renderer.render(scene, camera);

@@ -8,13 +8,114 @@ import { useDeviceStore } from "@/stores/globalStore";
 const deviceStore = useDeviceStore();
 const { isMobile } = storeToRefs(deviceStore);
 
+function initSectionListener() {
+  const sections = document.querySelectorAll("section");
+  const navItems = document.querySelectorAll(".nav__item");
+
+  document.querySelector(".container")?.addEventListener("scroll", () => {
+    sections.forEach((section) => {
+      let rect = section.getBoundingClientRect();
+      if (
+        rect.top >= 0 &&
+        rect.left >= 0 &&
+        rect.bottom <= window.innerHeight &&
+        rect.right <= window.innerWidth
+      ) {
+        navItems.forEach((item) => {
+          if (
+            item
+              .getAttribute("href")
+              ?.includes(section.getAttribute("id") ?? "")
+          ) {
+            item.classList.add("active");
+          } else {
+            item.classList.remove("active");
+          }
+        });
+      }
+    });
+  });
+}
+
+function initExpandCards() {
+  var toggleExpand = document.querySelectorAll(".timeline__element");
+  toggleExpand.forEach((e) => {
+    if (isMobile.value) {
+      e.addEventListener("click", (event) => {
+        event.preventDefault();
+        var container = e.querySelector(".expandable") as HTMLElement;
+        if (!container.classList.contains("expanded")) {
+          const expandedElements = document.querySelectorAll(".expanded");
+          expandedElements.forEach((el) => {
+            el.style.height = "0px";
+            el.addEventListener(
+              "transitionend",
+              () => {
+                el.classList.remove("expanded");
+              },
+              {
+                once: true,
+              }
+            );
+          });
+          container.classList.add("expanded");
+          container.style.height = "auto";
+          var height = container.clientHeight + "px";
+          container.style.height = "0px";
+          setTimeout(() => {
+            container.style.height = height;
+          }, 0);
+        } else {
+          container.style.height = "0px";
+          container.addEventListener(
+            "transitionend",
+            () => {
+              container.classList.remove("expanded");
+            },
+            {
+              once: true,
+            }
+          );
+        }
+      });
+    } else {
+      e.addEventListener("mouseenter", (event) => {
+        var container = e.querySelector(".expandable") as HTMLElement;
+        container.classList.add("expanded");
+        container.style.height = "auto";
+        var height = container.clientHeight + "px";
+        container.style.height = "0px";
+        setTimeout(() => {
+          container.style.height = height;
+        }, 0);
+      });
+      e.addEventListener("mouseleave", (event) => {
+        var container = e.querySelector(".expandable") as HTMLElement;
+        container.style.height = "0px";
+        container.addEventListener(
+          "transitionend",
+          () => {
+            container.classList.remove("expanded");
+          },
+          {
+            once: true,
+          }
+        );
+      });
+    }
+  });
+}
+
 function initAnimations() {
+  // Setup
   gsap.registerPlugin(ScrollTrigger);
 
   ScrollTrigger.defaults({
-    toggleActions: "restart pause resume pause",
+    toggleActions: "play pause resume pause",
     scroller: ".container",
   });
+
+  // Info
 
   gsap.from("#bio .line>h3", {
     scrollTrigger: "#bio",
@@ -56,13 +157,15 @@ function initAnimations() {
     },
   });
 
+  // Experience
+
   gsap.from("#timeline .timeline__wrapper>.timeline__line", {
     scrollTrigger: "#timeline",
     duration: 1,
-    y: "-100%",
+    y: "-101%",
     autoAlpha: 1,
-    delay: 1,
-    ease: "back.inOut",
+    delay: 0.25,
+    ease: "power3.inOut",
     stagger: {
       each: 1,
       amount: 2.5,
@@ -74,11 +177,130 @@ function initAnimations() {
     duration: 1,
     scale: 0,
     autoAlpha: 0,
-    delay: 1.55,
-    ease: "back.inOut",
+    delay: 0.75,
+    ease: "power3.inOut",
     stagger: {
       each: 0.5,
       amount: 2.5,
+    },
+  });
+
+  gsap.from("#timeline .line>h3", {
+    scrollTrigger: "#timeline",
+    duration: 1,
+    y: "150%",
+    autoAlpha: 0,
+    delay: 0.75,
+    ease: "power3.inOut",
+    stagger: {
+      each: 0.5,
+      amount: 2.5,
+    },
+  });
+
+  gsap.from("#timeline .line>h4", {
+    scrollTrigger: "#timeline",
+    duration: 1,
+    y: "150%",
+    autoAlpha: 0,
+    delay: 1,
+    ease: "power3.inOut",
+    stagger: {
+      each: 0.5,
+      amount: 2.5,
+    },
+  });
+
+  gsap.from("#timeline .line>h5", {
+    scrollTrigger: "#timeline",
+    duration: 1,
+    y: "150%",
+    autoAlpha: 0,
+    delay: 1.25,
+    ease: "power3.inOut",
+    stagger: {
+      each: 0.5,
+      amount: 2.5,
+    },
+  });
+
+  gsap.from("#timeline .timeline__element li", {
+    scrollTrigger: "#timeline",
+    duration: 1,
+    y: "100%",
+    autoAlpha: 0,
+    delay: 1.5,
+    ease: "power3.inOut",
+    stagger: {
+      each: 0.5,
+      amount: 2.5,
+    },
+  });
+
+  // Education
+
+  gsap.from("#education .timeline__wrapper>.timeline__line", {
+    scrollTrigger: "#education",
+    duration: 1,
+    y: "-101%",
+    autoAlpha: 1,
+    delay: 0.25,
+    ease: "power3.inOut",
+    stagger: {
+      each: 1,
+      amount: 2,
+    },
+  });
+
+  gsap.from("#education .timeline__line>.timeline__line-dot", {
+    scrollTrigger: "#education",
+    duration: 1,
+    scale: 0,
+    autoAlpha: 0,
+    delay: 0.75,
+    ease: "power3.inOut",
+    stagger: {
+      each: 0.5,
+      amount: 2,
+    },
+  });
+
+  gsap.from("#education .line>h3", {
+    scrollTrigger: "#education",
+    duration: 1,
+    y: "150%",
+    autoAlpha: 0,
+    delay: 0.75,
+    ease: "power3.inOut",
+    stagger: {
+      each: 0.5,
+      amount: 2,
+    },
+  });
+
+  gsap.from("#education .line>h4", {
+    scrollTrigger: "#education",
+    duration: 1,
+    y: "150%",
+    autoAlpha: 0,
+    delay: 1,
+    ease: "power3.inOut",
+    stagger: {
+      each: 0.5,
+      amount: 2,
+    },
+  });
+
+  gsap.from("#education .line>h5", {
+    scrollTrigger: "#education",
+    duration: 1,
+    y: "150%",
+    autoAlpha: 0,
+    delay: 1.25,
+    ease: "power3.inOut",
+    stagger: {
+      each: 0.5,
+      amount: 2,
     },
   });
 
@@ -112,6 +334,8 @@ function initAnimations() {
 
 onMounted(() => {
   initAnimations();
+  initExpandCards();
+  initSectionListener();
 });
 </script>
 
@@ -128,7 +352,7 @@ onMounted(() => {
           </div>
           <div class="bio__body">
             <div class="line">
-              <h4>I am</h4>
+              <h4>I'm a</h4>
             </div>
             <div class="bio__card-wrapper">
               <div
@@ -179,41 +403,171 @@ onMounted(() => {
                   <h5>September 2022 – Present</h5>
                 </div>
               </div>
-              <p>
-                Lorem ipsum dolor sit amet, consectetur adipisicing elit.
-                Repellat similique, eum odit minima sunt dolorum non facere,
-                assumenda corrupti exercitationem recusandae iusto aut ipsam
-                magnam qui! Magni non adipisci eius?
-              </p>
+              <ul class="expandable">
+                <li>
+                  Lorem, ipsum dolor sit amet consectetur adipisicing elit.
+                  Explicabo placeat cupiditate deleniti repudiandae eos cum
+                  excepturi corrupti sequi veritatis quod eligendi saepe,
+                </li>
+                <li>
+                  accusantium consequatur necessitatibus obcaecati veniam, nam
+                  distinctio rem.
+                </li>
+              </ul>
             </div>
           </div>
           <div class="timeline__wrapper">
             <div class="timeline__line"><div class="timeline__line-dot" /></div>
             <div class="timeline__element">
-              <span><span> Headline </span></span>
-              <p>some text...</p>
+              <div class="timeline__header">
+                <div class="line">
+                  <h3>Web Developer</h3>
+                </div>
+                <div class="line">
+                  <h4>Custommerce sp. z o. o.</h4>
+                </div>
+                <div class="line">
+                  <h5>October 2021 – September 2022</h5>
+                </div>
+              </div>
+              <ul class="expandable">
+                <li>
+                  Created rich content cards for well-known brands like Nivea,
+                  iRobot, Remington or Legrand and implemented them in numerous
+                  e-commerce shops in Poland,
+                </li>
+                <li>
+                  Developed unique system for optimizing HTML and CSS in Node.js
+                </li>
+              </ul>
             </div>
           </div>
           <div class="timeline__wrapper">
             <div class="timeline__line"><div class="timeline__line-dot" /></div>
             <div class="timeline__element">
-              <span><span> Headline </span></span>
-              <p>some text...</p>
+              <div class="timeline__header">
+                <div class="line">
+                  <h3>Front-end Web Developer</h3>
+                </div>
+                <div class="line">
+                  <h4>INFOCENTRUM sp. z o. o.</h4>
+                </div>
+                <div class="line">
+                  <h5>August 2020 – January 2022</h5>
+                </div>
+              </div>
+              <ul class="expandable">
+                <li>
+                  Software for production efficiency and countering the spread
+                  of COVID-19 for one of the largest companies in Poland H.
+                  CEGIELSKI-POZNAŃ S. A.
+                </li>
+                <li>Websites and e-commerce shops for individual clients</li>
+              </ul>
+            </div>
+          </div>
+          <div class="timeline__wrapper">
+            <div class="timeline__line"><div class="timeline__line-dot" /></div>
+            <div class="timeline__element">
+              <div class="timeline__header">
+                <div class="line">
+                  <h3>Web Developer</h3>
+                </div>
+                <div class="line">
+                  <h4>ITM-Software sp. z o. o.</h4>
+                </div>
+                <div class="line">
+                  <h5>June 2019 – July 2020</h5>
+                </div>
+              </div>
+              <ul class="expandable">
+                <li>
+                  Promo materials for company, new website, dedicated UI designs
+                  for upcoming software.
+                </li>
+              </ul>
             </div>
           </div>
         </div>
       </div>
     </section>
 
-    <section class="panel red">
+    <section id="education" class="education">
       <div class="section__body-wrapper">
         <div class="section__body">
-          <p>This background color will change</p>
+          <div class="timeline__wrapper">
+            <div class="timeline__line"><div class="timeline__line-dot" /></div>
+            <div class="timeline__element">
+              <div class="timeline__header">
+                <div class="line">
+                  <h3>Uniwerystet im.&nbsp;Adama&nbsp;Mickiewicza</h3>
+                </div>
+                <div class="line">
+                  <h4>Software Engineer</h4>
+                </div>
+                <div class="line">
+                  <h5>October 2021 – Present</h5>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="timeline__wrapper">
+            <div class="timeline__line"><div class="timeline__line-dot" /></div>
+            <div class="timeline__element">
+              <div class="timeline__header">
+                <div class="line">
+                  <h3>Zespół Szkół Komunikacji im.&nbsp;Hipolita&nbsp;Cegielskiego</h3>
+                </div>
+                <div class="line">
+                  <h4>IT Technician</h4>
+                </div>
+                <div class="line">
+                  <h5>September 2018 – May 2021</h5>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </section>
 
-    <section class="panel blue yoyo">
+    <section id="skills" class="skills">
+      <div class="section__body-wrapper">
+        <div class="section__body">
+          <div class="bio__body">
+            <div class="bio__card-wrapper">
+              <div
+                :class="['bio__card', 'hoverable', { 'mobile-card': isMobile }]"
+              >
+                <div class="bio__card-text">Web developer</div>
+              </div>
+              <div
+                :class="['bio__card', 'hoverable', { 'mobile-card': isMobile }]"
+              >
+                <div class="bio__card-text">Animation enthusiast</div>
+              </div>
+              <div
+                :class="['bio__card', 'hoverable', { 'mobile-card': isMobile }]"
+              >
+                <div class="bio__card-text">Graphic designer</div>
+              </div>
+              <div
+                :class="['bio__card', 'hoverable', { 'mobile-card': isMobile }]"
+              >
+                <div class="bio__card-text">Student</div>
+              </div>
+              <div
+                :class="['bio__card', 'hoverable', { 'mobile-card': isMobile }]"
+              >
+                <div class="bio__card-text">Beer enjoyer</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="contact" class="contact">
       <div class="section__body-wrapper">
         <div class="section__body">
           <p>Yoyo Text!</p>
@@ -243,7 +597,7 @@ onMounted(() => {
       width: 100%;
       max-width: 40rem;
       @media only screen and (max-width: 768px) {
-        padding: 2rem 2rem 2rem;
+        padding: 1rem 1rem 1rem 2rem;
       }
     }
   }
@@ -285,30 +639,19 @@ onMounted(() => {
   }
 }
 .timeline {
-  // .section__body {
-  //   position: relative;
-  //   &::after {
-  //     content: '';
-  //     height: 100%;
-  //     width: 1rem;
-  //     background-color: #cf3535;
-  //     position: absolute;
-  //     left: 0;
-  //     top: 0;
-  //   }
-  // }
   &__line {
     min-width: 0.1rem;
-    background-color: var(--color-text);
+    background-color: var(--color-heading);
     position: relative;
+    border-radius: 1rem;
     &-dot {
       position: absolute;
-      width: 1rem;
-      height: 1rem;
-      top: 50%;
+      width: 0.75rem;
+      height: 0.75rem;
+      top: 2.5rem;
       left: 50%;
-      transform: translate(-50%, -50%);
-      background-color: #cf3535;
+      transform: translate(-50%, -0%);
+      background-color: #fff;
       border-radius: 100%;
     }
   }
@@ -319,23 +662,32 @@ onMounted(() => {
   }
   &__element {
     padding: 1rem 1rem 1rem 3rem;
-    &:hover {
-      p {
-        display: block;
-      }
-    }
   }
   &__header {
     h3 {
       line-height: 1;
+      color: var(--color-heading);
     }
     h4 {
+      padding-bottom: 0.125rem;
       line-height: 1.2;
     }
   }
-  p {
+  .expandable {
     line-height: 1.2;
-    display: none;
+    height: 0px;
+    opacity: 0;
+    padding-left: 1rem;
+    padding-top: 0.5rem;
+    transition: 0.45s cubic-bezier(0.69, 0, 0.27, 1);
+    overflow-y: hidden;
+    @media only screen and (max-width: 768px) {
+      padding-left: 1.5rem;
+      line-height: 1;
+    }
+    &.expanded {
+      opacity: 1;
+    }
   }
 }
 

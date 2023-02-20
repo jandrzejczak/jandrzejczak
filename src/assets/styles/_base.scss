@@ -48,6 +48,16 @@
   --section-gap: 160px;
 }
 
+::-moz-selection { /* Code for Firefox */
+  color: var(--color-heading);
+  background: var(--color-background-mute);
+}
+
+::selection {
+  color: var(--color-heading);
+  background: var(--color-background-mute);
+}
+
 @media (prefers-color-scheme: dark) {
   :root {
     --color-background: var(--vt-c-black);
@@ -61,6 +71,7 @@
     --color-text: var(--vt-c-text-dark-2);
   }
 }
+
 
 @media only screen and (max-width: 768px) {
   html {
