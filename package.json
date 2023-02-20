@@ -16,6 +16,7 @@
     "@vitejs/plugin-basic-ssl": "^1.0.1",
     "animejs": "^3.2.1",
     "gsap": "^3.11.4",
+    "oh-vue-icons": "^1.0.0-rc3",
     "pinia": "^2.0.28",
     "three": "^0.149.0",
     "vanilla-tilt": "^1.8.0",

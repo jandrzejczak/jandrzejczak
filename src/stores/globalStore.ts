@@ -20,9 +20,12 @@ export const useOrientationStore = defineStore("orientation",
   },
 });
 
+  
+
 export const useDeviceStore = defineStore("device", 
 {
   state: () => ({
     isMobile: (typeof window.orientation !== "undefined") || (navigator.userAgent.indexOf('IEMobile') !== -1),
+    isSafari: (navigator.userAgent.indexOf("Safari") != -1 && navigator.userAgent.indexOf("Chrome") == -1),
   }),
 });

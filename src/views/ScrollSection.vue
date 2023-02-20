@@ -116,7 +116,6 @@ function initAnimations() {
   });
 
   // Info
-
   gsap.from("#bio .line>h3", {
     scrollTrigger: "#bio",
     duration: 1,
@@ -158,7 +157,6 @@ function initAnimations() {
   });
 
   // Experience
-
   gsap.from("#timeline .timeline__wrapper>.timeline__line", {
     scrollTrigger: "#timeline",
     duration: 1,
@@ -238,7 +236,6 @@ function initAnimations() {
   });
 
   // Education
-
   gsap.from("#education .timeline__wrapper>.timeline__line", {
     scrollTrigger: "#education",
     duration: 1,
@@ -304,31 +301,18 @@ function initAnimations() {
     },
   });
 
-  gsap.from(".orange span>span", {
-    scrollTrigger: ".orange",
+  // Skills
+  gsap.from("#skills .skills__card-wrapper>.skills__card", {
+    scrollTrigger: "#skills",
     duration: 1,
     y: "150%",
     autoAlpha: 0,
-    delay: 0.5,
+    delay: 1,
     ease: "power3.out",
-  });
-
-  gsap.to(".red", {
-    scrollTrigger: {
-      trigger: ".red",
-      toggleActions: "restart pause reverse pause",
+    stagger: {
+      each: 0.75,
+      amount: 0.5,
     },
-    duration: 1,
-    backgroundColor: "#FFA500",
-    ease: "none",
-  });
-
-  gsap.to(".yoyo p", {
-    scrollTrigger: ".yoyo",
-    scale: 2,
-    repeat: -1,
-    yoyo: true,
-    ease: "power2",
   });
 }
 
@@ -363,12 +347,12 @@ onMounted(() => {
               <div
                 :class="['bio__card', 'hoverable', { 'mobile-card': isMobile }]"
               >
-                <div class="bio__card-text">Animation enthusiast</div>
+                <div class="bio__card-text">Graphic designer</div>
               </div>
               <div
                 :class="['bio__card', 'hoverable', { 'mobile-card': isMobile }]"
               >
-                <div class="bio__card-text">Graphic designer</div>
+                <div class="bio__card-text">Animation enthusiast</div>
               </div>
               <div
                 :class="['bio__card', 'hoverable', { 'mobile-card': isMobile }]"
@@ -378,7 +362,7 @@ onMounted(() => {
               <div
                 :class="['bio__card', 'hoverable', { 'mobile-card': isMobile }]"
               >
-                <div class="bio__card-text">Beer enjoyer</div>
+                <div class="bio__card-text">Adventure seeker</div>
               </div>
             </div>
           </div>
@@ -450,7 +434,7 @@ onMounted(() => {
                   <h3>Front-end Web Developer</h3>
                 </div>
                 <div class="line">
-                  <h4>INFOCENTRUM sp. z o. o.</h4>
+                  <h4>Infocentrum sp. z o. o.</h4>
                 </div>
                 <div class="line">
                   <h5>August 2020 – January 2022</h5>
@@ -516,7 +500,9 @@ onMounted(() => {
             <div class="timeline__element">
               <div class="timeline__header">
                 <div class="line">
-                  <h3>Zespół Szkół Komunikacji im.&nbsp;Hipolita&nbsp;Cegielskiego</h3>
+                  <h3>
+                    Zespół Szkół Komunikacji im.&nbsp;Hipolita&nbsp;Cegielskiego
+                  </h3>
                 </div>
                 <div class="line">
                   <h4>IT Technician</h4>
@@ -534,32 +520,199 @@ onMounted(() => {
     <section id="skills" class="skills">
       <div class="section__body-wrapper">
         <div class="section__body">
-          <div class="bio__body">
-            <div class="bio__card-wrapper">
+          <div class="skills__body">
+            <div class="skills__card-wrapper">
               <div
-                :class="['bio__card', 'hoverable', { 'mobile-card': isMobile }]"
+                :class="[
+                  'skills__card',
+                  'hoverable',
+                  { 'mobile-card': isMobile },
+                ]"
               >
-                <div class="bio__card-text">Web developer</div>
+                <v-icon
+                  class="skills__card-icon"
+                  name="io-language"
+                  scale="2"
+                />
+                <div class="skills__card-text">English</div>
               </div>
               <div
-                :class="['bio__card', 'hoverable', { 'mobile-card': isMobile }]"
+                :class="[
+                  'skills__card',
+                  'hoverable',
+                  { 'mobile-card': isMobile },
+                ]"
               >
-                <div class="bio__card-text">Animation enthusiast</div>
+                <v-icon
+                  class="skills__card-icon"
+                  name="io-language"
+                  scale="2"
+                />
+                <div class="skills__card-text">Polish</div>
               </div>
               <div
-                :class="['bio__card', 'hoverable', { 'mobile-card': isMobile }]"
+                :class="[
+                  'skills__card',
+                  'hoverable',
+                  { 'mobile-card': isMobile },
+                ]"
               >
-                <div class="bio__card-text">Graphic designer</div>
+                <v-icon
+                  class="skills__card-icon"
+                  name="co-typescript"
+                  scale="2"
+                />
+                <div class="skills__card-text">TypeScript</div>
               </div>
               <div
-                :class="['bio__card', 'hoverable', { 'mobile-card': isMobile }]"
+                :class="[
+                  'skills__card',
+                  'hoverable',
+                  { 'mobile-card': isMobile },
+                ]"
               >
-                <div class="bio__card-text">Student</div>
+                <v-icon
+                  class="skills__card-icon"
+                  name="co-sass-alt"
+                  scale="2"
+                />
+                <div class="skills__card-text">CSS Preprocessors</div>
               </div>
               <div
-                :class="['bio__card', 'hoverable', { 'mobile-card': isMobile }]"
+                :class="[
+                  'skills__card',
+                  'hoverable',
+                  { 'mobile-card': isMobile },
+                ]"
               >
-                <div class="bio__card-text">Beer enjoyer</div>
+                <v-icon
+                  class="skills__card-icon"
+                  name="la-node"
+                  scale="2"
+                />
+                <div class="skills__card-text">Node.js</div>
+              </div>
+              <div
+                :class="[
+                  'skills__card',
+                  'hoverable',
+                  { 'mobile-card': isMobile },
+                ]"
+              >
+                <v-icon
+                  class="skills__card-icon"
+                  name="io-logo-vue"
+                  scale="2"
+                />
+                <div class="skills__card-text">Vue.js</div>
+              </div>
+              <div
+                :class="[
+                  'skills__card',
+                  'hoverable',
+                  { 'mobile-card': isMobile },
+                ]"
+              >
+                <v-icon
+                  class="skills__card-icon"
+                  name="si-html5"
+                  scale="2"
+                />
+                <div class="skills__card-text">HTML5</div>
+              </div>
+              <div
+                :class="[
+                  'skills__card',
+                  'hoverable',
+                  { 'mobile-card': isMobile },
+                ]"
+              >
+                <v-icon
+                  class="skills__card-icon"
+                  name="si-git"
+                  scale="2"
+                />
+              </div>
+              <div
+                :class="[
+                  'skills__card',
+                  'hoverable',
+                  { 'mobile-card': isMobile },
+                ]"
+              >
+                <v-icon
+                  class="skills__card-icon"
+                  name="co-jest"
+                  scale="2"
+                />
+                <div class="skills__card-text">Jest</div>
+              </div>
+              <div
+                :class="[
+                  'skills__card',
+                  'hoverable',
+                  { 'mobile-card': isMobile },
+                ]"
+              >
+                <v-icon
+                  class="skills__card-icon"
+                  name="co-graphql"
+                  scale="2"
+                />
+                <div class="skills__card-text">GraphQL</div>
+              </div>
+              <div
+                :class="[
+                  'skills__card',
+                  'hoverable',
+                  { 'mobile-card': isMobile },
+                ]"
+              >
+                <v-icon
+                  class="skills__card-icon"
+                  name="co-mysql"
+                  scale="2"
+                />
+              </div>
+              <div
+                :class="[
+                  'skills__card',
+                  'hoverable',
+                  { 'mobile-card': isMobile },
+                ]"
+              >
+                <v-icon
+                  class="skills__card-icon"
+                  name="co-docker"
+                  scale="2"
+                />
+                <div class="skills__card-text">Docker</div>
+              </div>
+              <div
+                :class="[
+                  'skills__card',
+                  'hoverable',
+                  { 'mobile-card': isMobile },
+                ]"
+              >
+                <v-icon
+                  class="skills__card-icon"
+                  name="si-adobephotoshop"
+                  scale="2"
+                />
+              </div>
+              <div
+                :class="[
+                  'skills__card',
+                  'hoverable',
+                  { 'mobile-card': isMobile },
+                ]"
+              >
+                <v-icon
+                  class="skills__card-icon"
+                  name="si-adobeaftereffects"
+                  scale="2"
+                />
               </div>
             </div>
           </div>
@@ -651,7 +804,7 @@ onMounted(() => {
       top: 2.5rem;
       left: 50%;
       transform: translate(-50%, -0%);
-      background-color: #fff;
+      background-color: var(--color-text-solid);
       border-radius: 100%;
     }
   }
@@ -691,24 +844,51 @@ onMounted(() => {
   }
 }
 
+.skills {
+  &__body {
+    padding-top: 2rem;
+  }
+  &__card {
+    position: relative;
+    padding: 1rem;
+    border-radius: 15px;
+    // overflow: hidden;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-top: 1px solid rgba(255, 255, 255, 0.3);
+    border-left: 1px solid rgba(255, 255, 255, 0.3);
+    color: white;
+    box-shadow: 0 50px 100px rgba(0, 0, 0, 0.6);
+    margin: 0 1rem 1rem 0;
+    transform-style: preserve-3d;
+    transform: perspective(1000px);
+    background-color: rgba(0, 0, 0, 0.25);
+    &-text {
+      font-family: "Questrial", sans-serif;
+      padding-left: 1rem;
+      transform: translateZ(20px);
+    }
+    &-icon {
+      transform: translateZ(20px);
+    }
+    &-wrapper {
+      padding-top: 1rem;
+      display: flex;
+      flex-wrap: wrap;
+    }
+  }
+  .mobile-card {
+    backdrop-filter: blur(5px);
+    -webkit-backdrop-filter: blur(5px);
+    background-color: rgba(0, 0, 0, 0.15);
+  }
+}
+
 .line {
   overflow: hidden;
   * {
     display: block;
   }
-}
-.orange {
-  span {
-    display: block;
-    overflow: hidden;
-  }
-}
-.red {
-  background-color: #cf3535;
-  background-image: none;
-}
-
-.panel p {
-  font-size: 32px;
 }
 </style>

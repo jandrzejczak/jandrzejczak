@@ -10,38 +10,29 @@ import { storeToRefs } from "pinia";
 import { useDeviceStore } from "@/stores/globalStore";
 
 const store = useDeviceStore();
-const { isMobile } = storeToRefs(store)
-// declare global {
-//   interface DeviceOrientationEvent extends Event {
-//     readonly absolute: boolean | undefined;
-//     readonly alpha: number | null;
-//     readonly beta: number | null;
-//     readonly gamma: number | null;
-//   }
-// }
+const { isMobile } = storeToRefs(store);
 
 const loading = ref(true);
 
-// const isMobileDevice = (): boolean => {
-//   return (typeof window.orientation !== "undefined") || (navigator.userAgent.indexOf('IEMobile') !== -1);
-// }
-
 const appHeight = () => {
-  const doc = document.documentElement
-  doc.style.setProperty(`--app-height`, `${window.innerHeight}px`)
-}
+  const doc = document.documentElement;
+  doc.style.setProperty(`--app-height`, `${window.innerHeight}px`);
+};
 
 onMounted(() => {
-
-  window.addEventListener('resize', appHeight)
-  appHeight()
+  window.addEventListener("resize", appHeight);
+  appHeight();
 });
 </script>
 
 <template>
   <cursor v-if="!isMobile && !loading"></cursor>
   <Transition>
-    <loading @loading-finished="(e) => (loading = !e)" :is-mobile="isMobile" v-show="loading"></loading>
+    <loading
+      @loading-finished="(e) => (loading = !e)"
+      :is-mobile="isMobile"
+      v-show="loading"
+    ></loading>
   </Transition>
   <div class="layout">
     <navigation v-if="!loading" :is-mobile="isMobile"></navigation>

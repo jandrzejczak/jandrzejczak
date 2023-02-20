@@ -19,6 +19,10 @@ const { isMobile } = storeToRefs(deviceStore)
 
 const emit = defineEmits(["scene-ready"]);
 
+function ease(start: number, end: number, amt: number): number {
+  return (1 - amt) * start + amt * end
+}
+
 let camera: any, scene: any, renderer: any, model: any, boxMesh: any;
 
 let mousePosition = {
@@ -33,39 +37,8 @@ onMounted(() => {
   window.addEventListener("mousemove", (e) => {
     mousePosition.x = e.pageX - window.innerWidth / 2;
     mousePosition.y = e.pageY - window.innerHeight / 2;
-    // console.table({x: mousePosition.x, y: mousePosition.y})
   });
-
-  // if (window.DeviceOrientationEvent) {
-  //   window.addEventListener(
-  //     "deviceorientation",
-  //     function (event: any) {
-  //       tilt([event.beta, event.gamma]);
-  //     },
-  //     true
-  //   );
-  // } else if (window.DeviceMotionEvent) {
-  //   window.addEventListener(
-  //     "devicemotion",
-  //     function (event: any) {
-  //       tilt([event.acceleration.x * 2, event.acceleration.y * 2]);
-  //     },
-  //     true
-  //   );
-  // } else {
-  //   window.addEventListener(
-  //     "MozOrientation",
-  //     function (orientation: any) {
-  //       tilt([orientation.x * 50, orientation.y * 50]);
-  //     },
-  //     true
-  //   );
-  // }
 });
-
-function ease(start: number, end: number, amt: number): number {
-  return (1 - amt) * start + amt * end
-}
 
 function init() {
   var container = document.getElementById("face") as HTMLElement;
@@ -81,7 +54,7 @@ function init() {
   scene = new THREE.Scene();
 
   const dracoLoader = new DRACOLoader();
-  dracoLoader.setDecoderPath("/jsm/libs/draco/");
+  dracoLoader.setDecoderPath("/libs/draco/");
 
   new RGBELoader()
     .setPath("/images/")

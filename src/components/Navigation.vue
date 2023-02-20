@@ -1,30 +1,30 @@
 <script setup lang="ts">
-import { RouterLink } from "vue-router";
 import VanillaTilt from "vanilla-tilt";
 import { onMounted } from "vue";
+import { storeToRefs } from "pinia";
+import { useDeviceStore } from "@/stores/globalStore";
 
-const props = defineProps({
-  isMobile : {
-    type: Boolean,
-    required: true,
-  }
-})
+const store = useDeviceStore();
+const { isMobile, isSafari } = storeToRefs(store);
 
 onMounted(() => {
   const element = document.querySelectorAll(".hoverable") as any;
   VanillaTilt.init(element, {
     max: 25,
     speed: 400,
-    scale: props.isMobile ? 1 : 1.125,
-    glare: !props.isMobile,
-    gyroscope: props.isMobile,
+    scale: isMobile.value ? 1 : 1.125,
+    // glare: !isMobile.value && !isSafari.value,
+    glare: !isMobile.value,
+    gyroscope: isMobile.value,
   });
 });
 </script>
 
 <template>
   <nav class="nav">
-    <div class="nav__logo">andrzejczak</div>
+    <a class="nav__logo-wrapper" href="#bio">
+      <div class="nav__logo">andrzejczak</div>
+    </a>
     <div class="nav__items">
       <a class="nav__item hoverable" href="#bio">
         <div class="nav__item-text">info</div>
@@ -59,14 +59,15 @@ onMounted(() => {
   z-index: 30;
   transform: translateX(-50%);
   padding: 0 2rem;
-  @media only screen and (max-width: 768px) {
-    // padding: 0 1rem;
-  }
   &__logo {
     font-family: "Questrial", sans-serif;
     font-size: 2rem;
     padding: 1rem 0;
     line-height: 1;
+    &-wrapper {
+      text-decoration: none;
+      color: var(--color-text);
+    }
   }
   &__items {
     margin-left: auto;
@@ -77,13 +78,14 @@ onMounted(() => {
     padding: 1rem 2rem;
     text-decoration: none;
     color: var(--color-text);
-    border-radius: 32px;
+    border-radius: 2rem;
     transform-style: preserve-3d;
     transform: perspective(1000px);
     transition-property: color;
     transition: 0.3s ease-in-out;
     @media only screen and (max-width: 768px) {
       display: none;
+      padding-right: 0;
     }
     &-text {
       line-height: 1;
