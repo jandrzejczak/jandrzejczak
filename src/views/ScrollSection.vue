@@ -46,7 +46,7 @@ function initExpandCards() {
         var container = e.querySelector(".expandable") as HTMLElement;
         if (!container.classList.contains("expanded")) {
           const expandedElements = document.querySelectorAll(".expanded");
-          expandedElements.forEach((el) => {
+          expandedElements.forEach((el: any) => {
             el.style.height = "0px";
             el.addEventListener(
               "transitionend",
