@@ -22,11 +22,11 @@ onMounted(() => {
 
 <template>
   <nav class="nav">
-    <a class="nav__logo-wrapper" href="#bio">
+    <a class="nav__logo-wrapper" href="#info">
       <div class="nav__logo">andrzejczak</div>
     </a>
     <div class="nav__items">
-      <a class="nav__item hoverable" href="#bio">
+      <a class="nav__item hoverable" href="#info">
         <div class="nav__item-text">info</div>
       </a>
       <a class="nav__item hoverable" href="#timeline">

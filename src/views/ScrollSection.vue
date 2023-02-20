@@ -1,12 +1,27 @@
 <script setup lang="ts">
 import gsap from "gsap";
 import ScrollTrigger from "gsap/ScrollTrigger";
-import { onMounted } from "vue";
+import { onMounted, ref, computed } from "vue";
 import { storeToRefs } from "pinia";
 import { useDeviceStore } from "@/stores/globalStore";
 
+import InfoComponent from "@/components/ScrollView/InfoComponent.vue";
+import TimelineComponent from "@/components/ScrollView/TimelineComponent.vue";
+import EducationComponent from "@/components/ScrollView/EducationComponent.vue";
+import SkillsComponent from "@/components/ScrollView/SkillsComponent.vue";
+import ContactComponent from "@/components/ScrollView/ContactComponent.vue";
+
 const deviceStore = useDeviceStore();
 const { isMobile } = storeToRefs(deviceStore);
+
+const mailData = ref({
+  subject: "",
+  body: "",
+});
+
+const mailTo = computed(() => {
+  return `mailto:jordan.andrzejczak@outlook.com?subject=${mailData.value.subject}&body=${mailData.value.body}`;
+});
 
 function initSectionListener() {
   const sections = document.querySelectorAll("section");
@@ -37,75 +52,6 @@ function initSectionListener() {
   });
 }
 
-function initExpandCards() {
-  var toggleExpand = document.querySelectorAll(".timeline__element");
-  toggleExpand.forEach((e) => {
-    if (isMobile.value) {
-      e.addEventListener("click", (event) => {
-        event.preventDefault();
-        var container = e.querySelector(".expandable") as HTMLElement;
-        if (!container.classList.contains("expanded")) {
-          const expandedElements = document.querySelectorAll(".expanded");
-          expandedElements.forEach((el: any) => {
-            el.style.height = "0px";
-            el.addEventListener(
-              "transitionend",
-              () => {
-                el.classList.remove("expanded");
-              },
-              {
-                once: true,
-              }
-            );
-          });
-          container.classList.add("expanded");
-          container.style.height = "auto";
-          var height = container.clientHeight + "px";
-          container.style.height = "0px";
-          setTimeout(() => {
-            container.style.height = height;
-          }, 0);
-        } else {
-          container.style.height = "0px";
-          container.addEventListener(
-            "transitionend",
-            () => {
-              container.classList.remove("expanded");
-            },
-            {
-              once: true,
-            }
-          );
-        }
-      });
-    } else {
-      e.addEventListener("mouseenter", (event) => {
-        var container = e.querySelector(".expandable") as HTMLElement;
-        container.classList.add("expanded");
-        container.style.height = "auto";
-        var height = container.clientHeight + "px";
-        container.style.height = "0px";
-        setTimeout(() => {
-          container.style.height = height;
-        }, 0);
-      });
-      e.addEventListener("mouseleave", (event) => {
-        var container = e.querySelector(".expandable") as HTMLElement;
-        container.style.height = "0px";
-        container.addEventListener(
-          "transitionend",
-          () => {
-            container.classList.remove("expanded");
-          },
-          {
-            once: true,
-          }
-        );
-      });
-    }
-  });
-}
-
 function initAnimations() {
   // Setup
   gsap.registerPlugin(ScrollTrigger);
@@ -116,8 +62,8 @@ function initAnimations() {
   });
 
   // Info
-  gsap.from("#bio .line>h3", {
-    scrollTrigger: "#bio",
+  gsap.from("#info .line>h3", {
+    scrollTrigger: "#info",
     duration: 1,
     y: "150%",
     autoAlpha: 0,
@@ -125,8 +71,8 @@ function initAnimations() {
     ease: "power3.out",
   });
 
-  gsap.from("#bio .line>h1", {
-    scrollTrigger: "#bio",
+  gsap.from("#info .line>h1", {
+    scrollTrigger: "#info",
     duration: 1,
     y: "150%",
     autoAlpha: 0,
@@ -134,8 +80,8 @@ function initAnimations() {
     ease: "power3.out",
   });
 
-  gsap.from("#bio .line>h4", {
-    scrollTrigger: "#bio",
+  gsap.from("#info .line>h4", {
+    scrollTrigger: "#info",
     duration: 1,
     y: "150%",
     autoAlpha: 0,
@@ -143,8 +89,8 @@ function initAnimations() {
     ease: "power3.out",
   });
 
-  gsap.from("#bio .bio__card-wrapper>.bio__card", {
-    scrollTrigger: "#bio",
+  gsap.from("#info .info__card-wrapper>.info__card", {
+    scrollTrigger: "#info",
     duration: 1,
     y: "150%",
     autoAlpha: 0,
@@ -318,552 +264,32 @@ function initAnimations() {
 
 onMounted(() => {
   initAnimations();
-  initExpandCards();
   initSectionListener();
 });
 </script>
 
 <template>
   <div class="container">
-    <section id="bio" class="bio">
-      <div class="section__body-wrapper">
-        <div class="section__body">
-          <div class="line">
-            <h3>my name is</h3>
-          </div>
-          <div class="line">
-            <h1>jordan andrzejczak</h1>
-          </div>
-          <div class="bio__body">
-            <div class="line">
-              <h4>I'm a</h4>
-            </div>
-            <div class="bio__card-wrapper">
-              <div
-                :class="['bio__card', 'hoverable', { 'mobile-card': isMobile }]"
-              >
-                <div class="bio__card-text">Web developer</div>
-              </div>
-              <div
-                :class="['bio__card', 'hoverable', { 'mobile-card': isMobile }]"
-              >
-                <div class="bio__card-text">Graphic designer</div>
-              </div>
-              <div
-                :class="['bio__card', 'hoverable', { 'mobile-card': isMobile }]"
-              >
-                <div class="bio__card-text">Animation enthusiast</div>
-              </div>
-              <div
-                :class="['bio__card', 'hoverable', { 'mobile-card': isMobile }]"
-              >
-                <div class="bio__card-text">Student</div>
-              </div>
-              <div
-                :class="['bio__card', 'hoverable', { 'mobile-card': isMobile }]"
-              >
-                <div class="bio__card-text">Adventure seeker</div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
+    <info-component />
 
-    <section id="timeline" class="timeline">
-      <div class="section__body-wrapper">
-        <div class="section__body">
-          <div class="timeline__wrapper">
-            <div class="timeline__line"><div class="timeline__line-dot" /></div>
-            <div class="timeline__element">
-              <div class="timeline__header">
-                <div class="line">
-                  <h3>Medior Vue.js Developer</h3>
-                </div>
-                <div class="line">
-                  <h4>AFS Group Netherlands</h4>
-                </div>
-                <div class="line">
-                  <h5>September 2022 – Present</h5>
-                </div>
-              </div>
-              <ul class="expandable">
-                <li>
-                  Lorem, ipsum dolor sit amet consectetur adipisicing elit.
-                  Explicabo placeat cupiditate deleniti repudiandae eos cum
-                  excepturi corrupti sequi veritatis quod eligendi saepe,
-                </li>
-                <li>
-                  accusantium consequatur necessitatibus obcaecati veniam, nam
-                  distinctio rem.
-                </li>
-              </ul>
-            </div>
-          </div>
-          <div class="timeline__wrapper">
-            <div class="timeline__line"><div class="timeline__line-dot" /></div>
-            <div class="timeline__element">
-              <div class="timeline__header">
-                <div class="line">
-                  <h3>Web Developer</h3>
-                </div>
-                <div class="line">
-                  <h4>Custommerce sp. z o. o.</h4>
-                </div>
-                <div class="line">
-                  <h5>October 2021 – September 2022</h5>
-                </div>
-              </div>
-              <ul class="expandable">
-                <li>
-                  Created rich content cards for well-known brands like Nivea,
-                  iRobot, Remington or Legrand and implemented them in numerous
-                  e-commerce shops in Poland,
-                </li>
-                <li>
-                  Developed unique system for optimizing HTML and CSS in Node.js
-                </li>
-              </ul>
-            </div>
-          </div>
-          <div class="timeline__wrapper">
-            <div class="timeline__line"><div class="timeline__line-dot" /></div>
-            <div class="timeline__element">
-              <div class="timeline__header">
-                <div class="line">
-                  <h3>Front-end Web Developer</h3>
-                </div>
-                <div class="line">
-                  <h4>Infocentrum sp. z o. o.</h4>
-                </div>
-                <div class="line">
-                  <h5>August 2020 – January 2022</h5>
-                </div>
-              </div>
-              <ul class="expandable">
-                <li>
-                  Software for production efficiency and countering the spread
-                  of COVID-19 for one of the largest companies in Poland H.
-                  CEGIELSKI-POZNAŃ S. A.
-                </li>
-                <li>Websites and e-commerce shops for individual clients</li>
-              </ul>
-            </div>
-          </div>
-          <div class="timeline__wrapper">
-            <div class="timeline__line"><div class="timeline__line-dot" /></div>
-            <div class="timeline__element">
-              <div class="timeline__header">
-                <div class="line">
-                  <h3>Web Developer</h3>
-                </div>
-                <div class="line">
-                  <h4>ITM-Software sp. z o. o.</h4>
-                </div>
-                <div class="line">
-                  <h5>June 2019 – July 2020</h5>
-                </div>
-              </div>
-              <ul class="expandable">
-                <li>
-                  Promo materials for company, new website, dedicated UI designs
-                  for upcoming software.
-                </li>
-              </ul>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
+    <timeline-component />
 
-    <section id="education" class="education">
-      <div class="section__body-wrapper">
-        <div class="section__body">
-          <div class="timeline__wrapper">
-            <div class="timeline__line"><div class="timeline__line-dot" /></div>
-            <div class="timeline__element">
-              <div class="timeline__header">
-                <div class="line">
-                  <h3>Uniwerystet im.&nbsp;Adama&nbsp;Mickiewicza</h3>
-                </div>
-                <div class="line">
-                  <h4>Software Engineer</h4>
-                </div>
-                <div class="line">
-                  <h5>October 2021 – Present</h5>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div class="timeline__wrapper">
-            <div class="timeline__line"><div class="timeline__line-dot" /></div>
-            <div class="timeline__element">
-              <div class="timeline__header">
-                <div class="line">
-                  <h3>
-                    Zespół Szkół Komunikacji im.&nbsp;Hipolita&nbsp;Cegielskiego
-                  </h3>
-                </div>
-                <div class="line">
-                  <h4>IT Technician</h4>
-                </div>
-                <div class="line">
-                  <h5>September 2018 – May 2021</h5>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
+    <education-component />
 
-    <section id="skills" class="skills">
-      <div class="section__body-wrapper">
-        <div class="section__body">
-          <div class="skills__body">
-            <div class="skills__card-wrapper">
-              <div
-                :class="[
-                  'skills__card',
-                  'hoverable',
-                  { 'mobile-card': isMobile },
-                ]"
-              >
-                <v-icon
-                  class="skills__card-icon"
-                  name="io-language"
-                  scale="2"
-                />
-                <div class="skills__card-text">English</div>
-              </div>
-              <div
-                :class="[
-                  'skills__card',
-                  'hoverable',
-                  { 'mobile-card': isMobile },
-                ]"
-              >
-                <v-icon
-                  class="skills__card-icon"
-                  name="io-language"
-                  scale="2"
-                />
-                <div class="skills__card-text">Polish</div>
-              </div>
-              <div
-                :class="[
-                  'skills__card',
-                  'hoverable',
-                  { 'mobile-card': isMobile },
-                ]"
-              >
-                <v-icon
-                  class="skills__card-icon"
-                  name="co-typescript"
-                  scale="2"
-                />
-                <div class="skills__card-text">TypeScript</div>
-              </div>
-              <div
-                :class="[
-                  'skills__card',
-                  'hoverable',
-                  { 'mobile-card': isMobile },
-                ]"
-              >
-                <v-icon
-                  class="skills__card-icon"
-                  name="co-sass-alt"
-                  scale="2"
-                />
-                <div class="skills__card-text">CSS Preprocessors</div>
-              </div>
-              <div
-                :class="[
-                  'skills__card',
-                  'hoverable',
-                  { 'mobile-card': isMobile },
-                ]"
-              >
-                <v-icon
-                  class="skills__card-icon"
-                  name="la-node"
-                  scale="2"
-                />
-                <div class="skills__card-text">Node.js</div>
-              </div>
-              <div
-                :class="[
-                  'skills__card',
-                  'hoverable',
-                  { 'mobile-card': isMobile },
-                ]"
-              >
-                <v-icon
-                  class="skills__card-icon"
-                  name="io-logo-vue"
-                  scale="2"
-                />
-                <div class="skills__card-text">Vue.js</div>
-              </div>
-              <div
-                :class="[
-                  'skills__card',
-                  'hoverable',
-                  { 'mobile-card': isMobile },
-                ]"
-              >
-                <v-icon
-                  class="skills__card-icon"
-                  name="si-html5"
-                  scale="2"
-                />
-                <div class="skills__card-text">HTML5</div>
-              </div>
-              <div
-                :class="[
-                  'skills__card',
-                  'hoverable',
-                  { 'mobile-card': isMobile },
-                ]"
-              >
-                <v-icon
-                  class="skills__card-icon"
-                  name="si-git"
-                  scale="2"
-                />
-              </div>
-              <div
-                :class="[
-                  'skills__card',
-                  'hoverable',
-                  { 'mobile-card': isMobile },
-                ]"
-              >
-                <v-icon
-                  class="skills__card-icon"
-                  name="co-jest"
-                  scale="2"
-                />
-                <div class="skills__card-text">Jest</div>
-              </div>
-              <div
-                :class="[
-                  'skills__card',
-                  'hoverable',
-                  { 'mobile-card': isMobile },
-                ]"
-              >
-                <v-icon
-                  class="skills__card-icon"
-                  name="co-graphql"
-                  scale="2"
-                />
-                <div class="skills__card-text">GraphQL</div>
-              </div>
-              <div
-                :class="[
-                  'skills__card',
-                  'hoverable',
-                  { 'mobile-card': isMobile },
-                ]"
-              >
-                <v-icon
-                  class="skills__card-icon"
-                  name="co-mysql"
-                  scale="2"
-                />
-              </div>
-              <div
-                :class="[
-                  'skills__card',
-                  'hoverable',
-                  { 'mobile-card': isMobile },
-                ]"
-              >
-                <v-icon
-                  class="skills__card-icon"
-                  name="co-docker"
-                  scale="2"
-                />
-                <div class="skills__card-text">Docker</div>
-              </div>
-              <div
-                :class="[
-                  'skills__card',
-                  'hoverable',
-                  { 'mobile-card': isMobile },
-                ]"
-              >
-                <v-icon
-                  class="skills__card-icon"
-                  name="si-adobephotoshop"
-                  scale="2"
-                />
-              </div>
-              <div
-                :class="[
-                  'skills__card',
-                  'hoverable',
-                  { 'mobile-card': isMobile },
-                ]"
-              >
-                <v-icon
-                  class="skills__card-icon"
-                  name="si-adobeaftereffects"
-                  scale="2"
-                />
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
+    <skills-component />
 
-    <section id="contact" class="contact">
-      <div class="section__body-wrapper">
-        <div class="section__body">
-          <p>Yoyo Text!</p>
-        </div>
-      </div>
-    </section>
+    <contact-component />
   </div>
 </template>
 
 <style scoped lang="scss">
-.container {
-  max-height: var(--app-height);
-  overflow-y: scroll;
-  scroll-snap-type: y mandatory;
-  overflow-x: hidden;
-  scroll-behavior: smooth;
-  section {
-    display: flex;
-    // justify-content: center;
-    align-items: center;
-    scroll-snap-align: start;
-    height: var(--app-height);
-    .section__body {
-      padding: 2rem;
-      box-sizing: border-box;
-      height: 100%;
-      width: 100%;
-      max-width: 40rem;
-      @media only screen and (max-width: 768px) {
-        padding: 1rem 1rem 1rem 2rem;
-      }
-    }
-  }
-}
-
-.bio {
-  &__body {
-    padding-top: 2rem;
-  }
-  &__card {
-    position: relative;
-    padding: 2rem;
-    border-radius: 15px;
-    // overflow: hidden;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    border-top: 1px solid rgba(255, 255, 255, 0.3);
-    border-left: 1px solid rgba(255, 255, 255, 0.3);
-    color: white;
-    box-shadow: 0 50px 100px rgba(0, 0, 0, 0.6);
-    margin: 0 1rem 1rem 0;
-    transform-style: preserve-3d;
-    transform: perspective(1000px);
-    background-color: rgba(0, 0, 0, 0.25);
-    &-text {
-      transform: translateZ(20px);
-    }
-    &-wrapper {
-      padding-top: 1rem;
-      display: flex;
-      flex-wrap: wrap;
-    }
-  }
-  .mobile-card {
-    backdrop-filter: blur(5px);
-    -webkit-backdrop-filter: blur(5px);
-    background-color: rgba(0, 0, 0, 0.15);
-  }
-}
-.timeline {
-  &__line {
-    min-width: 0.1rem;
-    background-color: var(--color-heading);
-    position: relative;
-    border-radius: 1rem;
-    &-dot {
-      position: absolute;
-      width: 0.75rem;
-      height: 0.75rem;
-      top: 2.5rem;
-      left: 50%;
-      transform: translate(-50%, -0%);
-      background-color: var(--color-text-solid);
-      border-radius: 100%;
-    }
-  }
-  &__wrapper {
-    padding-left: 0.5rem;
-    display: flex;
-    overflow: hidden;
-  }
-  &__element {
-    padding: 1rem 1rem 1rem 3rem;
-  }
-  &__header {
-    h3 {
-      line-height: 1;
-      color: var(--color-heading);
-    }
-    h4 {
-      padding-bottom: 0.125rem;
-      line-height: 1.2;
-    }
-  }
-  .expandable {
-    line-height: 1.2;
-    height: 0px;
-    opacity: 0;
-    padding-left: 1rem;
-    padding-top: 0.5rem;
-    transition: 0.45s cubic-bezier(0.69, 0, 0.27, 1);
-    overflow-y: hidden;
-    @media only screen and (max-width: 768px) {
-      padding-left: 1.5rem;
-      line-height: 1;
-    }
-    &.expanded {
-      opacity: 1;
-    }
-  }
-}
-
 .skills {
   &__body {
     padding-top: 2rem;
   }
   &__card {
-    position: relative;
+    @include glass__card;
     padding: 1rem;
-    border-radius: 15px;
-    // overflow: hidden;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    border-top: 1px solid rgba(255, 255, 255, 0.3);
-    border-left: 1px solid rgba(255, 255, 255, 0.3);
-    color: white;
-    box-shadow: 0 50px 100px rgba(0, 0, 0, 0.6);
-    margin: 0 1rem 1rem 0;
-    transform-style: preserve-3d;
-    transform: perspective(1000px);
-    background-color: rgba(0, 0, 0, 0.25);
     &-text {
       font-family: "Questrial", sans-serif;
       padding-left: 1rem;
@@ -878,17 +304,29 @@ onMounted(() => {
       flex-wrap: wrap;
     }
   }
-  .mobile-card {
-    backdrop-filter: blur(5px);
-    -webkit-backdrop-filter: blur(5px);
-    background-color: rgba(0, 0, 0, 0.15);
-  }
 }
 
-.line {
-  overflow: hidden;
-  * {
-    display: block;
+.contact {
+  .section__body-wrapper {
+    width: 100%;
+  }
+  &__card {
+    @include glass__card;
+    input {
+      background-color: transparent;
+      border: none;
+      color: var(--color-heading);
+    }
+    &-text {
+      font-family: "Questrial", sans-serif;
+      padding-left: 1rem;
+      transform: translateZ(20px);
+    }
+    &-icon {
+      transform: translateZ(20px);
+    }
+    &-wrapper {
+    }
   }
 }
 </style>

@@ -1,0 +1,108 @@
+@mixin glass__card {
+  position: relative;
+  padding: 2rem;
+  border-radius: 15px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-top: 1px solid rgba(255, 255, 255, 0.3);
+  border-left: 1px solid rgba(255, 255, 255, 0.3);
+  color: white;
+  box-shadow: 0 50px 100px rgba(0, 0, 0, 0.6);
+  margin: 0 1rem 1rem 0;
+  transform-style: preserve-3d;
+  transform: perspective(1000px);
+  background-color: rgba(0, 0, 0, 0.25);
+}
+
+// Scroll components global
+.container {
+  max-height: var(--app-height);
+  overflow-y: scroll;
+  scroll-snap-type: y mandatory;
+  overflow-x: hidden;
+  scroll-behavior: smooth;
+  section {
+    display: flex;
+    // justify-content: center;
+    align-items: center;
+    scroll-snap-align: start;
+    height: var(--app-height);
+    .section__body {
+      padding: 2rem;
+      box-sizing: border-box;
+      height: 100%;
+      width: 100%;
+      max-width: 40rem;
+      @media only screen and (max-width: 768px) {
+        padding: 1rem 2rem 1rem 2rem;
+      }
+    }
+  }
+}
+
+.timeline {
+  &__line {
+    min-width: 0.1rem;
+    background-color: var(--color-heading);
+    position: relative;
+    border-radius: 1rem;
+    &-dot {
+      position: absolute;
+      width: 0.75rem;
+      height: 0.75rem;
+      top: 2.5rem;
+      left: 50%;
+      transform: translate(-50%, -0%);
+      background-color: var(--color-text-solid);
+      border-radius: 100%;
+    }
+  }
+  &__wrapper {
+    padding-left: 0.5rem;
+    display: flex;
+    overflow: hidden;
+  }
+  &__element {
+    padding: 1rem 1rem 1rem 3rem;
+  }
+  &__header {
+    h3 {
+      line-height: 1;
+      color: var(--color-heading);
+    }
+    h4 {
+      padding-bottom: 0.125rem;
+      line-height: 1.2;
+    }
+  }
+  .expandable {
+    line-height: 1.2;
+    height: 0px;
+    opacity: 0;
+    padding-left: 1rem;
+    padding-top: 0.5rem;
+    transition: 0.45s cubic-bezier(0.69, 0, 0.27, 1);
+    overflow-y: hidden;
+    @media only screen and (max-width: 768px) {
+      padding-left: 1.5rem;
+      line-height: 1;
+    }
+    &.expanded {
+      opacity: 1;
+    }
+  }
+}
+
+.line {
+  overflow: hidden;
+  * {
+    display: block;
+  }
+}
+
+.mobile-card {
+  backdrop-filter: blur(5px);
+  -webkit-backdrop-filter: blur(5px);
+  background-color: rgba(0, 0, 0, 0.15);
+}
