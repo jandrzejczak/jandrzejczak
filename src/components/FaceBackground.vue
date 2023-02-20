@@ -120,6 +120,7 @@ function init() {
 
         model.scale.set(20, 20, 20)
         model.position.set(1, -0.5, 0);
+        model.rotation.x = -1;
 
         const light = new THREE.PointLight(0xfffff, 1, 1);
         light.position.set(5, 0, 1);
@@ -172,7 +173,7 @@ function init() {
       model.rotation.y = ease(model.rotation.y, mousePosition.x / (3 * window.innerHeight), 0.075);
     }
     if (model && isMobile.value) {
-      model.rotation.x = ease(model.rotation.x, ((orientation.value.b ?? 0) / 300 - 0.2), 0.075)
+      model.rotation.x = ease(model.rotation.x, ((orientation.value.b ?? 0) / 300 - 0.1), 0.075)
       model.rotation.y = ease(model.rotation.y, ((orientation.value.g ?? 0) / 300), 0.075); 
     }
     requestAnimationFrame(animate);
