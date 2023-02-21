@@ -18,3 +18,23 @@ body {
 .js-tilt-glare-inner {
   border-radius: 2rem;
 }
+
+.cta__button {
+  display: block;
+  padding: 0.75rem 2rem;
+  text-decoration: none;
+  color: var(--color-text);
+  font-family: "Questrial", sans-serif;
+  border-radius: 2rem;
+  transform-style: preserve-3d !important;
+  transform: perspective(1000px);
+  transform: translateZ(20px) !important;
+  background-color: #ffffff22;
+  &.disabled {
+    pointer-events: none;
+    color: rgba(255, 255, 255, 0.4);
+  } 
+  div {
+    transition: 0.3s ease-in-out;
+  }
+}

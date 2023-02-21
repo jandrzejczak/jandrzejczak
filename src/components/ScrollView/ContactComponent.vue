@@ -23,11 +23,21 @@ onMounted(() => {});
     <div class="section__body-wrapper">
       <div class="section__body">
         <div class="contact__card-wrapper">
-          <div :class="['contact__card']">
-            <div>To: <input type="text" /></div>
-            <div>Subject: <input v-model="mailData.subject" type="text" /></div>
-            <div>
-              Body:
+          <div :class="['contact__card', { 'mobile-card': isMobile }]">
+            <div class="contact__card-input">
+              <div>To:</div>
+              <input
+                value="jordan.andrzejczak@outlook.com"
+                disabled
+                type="text"
+              />
+            </div>
+            <div class="contact__card-input">
+              <div>Subject:</div>
+              <input v-model="mailData.subject" type="text" maxlength="40" />
+            </div>
+            <div class="contact__card-input__body">
+              <div>Body:</div>
               <textarea
                 v-model="mailData.body"
                 name=""
@@ -36,8 +46,81 @@ onMounted(() => {});
                 rows="10"
               ></textarea>
             </div>
-            <a :href="mailTo">Send mail</a>
+            <div class="contact__card-actions">
+              <a
+                :class="[
+                  'cta__button',
+                  'hoverable',
+                  { disabled: !mailData.subject || !mailData.body },
+                ]"
+                :href="mailTo"
+              >
+                <div>send email</div>
+              </a>
+            </div>
           </div>
+        </div>
+        <div class="contact__tiles">
+          <a
+            href="https://www.behance.net/andrzejczak"
+            target="_blank"
+            :class="[
+              'contact__tiles__card',
+              'hoverable',
+              { 'mobile-card': isMobile },
+            ]"
+          >
+            <v-icon
+              class="contact__tiles__card-icon"
+              name="bi-behance"
+              scale="2"
+            />
+          </a>
+          <a
+            href="https://github.com/jandrzejczak"
+            target="_blank"
+            :class="[
+              'contact__tiles__card',
+              'hoverable',
+              { 'mobile-card': isMobile },
+            ]"
+          >
+            <v-icon
+              class="contact__tiles__card-icon"
+              name="bi-github"
+              scale="2"
+            />
+          </a>
+          <a
+            href="https://www.linkedin.com/in/andrzejczak/"
+            target="_blank"
+            :class="[
+              'contact__tiles__card',
+              'hoverable',
+              { 'mobile-card': isMobile },
+            ]"
+          >
+            <v-icon
+              class="contact__tiles__card-icon"
+              name="bi-linkedin"
+              scale="2"
+            />
+          </a>
+          <a
+            href="https://www.instagram.com/andrzejczakjordan/"
+            target="_blank"
+            :class="[
+              'contact__tiles__card',
+              'hoverable',
+              { 'mobile-card': isMobile },
+            ]"
+          >
+            <v-icon
+              class="contact__tiles__card-icon"
+              name="bi-instagram"
+              scale="2"
+            />
+          </a>
         </div>
       </div>
     </div>
@@ -51,20 +134,85 @@ onMounted(() => {});
   }
   &__card {
     @include glass__card;
-    input {
-      background-color: transparent;
-      border: none;
-      color: var(--color-heading);
-    }
-    &-text {
-      font-family: "Questrial", sans-serif;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: flex-start;
+    padding: 0rem;
+    margin: 0;
+    &-input {
+      display: flex;
+      align-items: center;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+      width: 100%;
       padding-left: 1rem;
-      transform: translateZ(20px);
+      &__body {
+        display: flex;
+        flex-direction: column;
+        width: 100%;
+        > div {
+          padding: 1rem 0 0 1rem;
+        }
+        textarea {
+          background-color: transparent;
+          border: none;
+          flex-grow: 1;
+          padding: 0.5rem 1rem;
+          outline: none;
+          outline-width: 0;
+          color: var(--color-heading);
+          resize: none;
+          font-family: "Cutive Mono", monospace;
+          @media only screen and (max-width: 768px) {
+            font-size: 1.125rem;
+          }
+        }
+      }
+      input {
+        flex-grow: 1;
+        padding: 1rem 0.5rem;
+        outline: none;
+        outline-width: 0;
+        background-color: transparent;
+        border: none;
+        color: var(--color-heading);
+        font-family: "Cutive Mono", monospace;
+        font-size: 1rem;
+        @media only screen and (max-width: 768px) {
+          font-size: 1.125rem;
+        }
+      }
+    }
+    &-actions {
+      display: flex;
+      width: 100%;
+      justify-content: flex-end;
     }
     &-icon {
       transform: translateZ(20px);
     }
-    &-wrapper {
+  }
+  &__tiles {
+    display: flex;
+    justify-content: space-between;
+    > * {
+      flex-grow: 1;
+    }
+    &__card {
+      @include glass__card;
+      padding: 1rem;
+      margin-top: 1rem;
+      margin-bottom: 0;
+      &:last-child {
+        margin-right: 0;
+      }
+      &-text {
+        font-family: "Questrial", sans-serif;
+        padding-left: 1rem;
+        transform: translateZ(20px);
+      }
+      &-icon {
+        transform: translateZ(20px);
+      }
     }
   }
 }

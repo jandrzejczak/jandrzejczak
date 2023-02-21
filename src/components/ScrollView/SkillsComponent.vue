@@ -64,7 +64,6 @@ const { isMobile } = storeToRefs(deviceStore);
               ]"
             >
               <v-icon class="skills__card-icon" name="la-node" scale="2" />
-              <div class="skills__card-text">Node.js</div>
             </div>
             <div
               :class="[

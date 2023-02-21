@@ -1,27 +1,13 @@
 <script setup lang="ts">
 import gsap from "gsap";
 import ScrollTrigger from "gsap/ScrollTrigger";
-import { onMounted, ref, computed } from "vue";
-import { storeToRefs } from "pinia";
-import { useDeviceStore } from "@/stores/globalStore";
+import { onMounted } from "vue";
 
 import InfoComponent from "@/components/ScrollView/InfoComponent.vue";
 import TimelineComponent from "@/components/ScrollView/TimelineComponent.vue";
 import EducationComponent from "@/components/ScrollView/EducationComponent.vue";
 import SkillsComponent from "@/components/ScrollView/SkillsComponent.vue";
 import ContactComponent from "@/components/ScrollView/ContactComponent.vue";
-
-const deviceStore = useDeviceStore();
-const { isMobile } = storeToRefs(deviceStore);
-
-const mailData = ref({
-  subject: "",
-  body: "",
-});
-
-const mailTo = computed(() => {
-  return `mailto:jordan.andrzejczak@outlook.com?subject=${mailData.value.subject}&body=${mailData.value.body}`;
-});
 
 function initSectionListener() {
   const sections = document.querySelectorAll("section");
@@ -283,50 +269,4 @@ onMounted(() => {
 </template>
 
 <style scoped lang="scss">
-.skills {
-  &__body {
-    padding-top: 2rem;
-  }
-  &__card {
-    @include glass__card;
-    padding: 1rem;
-    &-text {
-      font-family: "Questrial", sans-serif;
-      padding-left: 1rem;
-      transform: translateZ(20px);
-    }
-    &-icon {
-      transform: translateZ(20px);
-    }
-    &-wrapper {
-      padding-top: 1rem;
-      display: flex;
-      flex-wrap: wrap;
-    }
-  }
-}
-
-.contact {
-  .section__body-wrapper {
-    width: 100%;
-  }
-  &__card {
-    @include glass__card;
-    input {
-      background-color: transparent;
-      border: none;
-      color: var(--color-heading);
-    }
-    &-text {
-      font-family: "Questrial", sans-serif;
-      padding-left: 1rem;
-      transform: translateZ(20px);
-    }
-    &-icon {
-      transform: translateZ(20px);
-    }
-    &-wrapper {
-    }
-  }
-}
 </style>

@@ -19,6 +19,10 @@ import {
   CoDocker,
   LaNode,
   CoGraphql,
+  BiBehance,
+  BiGithub,
+  BiLinkedin,
+  BiInstagram,
 } from "oh-vue-icons/icons";
 
 addIcons(
@@ -34,7 +38,11 @@ addIcons(
   CoJest,
   CoDocker,
   LaNode,
-  CoGraphql
+  CoGraphql,
+  BiBehance,
+  BiGithub,
+  BiLinkedin,
+  BiInstagram,
 );
 
 const app = createApp(App);

@@ -82,12 +82,11 @@ onMounted(() => {
     transform-style: preserve-3d;
     transform: perspective(1000px);
     transition-property: color;
-    transition: 0.3s ease-in-out;
     @media only screen and (max-width: 768px) {
       display: none;
-      padding-right: 0;
     }
     &-text {
+      font-family: "Questrial", sans-serif;
       line-height: 1;
       transform: translateZ(10px);
       transition: 0.3s ease-in-out;
