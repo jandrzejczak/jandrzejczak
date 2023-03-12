@@ -102,5 +102,8 @@ onMounted(() => {
       }
     }
   }
+  @media only screen and (max-width: 500px) {
+    display: none;
+  }
 }
 </style>

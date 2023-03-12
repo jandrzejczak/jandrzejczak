@@ -84,6 +84,9 @@
     padding-top: 0.5rem;
     transition: 0.45s cubic-bezier(0.69, 0, 0.27, 1);
     overflow-y: hidden;
+    li {
+      padding-top: 0.25rem;
+    }
     @media only screen and (max-width: 768px) {
       padding-left: 1.5rem;
       line-height: 1;

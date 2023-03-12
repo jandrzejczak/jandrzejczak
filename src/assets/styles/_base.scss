@@ -51,13 +51,13 @@
 }
 
 ::-moz-selection { /* Code for Firefox */
-  color: var(--color-heading);
-  background: var(--color-background-mute);
+  background: var(--color-heading);
+  color: var(--color-background-mute);
 }
 
 ::selection {
-  color: var(--color-heading);
-  background: var(--color-background-mute);
+  background: var(--color-heading);
+  color: var(--color-background-mute);
 }
 
 @media (prefers-color-scheme: dark) {

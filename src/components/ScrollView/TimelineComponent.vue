@@ -99,7 +99,7 @@ onMounted(() => {
             </div>
             <ul class="expandable">
               <li>
-                Worked on an internal software system for energy market brokers and redesigned the entirety of&nbsp;the system, presumably to&nbsp;improve its usability and functionality,
+                Worked on an internal software system for energy market brokers and redesigned the entirety of&nbsp;the system,
               </li>
               <li>
                 Developed new ideas and novel aproaches for upcoming consulting web application using Vue&nbsp;3, Pinia and GraphQL,
