@@ -99,13 +99,13 @@ onMounted(() => {
             </div>
             <ul class="expandable">
               <li>
-                Lorem, ipsum dolor sit amet consectetur adipisicing elit.
-                Explicabo placeat cupiditate deleniti repudiandae eos cum
-                excepturi corrupti sequi veritatis quod eligendi saepe,
+                Worked on an internal software system for energy market brokers and redesigned the entirety of&nbsp;the system, presumably to&nbsp;improve its usability and functionality,
               </li>
               <li>
-                accusantium consequatur necessitatibus obcaecati veniam, nam
-                distinctio rem.
+                Developed new ideas and novel aproaches for upcoming consulting web application using Vue&nbsp;3, Pinia and GraphQL,
+              </li>
+              <li>
+                Used software development methodologies like Agile and&nbsp;Waterfall to&nbsp;plan and execute the development process.
               </li>
             </ul>
           </div>
@@ -126,9 +126,9 @@ onMounted(() => {
             </div>
             <ul class="expandable">
               <li>
-                Created rich content cards for well-known brands like Nivea,
+                Created rich content cards for well&#8209;known brands like Nivea,
                 iRobot, Remington or Legrand and implemented them in numerous
-                e-commerce shops in Poland,
+                e&#8209;commerce shops in Poland,
               </li>
               <li>
                 Developed unique system for optimizing HTML and CSS in Node.js
