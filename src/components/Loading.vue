@@ -8,15 +8,16 @@ const props = defineProps({
   isMobile : {
     type: Boolean,
     required: true,
+  },
+  isLoading: {
+    type: Boolean,
+    required: true,
   }
 })
 
-const emit = defineEmits(["loadingFinished"]);
+const emit = defineEmits(["grant-permission"]);
 
 function handleOrientation(event: any) {
-  // updateFieldIfNotNull('Orientation_a', event.alpha);
-  // updateFieldIfNotNull('Orientation_b', event.beta);
-  // updateFieldIfNotNull('Orientation_g', event.gamma);
   setOrientation(event.alpha, event.beta, event.gamma)
 }
 
@@ -47,8 +48,12 @@ function initGyroscope() {
 };
 
 function initMobileExperience() {
-  emit("loadingFinished", true);
+  emit("grant-permission", true);
   initGyroscope();
+}
+
+function noMobileExperience() {
+  emit("grant-permission", true);
 }
 
 onMounted(() => {
@@ -58,9 +63,15 @@ onMounted(() => {
 
 <template>
   <div class="loading-wrapper">
-    <div class="necuro-logo">andrzejczak</div>
-    <div v-if="isMobile"><button @click="initMobileExperience()">Give me full experience</button></div>
+    <TransitionGroup>
+      <div class="necuro-logo" v-if="isLoading">andrzejczak</div>
+      <div v-if="isMobile && !isLoading">
+        <button class="cta__button" @click="initMobileExperience()">Give me full experience</button>
+        <button class="cta__button" @click="noMobileExperience()">Just let me in</button>
+      </div>
+    </TransitionGroup>
   </div>
+  
 </template>
 
 <style scoped lang="scss">
@@ -84,6 +95,19 @@ onMounted(() => {
     transform: translate(-50%, -50%);
     z-index: -1;
     background-color: var(--color-background);
+  }
+  > div {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    display: flex;
+    flex-direction: column;
+    button {
+      font-size: 1rem;
+      white-space: nowrap;
+      margin-top: 1rem;
+    }
   }
 }
 .ml4 {

@@ -13,6 +13,7 @@ const store = useDeviceStore();
 const { isMobile } = storeToRefs(store);
 
 const loading = ref(true);
+const permissionGranted = ref(true);
 
 const appHeight = () => {
   const doc = document.documentElement;
@@ -29,9 +30,10 @@ onMounted(() => {
   <cursor v-if="!isMobile && !loading"></cursor>
   <Transition>
     <loading
-      @loading-finished="(e) => (loading = !e)"
+      @grant-permission="(e) => (permissionGranted = !e)"
       :is-mobile="isMobile"
-      v-show="loading"
+      :is-loading="loading"
+      v-show="loading || (isMobile && permissionGranted)"
     ></loading>
   </Transition>
   <div class="layout">
