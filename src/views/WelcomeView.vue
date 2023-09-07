@@ -139,7 +139,7 @@ onMounted(() => {
     <div
       ref="necuroLogo"
       id="element"
-      class="draggable-element text-black font-display flex justify-center items-center text-9xl"
+      class="draggable-element text-white font-display flex justify-center items-center text-9xl"
     >
       necuro
     </div>
