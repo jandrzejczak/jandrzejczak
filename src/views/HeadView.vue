@@ -5,7 +5,7 @@ import FaceBackground from "@/components/FaceBackground.vue";
 import Loading from "@/components/Loading.vue";
 import Cursor from "@/components/Cursor.vue";
 import { onMounted, ref, Transition } from "vue";
-import Navigation from "@/components/Navigation.vue";
+// import Navigation from "@/components/Navigation.vue";
 import { storeToRefs } from "pinia";
 import { useDeviceStore } from "@/stores/globalStore";
 
@@ -37,7 +37,7 @@ onMounted(() => {
     ></loading>
   </Transition>
   <div class="layout">
-    <navigation v-if="!loading" :is-mobile="isMobile"></navigation>
+    <!-- <navigation v-if="!loading" :is-mobile="isMobile"></navigation> -->
     <scroll-section v-if="!loading" id="scroll-section"></scroll-section>
     <face-background @scene-ready="(e) => (loading = !e)"></face-background>
   </div>

@@ -134,7 +134,7 @@ onMounted(() => {
 <template>
   <div
     ref="header"
-    class="w-full height--screen flex items-center justify-center absolute backdrop-blur-sm z-50"
+    class="w-full height--screen flex items-center justify-center absolute backdrop-blur-sm z-50 bg-white bg-opacity-20"
   >
     <div
       ref="necuroLogo"
