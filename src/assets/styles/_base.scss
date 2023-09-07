@@ -1,5 +1,15 @@
 @import url('https://fonts.googleapis.com/css2?family=Cutive+Mono&family=Oxygen:wght@300;400;700&family=Questrial&display=swap');
 
+@font-face {
+  font-family: "Balaleen Line";
+  src: url("/fonts/Balaleen-Line.otf") format("opentype");
+}
+
+@font-face {
+  font-family: "Balaleen Solid";
+  src: url("/fonts/Balaleen-Solid.otf") format("opentype");
+}
+
 :root {
   --vt-c-white: #ffffff;
   --vt-c-white-soft: #f8f8f8;
@@ -94,7 +104,6 @@
 body {
   min-height: var(--app-height);
   color: var(--color-text);
-  background: var(--color-background);
   transition: color 0.5s, background-color 0.5s;
   line-height: 1.6;
   font-family: 'Cutive Mono', monospace;

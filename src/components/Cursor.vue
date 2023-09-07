@@ -102,7 +102,7 @@ onMounted(() => {
 }
 </style>
 
-<style> 
+<style scoped> 
 * {
   cursor: none !important;
 }

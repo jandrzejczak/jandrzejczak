@@ -1,8 +1,7 @@
 import { ref, computed } from "vue";
 import { defineStore } from "pinia";
 
-export const useOrientationStore = defineStore("orientation", 
-{
+export const useOrientationStore = defineStore("orientation", {
   state: () => ({
     orientation: {
       a: null,
@@ -16,16 +15,17 @@ export const useOrientationStore = defineStore("orientation",
       this.orientation.a = a;
       this.orientation.b = b;
       this.orientation.g = g;
-    }
+    },
   },
 });
 
-  
-
-export const useDeviceStore = defineStore("device", 
-{
+export const useDeviceStore = defineStore("device", {
   state: () => ({
-    isMobile: (typeof window.orientation !== "undefined") || (navigator.userAgent.indexOf('IEMobile') !== -1),
-    isSafari: (navigator.userAgent.indexOf("Safari") != -1 && navigator.userAgent.indexOf("Chrome") == -1),
+    isMobile:
+      typeof window.orientation !== "undefined" ||
+      navigator.userAgent.indexOf("IEMobile") !== -1,
+    isSafari:
+      navigator.userAgent.indexOf("Safari") != -1 &&
+      navigator.userAgent.indexOf("Chrome") == -1,
   }),
 });
