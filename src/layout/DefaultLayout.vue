@@ -14,7 +14,7 @@ onMounted(() => {
 </script>
 
 <template>
-  <main class="layout flex w-full">
+  <main class="layout flex w-full flex-col">
     <!-- <slot name="header"></slot> -->
     <slot />
   </main>
@@ -28,6 +28,12 @@ onMounted(() => {
 
 <style scoped lang="scss">
 .layout {
+  height: var(--app-height);
+}
+</style>
+
+<style lang="scss">
+.height--screen {
   height: var(--app-height);
 }
 </style>

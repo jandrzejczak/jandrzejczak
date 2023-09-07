@@ -22,7 +22,10 @@ const textAnimation = (element: HTMLElement) => {
   const targetsDiv = element.querySelectorAll("div");
   gsap
     .timeline({
-      onComplete: () => flattenText(element),
+      onComplete: () => {
+        flattenText(element);
+        collapseHeader(header.value!);
+      },
     })
     .staggerFromTo(
       targetsDiv,
@@ -43,11 +46,18 @@ const flattenText = (element: HTMLElement) => {
     rotationZ: 0,
     rotationX: 0,
     rotationY: 0,
-    scale: 0.65,
-    ease: "elastic.out(1, 0.3)",
-    duration: 2,
-    width: "200px",
+    ease: "power3.inOut",
+    duration: 1.75,
+    fontSize: "3rem",
     onComplete: function () {},
+  });
+};
+
+const collapseHeader = (element: HTMLElement) => {
+  gsap.to(element, {
+    height: "4rem",
+    ease: "power3.inOut",
+    duration: 1.75,
   });
 };
 
@@ -105,14 +115,6 @@ const setTextFullWidth = (textElement: HTMLElement, width: number) => {
   textElement.style.fontSize = updatedFontSize + "px";
 };
 
-useResizeObserver(header, (entries) => {
-  if (necuroLogo.value) {
-    const entry = entries[0];
-    const { width, height } = entry.contentRect;
-    setTextFullWidth(necuroLogo.value, width);
-  }
-});
-
 onMounted(() => {
   if (necuroLogo.value) {
     textAnimation(necuroLogo.value);
@@ -130,11 +132,14 @@ onMounted(() => {
 </script>
 
 <template>
-  <div ref="header" class="w-full h-full flex items-center justify-center">
+  <div
+    ref="header"
+    class="w-full height--screen flex items-center justify-center absolute backdrop-blur-sm z-50"
+  >
     <div
       ref="necuroLogo"
       id="element"
-      class="draggable-element text-black font-display flex justify-center items-center"
+      class="draggable-element text-black font-display flex justify-center items-center text-9xl"
     >
       necuro
     </div>

@@ -7,8 +7,8 @@ import { onMounted, ref, Transition } from "vue";
 
 <template>
   <DefaultLayout>
-    <!-- <RouterView></RouterView> -->
     <WelcomeView></WelcomeView>
+    <RouterView></RouterView>
   </DefaultLayout>
 </template>
 
