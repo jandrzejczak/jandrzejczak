@@ -28,14 +28,14 @@ onMounted(() => {
 
 <template>
   <cursor v-if="!isMobile && !loading"></cursor>
-  <Transition>
+  <!-- <Transition>
     <loading
       @grant-permission="(e) => (permissionGranted = !e)"
       :is-mobile="isMobile"
       :is-loading="loading"
       v-show="loading || (isMobile && permissionGranted)"
     ></loading>
-  </Transition>
+  </Transition> -->
   <div class="layout">
     <!-- <navigation v-if="!loading" :is-mobile="isMobile"></navigation> -->
     <scroll-section v-if="!loading" id="scroll-section"></scroll-section>

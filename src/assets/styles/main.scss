@@ -38,8 +38,14 @@ body {
   &.disabled {
     pointer-events: none;
     color: rgba(255, 255, 255, 0.4);
-  } 
+  }
   div {
     transition: 0.3s ease-in-out;
+  }
+}
+
+.draggable-element {
+  * {
+    color: white;
   }
 }
