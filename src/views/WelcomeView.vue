@@ -204,10 +204,6 @@ onMounted(() => {
     ref="header"
     class="w-full height--screen flex items-center justify-center absolute backdrop-blur-sm z-50 dark:bg-black bg-white dark:bg-opacity-10 bg-opacity-10"
   >
-    <nav>
-      <router-link to="/">Home</router-link> |
-      <router-link to="/head">Head</router-link>
-    </nav>
     <div class="flex flex-col items-center leading-none">
       <div
         ref="necuroLogo"

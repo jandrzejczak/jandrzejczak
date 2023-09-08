@@ -1,5 +1,6 @@
 import { createRouter, createWebHistory } from "vue-router";
 import HeadView from "@/views/HeadView.vue";
+import HomeView from "@/views/HomeView.vue";
 
 const router = createRouter({
   history: createWebHistory(),
@@ -7,7 +8,7 @@ const router = createRouter({
     {
       path: "/",
       name: "Home",
-      component: HeadView,
+      component: HomeView,
     },
     {
       path: "/head",
