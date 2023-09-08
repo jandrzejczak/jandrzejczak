@@ -2,16 +2,32 @@
 @tailwind components;
 @tailwind utilities;
 
+@layer base {
+  body {
+    min-height: var(--app-height);
+    font-family: "Cutive Mono", monospace;
+    transition: color 0.5s, background-color 0.5s;
+    line-height: 1.6;
+    font-size: 16px;
+    text-rendering: optimizeLegibility;
+    color: var(--text-color);
+    background-color: var(--bg-color);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    --text-color: #000;
+    --text-color-secondary: #131313;
+    --bg-color: #fff;
+  }
+  // html {
+  //   &.dark {
+  //     background-color: var(--vt-c-black);
+  //     color: var(--vt-c-text-dark-2);
+  //   }
+  // }
+}
+
 @import "base.scss";
 @import "scrollsection.scss";
-
-body {
-  font-family: "Cutive Mono", monospace;
-
-  // font-family: 'Oxygen', sans-serif;
-
-  // font-family: 'Questrial', sans-serif;
-}
 
 .hoverable {
   &__hovered {
@@ -41,11 +57,5 @@ body {
   }
   div {
     transition: 0.3s ease-in-out;
-  }
-}
-
-.draggable-element {
-  * {
-    color: white;
   }
 }

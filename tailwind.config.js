@@ -5,7 +5,11 @@ export default {
     extend: {},
     fontFamily: {
       display: ["Balaleen Solid"],
+      "display-line": ["Balaleen Line"],
+      body: ["Cutive Mono"],
+      header: ["Questrial"],
     },
   },
   plugins: [],
+  darkMode: "class",
 };

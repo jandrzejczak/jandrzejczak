@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { storeToRefs } from 'pinia';
+import { storeToRefs } from "pinia";
 import * as THREE from "three";
 // @ts-ignore
 import { OrbitControls } from "three/addons/controls/OrbitControls.js";
@@ -9,18 +9,24 @@ import { GLTFLoader } from "three/addons/loaders/GLTFLoader.js";
 import { DRACOLoader } from "three/addons/loaders/DRACOLoader.js";
 // @ts-ignore
 import { RGBELoader } from "three/addons/loaders/RGBELoader.js";
-import { onMounted, ref } from "vue";
-import { useOrientationStore, useDeviceStore } from "@/stores/globalStore"
+import { onMounted, ref, computed } from "vue";
+import { useOrientationStore, useDeviceStore } from "@/stores/globalStore";
+import { useColorMode } from "@vueuse/core";
+
+const { system, store } = useColorMode();
+const myColorMode = computed(() =>
+  store.value === "auto" ? system.value : store.value
+);
 
 const orientationStore = useOrientationStore();
 const deviceStore = useDeviceStore();
-const { orientation } = storeToRefs(orientationStore)
-const { isMobile } = storeToRefs(deviceStore)
+const { orientation } = storeToRefs(orientationStore);
+const { isMobile } = storeToRefs(deviceStore);
 
 const emit = defineEmits(["scene-ready"]);
 
 function ease(start: number, end: number, amt: number): number {
-  return (1 - amt) * start + amt * end
+  return (1 - amt) * start + amt * end;
 }
 
 let camera: any, scene: any, renderer: any, model: any, boxMesh: any;
@@ -49,7 +55,7 @@ function init() {
     100
   );
   camera.position.z = 1;
-	camera.focalLength = 3;
+  camera.focalLength = 3;
 
   scene = new THREE.Scene();
 
@@ -80,29 +86,33 @@ function init() {
           envMap: texture,
         });
 
-       
-
-        model.traverse( function ( child: any ) {
-          if ( child.isMesh ) {
+        model.traverse(function (child: any) {
+          if (child.isMesh) {
             // child.material = material;
-            child.material.color.set( 0x000000 );
-          } if (child.isGeometry) {
+            child.material.color.set(0x000000);
+          }
+          if (child.isGeometry) {
             child.geometry.computeVertexNormals(true);
           }
         });
 
-        model.scale.set(20, 20, 20)
+        model.scale.set(20, 20, 20);
         model.position.set(1, -0.5, 0);
         model.rotation.x = -1;
 
         const light = new THREE.PointLight(0xfffff, 1, 1);
         light.position.set(5, 0, 1);
-        
+
         scene.add(light);
 
         // Glass models
 
-        const roundedBox = new THREE.TorusKnotGeometry( 0.12, 0.07, 100, 26 ).toNonIndexed();
+        const roundedBox = new THREE.TorusKnotGeometry(
+          0.12,
+          0.07,
+          100,
+          26
+        ).toNonIndexed();
 
         // const material = new THREE.MeshPhysicalMaterial({
         //   color: 0x000000,
@@ -139,15 +149,29 @@ function init() {
 
   animate();
   function animate() {
-
     if (model && !isMobile.value) {
-      
-      model.rotation.x = ease(model.rotation.x, mousePosition.y / (3 * window.innerWidth), 0.075);
-      model.rotation.y = ease(model.rotation.y, mousePosition.x / (3 * window.innerHeight), 0.075);
+      model.rotation.x = ease(
+        model.rotation.x,
+        mousePosition.y / (3 * window.innerWidth),
+        0.075
+      );
+      model.rotation.y = ease(
+        model.rotation.y,
+        mousePosition.x / (3 * window.innerHeight),
+        0.075
+      );
     }
     if (model && isMobile.value) {
-      model.rotation.x = ease(model.rotation.x, ((orientation.value.b ?? 0) / 300 - 0.1), 0.075)
-      model.rotation.y = ease(model.rotation.y, ((orientation.value.g ?? 0) / 300), 0.075); 
+      model.rotation.x = ease(
+        model.rotation.x,
+        (orientation.value.b ?? 0) / 300 - 0.1,
+        0.075
+      );
+      model.rotation.y = ease(
+        model.rotation.y,
+        (orientation.value.g ?? 0) / 300,
+        0.075
+      );
     }
     requestAnimationFrame(animate);
     renderer.render(scene, camera);
@@ -167,14 +191,14 @@ function onWindowResize() {
 }
 
 function render() {
-  camera.lookAt( scene.position );
-  
+  camera.lookAt(scene.position);
+
   renderer.render(scene, camera);
 }
 </script>
 
 <template>
-  <div id="face" :class="['face-bg', {'mobile-overlay': isMobile}]"></div>
+  <div id="face" :class="['face-bg', { 'mobile-overlay': isMobile }]"></div>
 </template>
 
 <style scoped lang="scss">
@@ -195,7 +219,7 @@ function render() {
 }
 .mobile-overlay {
   &::after {
-    content: '';
+    content: "";
     height: 100vh;
     width: 100vw;
     position: absolute;

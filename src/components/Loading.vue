@@ -1,29 +1,32 @@
 <script setup lang="ts">
 import { onMounted } from "vue";
-import { useOrientationStore } from "@/stores/globalStore"
+import { useOrientationStore } from "@/stores/globalStore";
 
 const { setOrientation } = useOrientationStore();
 
 const props = defineProps({
-  isMobile : {
+  isMobile: {
     type: Boolean,
     required: true,
   },
   isLoading: {
     type: Boolean,
     required: true,
-  }
-})
+  },
+});
 
 const emit = defineEmits(["grant-permission"]);
 
 function handleOrientation(event: any) {
-  setOrientation(event.alpha, event.beta, event.gamma)
+  setOrientation(event.alpha, event.beta, event.gamma);
 }
 
-function updateFieldIfNotNull(fieldName: string, value: Number, precision = 10){
-  if (value != null)
-    console.log(fieldName, value.toFixed(precision));
+function updateFieldIfNotNull(
+  fieldName: string,
+  value: Number,
+  precision = 10
+) {
+  if (value != null) console.log(fieldName, value.toFixed(precision));
 }
 
 let is_running = false;
@@ -37,15 +40,15 @@ function initGyroscope() {
     // @ts-ignore
     DeviceMotionEvent.requestPermission();
   }
-  
-  if (is_running){
+
+  if (is_running) {
     window.removeEventListener("deviceorientation", handleOrientation);
     is_running = false;
   } else {
     window.addEventListener("deviceorientation", handleOrientation);
     is_running = true;
   }
-};
+}
 
 function initMobileExperience() {
   emit("grant-permission", true);
@@ -64,20 +67,22 @@ onMounted(() => {
 <template>
   <div class="loading-wrapper">
     <TransitionGroup>
-      <div class="necuro-logo" v-if="isLoading">andrzejczak</div>
       <div v-if="isMobile && !isLoading">
-        <button class="cta__button" @click="initMobileExperience()">Give me full experience</button>
-        <button class="cta__button" @click="noMobileExperience()">Just let me in</button>
+        <button class="cta__button" @click="initMobileExperience()">
+          Give me full experience
+        </button>
+        <button class="cta__button" @click="noMobileExperience()">
+          Just let me in
+        </button>
       </div>
     </TransitionGroup>
   </div>
-  
 </template>
 
 <style scoped lang="scss">
 .necuro-logo {
-    font-family: 'Questrial', sans-serif;
-    font-size: 4rem;
+  font-family: "Questrial", sans-serif;
+  font-size: 4rem;
 }
 .loading-wrapper {
   position: fixed;
@@ -94,7 +99,6 @@ onMounted(() => {
     height: 100vh;
     transform: translate(-50%, -50%);
     z-index: -1;
-    background-color: var(--color-background);
   }
   > div {
     position: absolute;

@@ -22,6 +22,11 @@
   scroll-snap-type: y mandatory;
   overflow-x: hidden;
   scroll-behavior: smooth;
+  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none; /* Firefox */
+  &::-webkit-scrollbar {
+    display: none;
+  }
   section {
     display: flex;
     align-items: center;
@@ -43,9 +48,12 @@
 .timeline {
   &__line {
     min-width: 0.1rem;
-    background-color: var(--color-heading);
+    background-color: var(--text-color-secondary);
     position: relative;
     border-radius: 1rem;
+    // .light & {
+    //   background-color: var(--vt-c-black)
+    // }
     &-dot {
       position: absolute;
       width: 0.75rem;
@@ -53,8 +61,11 @@
       top: 2.5rem;
       left: 50%;
       transform: translate(-50%, -0%);
-      background-color: var(--color-text-solid);
+      background-color: var(--text-color-secondary);
       border-radius: 100%;
+      // .light & {
+      //   background-color: var(--vt-c-black)
+      // }
     }
   }
   &__wrapper {
@@ -68,7 +79,10 @@
   &__header {
     h3 {
       line-height: 1;
-      color: var(--color-heading);
+      color: var(--text-color-secondary);
+      // .light & {
+      //   color: var(--vt-c-black)
+      // }
     }
     h4 {
       padding-bottom: 0.125rem;
@@ -81,7 +95,7 @@
     opacity: 0;
     padding-left: 1rem;
     padding-top: 0.5rem;
-    transition: 0.45s cubic-bezier(0.69, 0, 0.27, 1);
+    transition: all 0.45s cubic-bezier(0.69, 0, 0.27, 1);
     overflow-y: hidden;
     li {
       padding-top: 0.25rem;
