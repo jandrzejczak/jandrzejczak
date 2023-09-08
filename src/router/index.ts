@@ -1,5 +1,4 @@
 import { createRouter, createWebHistory } from "vue-router";
-import HomeView from "@/views/ScrollSection.vue";
 import HeadView from "@/views/HeadView.vue";
 
 const router = createRouter({
@@ -7,12 +6,12 @@ const router = createRouter({
   routes: [
     {
       path: "/",
-      name: "home",
-      component: HomeView,
+      name: "Home",
+      component: HeadView,
     },
     {
-      path: "/head-view",
-      name: "home",
+      path: "/head",
+      name: "Head",
       component: HeadView,
     },
   ],

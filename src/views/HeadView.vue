@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { RouterLink, RouterView } from "vue-router";
-import ScrollSection from "@/views/ScrollSection.vue";
+import ScrollSection from "@/components/ScrollSection.vue";
 import FaceBackground from "@/components/FaceBackground.vue";
 import Loading from "@/components/Loading.vue";
 import Cursor from "@/components/Cursor.vue";
@@ -54,7 +54,7 @@ onMounted(() => {
     ></loading>
   </Transition>
   <!-- <navigation v-if="!loading" :is-mobile="isMobile"></navigation> -->
-  <scroll-section v-if="!loading" id="scroll-section"></scroll-section>
+  <ScrollSection v-if="!loading" id="scroll-section"></ScrollSection>
   <face-background @scene-ready="(e) => (loading = !e)"></face-background>
 </template>
 
