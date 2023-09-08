@@ -129,7 +129,7 @@ const setTextFullWidth = (textElement: HTMLElement, width: number) => {
 const styleClasses = ref([
   { className: "necuro--mocha", probability: 0.01 },
   { className: "necuro--volt", probability: 0.05 },
-  { className: "necuro--default", probability: 0.8 },
+  { className: "necuro--default", probability: 0.6 },
   { className: "necuro--beach", probability: 0.1 },
   { className: "necuro--black", probability: 0.3 },
   { className: "necuro--wine", probability: 0.08 },
