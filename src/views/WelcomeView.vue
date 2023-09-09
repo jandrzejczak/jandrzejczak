@@ -19,6 +19,7 @@ const necuroLogo = ref<HTMLElement | null>(null);
 const header = ref<HTMLElement | null>(null);
 const logoAnimation = ref();
 const backgroundAnimation = ref();
+const activeColor = ref("");
 
 const textAnimation = (element: HTMLElement) => {
   const characters = Array.from(element.innerText);
@@ -127,12 +128,12 @@ const setTextFullWidth = (textElement: HTMLElement, width: number) => {
 };
 
 const styleClasses = ref([
-  { className: "necuro--mocha", probability: 0.01 },
-  { className: "necuro--volt", probability: 0.05 },
-  { className: "necuro--default", probability: 0.6 },
-  { className: "necuro--beach", probability: 0.1 },
-  { className: "necuro--black", probability: 0.3 },
-  { className: "necuro--wine", probability: 0.08 },
+  { className: "necuro--mocha", probability: 0.01, color: "#593d3b" },
+  { className: "necuro--volt", probability: 0.05, color: "#7f0799" },
+  { className: "necuro--default", probability: 0.6, color: "#ffffff" },
+  { className: "necuro--beach", probability: 0.1, color: "#3f88c5" },
+  { className: "necuro--black", probability: 0.3, color: "#0d0d0d" },
+  { className: "necuro--wine", probability: 0.08, color: "#612940" },
 ]);
 
 const getRandomStyleClass = () => {
@@ -166,40 +167,83 @@ onMounted(() => {
       .timeline()
       .set(
         document.body,
-        { className: styleClasses.value[0].className },
+        {
+          className: styleClasses.value[0].className,
+          onUpdate: () => {
+            activeColor.value = styleClasses.value[0].color;
+          },
+        },
         "+=0.05"
       )
       .set(
         document.body,
-        { className: styleClasses.value[1].className },
+        {
+          className: styleClasses.value[1].className,
+          onUpdate: () => {
+            activeColor.value = styleClasses.value[1].color;
+          },
+        },
         "+=0.10"
       )
       .set(
         document.body,
-        { className: styleClasses.value[2].className },
+        {
+          className: styleClasses.value[2].className,
+          onUpdate: () => {
+            activeColor.value = styleClasses.value[2].color;
+          },
+        },
         "+=0.15"
       )
       .set(
         document.body,
-        { className: styleClasses.value[3].className },
+        {
+          className: styleClasses.value[3].className,
+          onUpdate: () => {
+            activeColor.value = styleClasses.value[3].color;
+          },
+        },
         "+=0.20"
       )
       .set(
         document.body,
-        { className: styleClasses.value[4].className },
+        {
+          className: styleClasses.value[4].className,
+          onUpdate: () => {
+            activeColor.value = styleClasses.value[4].color;
+          },
+        },
         "+=0.25"
       )
       .set(
         document.body,
-        { className: styleClasses.value[5].className },
+        {
+          className: styleClasses.value[5].className,
+          onUpdate: () => {
+            activeColor.value = styleClasses.value[5].color;
+          },
+        },
         "+=0.50"
       )
-      .set(document.body, { className: getRandomStyleClass }, "+=1.25");
+      .set(
+        document.body,
+        {
+          className: getRandomStyleClass,
+          onUpdate: () => {
+            const result = styleClasses.value.find((obj) => {
+              return obj.className === document.body.className;
+            });
+            activeColor.value = result?.color || "";
+          },
+        },
+        "+=1.25"
+      );
   }
 });
 </script>
 
 <template>
+  <meta name="theme-color" :content="activeColor" />
   <div
     ref="header"
     class="w-full height--screen flex items-center justify-center absolute backdrop-blur-sm z-50 dark:bg-black bg-white dark:bg-opacity-10 bg-opacity-10"
