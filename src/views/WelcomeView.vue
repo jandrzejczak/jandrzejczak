@@ -8,7 +8,7 @@ import { useDeviceStore } from "@/stores/globalStore";
 import { storeToRefs } from "pinia";
 
 const deviceStore = useDeviceStore();
-const { isMobile } = storeToRefs(deviceStore);
+const { isMobileDevice } = storeToRefs(deviceStore);
 const { bottom } = useScreenSafeArea();
 const { space, escape } = useMagicKeys();
 const colorMode = useColorMode({
@@ -250,7 +250,7 @@ onMounted(() => {
   <meta name="theme-color" :content="activeColor" />
   <div
     ref="header"
-    :style="isMobile ? `bottom: ${bottom || 32}px` : ''"
+    :style="isMobileDevice() ? `bottom: ${bottom || 32}px` : ''"
     :class="[
       'w-full height--screen flex items-center justify-center absolute backdrop-blur-sm z-50',
     ]"
