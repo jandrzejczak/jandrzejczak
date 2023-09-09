@@ -3,15 +3,14 @@ import { RouterLink, RouterView } from "vue-router";
 import { onMounted, ref, Transition, watchEffect } from "vue";
 import gsap from "gsap";
 import Draggable from "gsap/Draggable";
-import { useColorMode, useMagicKeys } from "@vueuse/core";
+import { useColorMode, useMagicKeys, useScreenSafeArea } from "@vueuse/core";
 import { useDeviceStore } from "@/stores/globalStore";
 import { storeToRefs } from "pinia";
 
 const deviceStore = useDeviceStore();
 const { isMobile } = storeToRefs(deviceStore);
-
+const { bottom } = useScreenSafeArea();
 const { space, escape } = useMagicKeys();
-
 const colorMode = useColorMode({
   emitAuto: true,
 });
@@ -251,9 +250,9 @@ onMounted(() => {
   <meta name="theme-color" :content="activeColor" />
   <div
     ref="header"
+    :style="isMobile ? `bottom: ${bottom || 0}px` : ''"
     :class="[
       'w-full height--screen flex items-center justify-center absolute backdrop-blur-sm z-50',
-      { 'bottom-0': isMobile },
     ]"
   >
     <div class="flex flex-col items-center leading-none">
