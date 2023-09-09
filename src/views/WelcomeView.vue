@@ -250,7 +250,7 @@ onMounted(() => {
   <meta name="theme-color" :content="activeColor" />
   <div
     ref="header"
-    :style="isMobile ? `bottom: ${bottom || 0}px` : ''"
+    :style="isMobile ? `bottom: ${bottom || 32}px` : ''"
     :class="[
       'w-full height--screen flex items-center justify-center absolute backdrop-blur-sm z-50',
     ]"
