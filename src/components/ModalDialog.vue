@@ -4,21 +4,21 @@
       <div class="modal-dialog-inner">
         <div class="modal-thumb">
           <img
-            :src="items[$route.params.id].thumb"
+            :src="items[$route.params.id as any].thumb"
             :style="`view-transition-name: card-img-${$route.params.id}`"
             width="1"
             height="1"
             alt=""
           />
-          <CardHeadline class="modal-headline" :item="items[$route.params.id]" />
+          <CardHeadline class="modal-headline" :item="items[$route.params.id as any]" />
         </div>
 
-        <p class="modal-description">{{ items[$route.params.id].description }}</p>
+        <p class="modal-description">{{ items[$route.params.id as any].description }}</p>
       </div>
       <button class="modal-close" @click="handleClose()" aria-label="とじる">×</button>
     </div>
   </div>
-</template>nn jkkl;'\'
+</template>
 
 <script lang="ts" setup>
 import type { Item } from "@/types/Item";

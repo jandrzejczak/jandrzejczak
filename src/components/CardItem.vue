@@ -9,7 +9,7 @@
 </template>
 
 <script lang="ts" setup>
-import { Item } from "@/types/Item";
+import type { Item } from "@/types/Item";
 import CardHeadline from "@/components/CardHeadline.vue";
 
 const props = defineProps<{
