@@ -198,7 +198,7 @@ function render() {
 </script>
 
 <template>
-  <div id="face" :class="['face-bg', { 'mobile-overlay': isMobile }]"></div>
+  <div id="face" :class="['face-bg']"></div>
 </template>
 
 <style scoped lang="scss">

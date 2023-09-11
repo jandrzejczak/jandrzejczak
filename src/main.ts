@@ -1,49 +1,9 @@
 import { createApp } from "vue";
 import { createPinia } from "pinia";
+import OhVueIcon from "@/config/constants/icons";
 
 import App from "./App.vue";
 import router from "./router";
-
-import { OhVueIcon, addIcons } from "oh-vue-icons";
-import {
-  IoLanguage,
-  CoTypescript,
-  IoLogoVue,
-  SiGit,
-  SiAdobephotoshop,
-  SiAdobeaftereffects,
-  CoMysql,
-  CoSassAlt,
-  SiHtml5,
-  CoJest,
-  CoDocker,
-  LaNode,
-  CoGraphql,
-  BiBehance,
-  BiGithub,
-  BiLinkedin,
-  BiInstagram,
-} from "oh-vue-icons/icons";
-
-addIcons(
-  IoLanguage,
-  CoTypescript,
-  IoLogoVue,
-  SiGit,
-  SiAdobephotoshop,
-  SiAdobeaftereffects,
-  CoMysql,
-  CoSassAlt,
-  SiHtml5,
-  CoJest,
-  CoDocker,
-  LaNode,
-  CoGraphql,
-  BiBehance,
-  BiGithub,
-  BiLinkedin,
-  BiInstagram,
-);
 
 const app = createApp(App);
 app.component("v-icon", OhVueIcon);

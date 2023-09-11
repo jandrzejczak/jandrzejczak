@@ -1,19 +1,22 @@
 <script setup lang="ts">
-import { RouterLink, RouterView } from "vue-router";
-import { onMounted, ref, Transition, watchEffect } from "vue";
+import { RouterLink, RouterView, useRouter } from "vue-router";
+import { onMounted, ref, computed, watchEffect } from "vue";
 import gsap from "gsap";
 import Draggable from "gsap/Draggable";
-import { useColorMode, useMagicKeys, useScreenSafeArea } from "@vueuse/core";
+import { useColorMode, useMagicKeys } from "@vueuse/core";
 import { useDeviceStore } from "@/stores/globalStore";
 import { storeToRefs } from "pinia";
+import MenuButton from "@/components/Navigation/MenuButton.vue";
+import { vOnClickOutside } from "@vueuse/components";
 
 const deviceStore = useDeviceStore();
 const { isMobileDevice } = storeToRefs(deviceStore);
-const { bottom } = useScreenSafeArea();
-const { space, escape } = useMagicKeys();
+const { space, escape, enter } = useMagicKeys();
 const colorMode = useColorMode({
   emitAuto: true,
 });
+const router = useRouter();
+const routePath = computed(() => router.currentRoute.value.path);
 
 colorMode.value = "auto";
 
@@ -24,6 +27,20 @@ const header = ref<HTMLElement | null>(null);
 const logoAnimation = ref();
 const backgroundAnimation = ref();
 const activeColor = ref("");
+const isMenuOpen = ref(false);
+const isAnimationFinished = ref(false);
+
+const styleClasses = ref([
+  { className: "necuro--mocha", probability: 0.01, color: "#593d3b" },
+  { className: "necuro--volt", probability: 0.05, color: "#7f0799" },
+  { className: "necuro--default", probability: 0.3, color: "#ffffff" },
+  { className: "necuro--beach", probability: 0.1, color: "#3f88c5" },
+  { className: "necuro--black", probability: 0.3, color: "#0d0d0d" },
+  { className: "necuro--wine", probability: 0.08, color: "#612940" },
+  { className: "necuro--fedex", probability: 0.1, color: "#660099" },
+  { className: "necuro--coca-cola", probability: 0.07, color: "#b91212" },
+  { className: "necuro--forest", probability: 0.06, color: "#3e363f" },
+]);
 
 const textAnimation = (element: HTMLElement) => {
   const characters = Array.from(element.innerText);
@@ -32,7 +49,7 @@ const textAnimation = (element: HTMLElement) => {
     .map((char) =>
       char === " "
         ? "<div>&nbsp;</div>"
-        : `<div class="relative"><div>${char}</div><div class="necuro__logo--line absolute top-0 font-display-line">${char}</div></div>`
+        : `<div class="relative"><div>${char}</div><div class="necuro__logo--line absolute top-0 font-display-line">${char}</div></div>`,
     )
     .join("");
 
@@ -51,7 +68,7 @@ const textAnimation = (element: HTMLElement) => {
       2,
       { opacity: 0, y: "70%", ease: "elastic.out(1.2, 0.5)" },
       { opacity: 1, y: 0, ease: "elastic.out(1.2, 0.5)" },
-      0.1
+      0.1,
     );
 
   newDraggable(Array.from(targetsDiv) as HTMLElement[]);
@@ -65,15 +82,18 @@ const flattenText = (element: HTMLElement) => {
     ease: "power3.inOut",
     duration: 1.75,
     fontSize: "3rem",
-    onComplete: function () {},
   });
 };
 
 const collapseHeader = (element: HTMLElement) => {
   gsap.to(element, {
-    height: "4rem",
     ease: "power3.inOut",
+    maxHeight: isMobileDevice.value() ? "7rem" : "5rem",
     duration: 1.75,
+    onComplete: () => {
+      //   element.classList.remove("max-h-screen", "height--screen");
+      isAnimationFinished.value = true;
+    },
   });
 };
 
@@ -131,19 +151,10 @@ const setTextFullWidth = (textElement: HTMLElement, width: number) => {
   textElement.style.fontSize = updatedFontSize + "px";
 };
 
-const styleClasses = ref([
-  { className: "necuro--mocha", probability: 0.01, color: "#593d3b" },
-  { className: "necuro--volt", probability: 0.05, color: "#7f0799" },
-  { className: "necuro--default", probability: 0.6, color: "#ffffff" },
-  { className: "necuro--beach", probability: 0.1, color: "#3f88c5" },
-  { className: "necuro--black", probability: 0.3, color: "#0d0d0d" },
-  { className: "necuro--wine", probability: 0.08, color: "#612940" },
-]);
-
 const getRandomStyleClass = () => {
   const totalProbability = styleClasses.value.reduce(
     (sum, styleClass) => sum + styleClass.probability,
-    0
+    0,
   );
 
   const randomValue = Math.random() * totalProbability;
@@ -157,14 +168,32 @@ const getRandomStyleClass = () => {
   return "necuro--default";
 };
 
+const handleRouterGoBack = () => {
+  router.go(-1);
+};
+
+const closeMenu = () => {
+  isMenuOpen.value = false;
+};
+
+const shuffleArray = (array) => {
+  for (let i = array.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    const temp = array[i];
+    array[i] = array[j];
+    array[j] = temp;
+  }
+};
+
 watchEffect(() => {
-  if (space.value || escape.value) {
+  if (space.value || escape.value || enter.value) {
     logoAnimation.value.progress(1);
     backgroundAnimation.value.progress(1);
   }
 });
 
 onMounted(() => {
+  shuffleArray(styleClasses.value);
   if (necuroLogo.value) {
     textAnimation(necuroLogo.value);
     backgroundAnimation.value = gsap
@@ -177,7 +206,7 @@ onMounted(() => {
             activeColor.value = styleClasses.value[0].color;
           },
         },
-        "+=0.05"
+        "+=0.05",
       )
       .set(
         document.body,
@@ -187,7 +216,7 @@ onMounted(() => {
             activeColor.value = styleClasses.value[1].color;
           },
         },
-        "+=0.10"
+        "+=0.10",
       )
       .set(
         document.body,
@@ -197,7 +226,7 @@ onMounted(() => {
             activeColor.value = styleClasses.value[2].color;
           },
         },
-        "+=0.15"
+        "+=0.15",
       )
       .set(
         document.body,
@@ -207,7 +236,7 @@ onMounted(() => {
             activeColor.value = styleClasses.value[3].color;
           },
         },
-        "+=0.20"
+        "+=0.20",
       )
       .set(
         document.body,
@@ -217,7 +246,7 @@ onMounted(() => {
             activeColor.value = styleClasses.value[4].color;
           },
         },
-        "+=0.25"
+        "+=0.25",
       )
       .set(
         document.body,
@@ -227,7 +256,7 @@ onMounted(() => {
             activeColor.value = styleClasses.value[5].color;
           },
         },
-        "+=0.50"
+        "+=0.50",
       )
       .set(
         document.body,
@@ -240,7 +269,7 @@ onMounted(() => {
             activeColor.value = result?.color || "";
           },
         },
-        "+=1.25"
+        "+=1.25",
       );
   }
 });
@@ -250,23 +279,78 @@ onMounted(() => {
   <meta name="theme-color" :content="activeColor" />
   <div
     ref="header"
-    :style="isMobileDevice() ? `bottom: ${bottom || 32}px` : ''"
     :class="[
-      'w-full height--screen flex items-center justify-center absolute backdrop-blur-sm z-50',
+      'height--screen fixed z-[999] flex max-h-screen w-full items-start justify-center pt-4 backdrop-blur-md pb-safe-offset-4',
+      { 'bottom-0': isMobileDevice() },
+      { 'top-0': !isMobileDevice() },
     ]"
   >
-    <div class="flex flex-col items-center leading-none">
+    <div class="flex h-full w-full items-center justify-between leading-none">
+      <div class="flex justify-center px-4">
+        <v-icon
+          @click="handleRouterGoBack()"
+          :class="[
+            'h-12 w-12 cursor-pointer transition-opacity duration-700',
+            isAnimationFinished && routePath !== '/'
+              ? 'opacity-100'
+              : 'opacity-0',
+            routePath === '/' ? 'pointer-events-none opacity-0' : '',
+          ]"
+          name="hi-arrow-sm-left"
+        />
+      </div>
       <div
         ref="necuroLogo"
-        class="necuro__logo font-display flex justify-center items-center text-9xl"
+        class="necuro__logo flex grow items-center justify-center font-display text-8xl sm:text-9xl"
       >
         necuro
       </div>
-      <!-- <div
-        class="absolute -bottom-5 font-header tracking-[0.25rem] pointer-events-none uppercase text-xs"
+      <div
+        :class="[
+          'flex justify-end px-4 transition-[width] duration-500',
+          isMenuOpen ? 'w-1/2' : 'w-20',
+        ]"
       >
-        playground
-      </div> -->
+        <MenuButton
+          :class="[
+            'transition-opacity duration-700',
+            isAnimationFinished ? 'opacity-100' : 'opacity-0',
+          ]"
+          v-model="isMenuOpen"
+        >
+        </MenuButton>
+      </div>
+      <div
+        v-on-click-outside="closeMenu"
+        :class="[
+          `height--screen fixed right-0 -z-10 flex w-full justify-end overflow-hidden transition-transform duration-500 after:absolute after:top-0 after:h-full after:w-full after:bg-background after:opacity-75 after:content-[''] sm:w-[24rem]`,
+          isMenuOpen ? 'translate-x-0' : 'translate-x-full',
+          isMobileDevice() ? 'bottom-0' : 'top-0',
+        ]"
+      >
+        <div
+          :class="[
+            'relative z-10 flex h-full flex-col items-end px-6 ',
+            isMobileDevice() ? 'justify-end pb-32' : 'pt-32',
+          ]"
+        >
+          <RouterLink @click="closeMenu" class="pb-4" to="/">
+            <span class="font-header text-5xl font-bold">home page</span>
+          </RouterLink>
+          <RouterLink @click="closeMenu" class="pb-4" to="/head">
+            <span class="font-header text-5xl font-bold">andrzejczak</span>
+          </RouterLink>
+          <RouterLink @click="closeMenu" class="pb-4" to="/">
+            <span class="font-header text-5xl font-bold">about</span>
+          </RouterLink>
+          <RouterLink @click="closeMenu" class="pb-4" to="/">
+            <span class="font-header text-5xl font-bold">???</span>
+          </RouterLink>
+          <RouterLink @click="closeMenu" class="pb-4" to="/">
+            <span class="font-header text-5xl font-bold">profit</span>
+          </RouterLink>
+        </div>
+      </div>
     </div>
   </div>
 </template>
@@ -321,6 +405,30 @@ onMounted(() => {
       &--line {
         color: #9d6381;
       }
+    }
+  }
+  &--fedex {
+    @extend .necuro;
+    --text-color: #ff6600;
+    --text-color-secondary: #fff;
+    --bg-color: #660099;
+    .necuro__logo {
+    }
+  }
+  &--coca-cola {
+    @extend .necuro;
+    --text-color: #ffffff;
+    --text-color-secondary: #000000;
+    --bg-color: #b91212;
+    .necuro__logo {
+    }
+  }
+  &--forest {
+    @extend .necuro;
+    --text-color: #e1ad01;
+    --text-color-secondary: #73a580;
+    --bg-color: #3e363f;
+    .necuro__logo {
     }
   }
 }
