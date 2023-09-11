@@ -20,8 +20,6 @@ const { isMobileDevice, getCurrentColor } = storeToRefs(deviceStore);
 watch(getCurrentColor, (newVal) => {
   model.traverse(function (child: any) {
     if (child.isMesh) {
-      // child.material = material;
-      console.log(Number("0x" + newVal.slice(1)));
       child.material.color.set(Number("0x" + newVal.slice(1)));
     }
     if (child.isGeometry) {
@@ -95,8 +93,9 @@ function init() {
 
         model.traverse(function (child: any) {
           if (child.isMesh) {
-            // child.material = material;
-            child.material.color.set("0x000000");
+            child.material.color.set(
+              Number("0x" + getCurrentColor.value.slice(1)),
+            );
           }
           if (child.isGeometry) {
             child.geometry.computeVertexNormals(true);
@@ -205,7 +204,10 @@ function render() {
 </script>
 
 <template>
-  <div id="face" :class="['face-bg', { 'mobile-overlay': isMobileDevice() }]"></div>
+  <div
+    id="face"
+    :class="['face-bg', { 'mobile-overlay': isMobileDevice() }]"
+  ></div>
 </template>
 
 <style scoped lang="scss">

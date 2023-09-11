@@ -11,7 +11,7 @@ import { storeToRefs } from "pinia";
 import { useDeviceStore } from "@/stores/globalStore";
 
 const store = useDeviceStore();
-const { isMobile } = storeToRefs(store);
+const { isMobileDevice } = storeToRefs(store);
 
 const loading = ref(true);
 const permissionGranted = ref(true);
@@ -23,10 +23,10 @@ watch(loading, (isLoading) => {
       VanillaTilt.init(element, {
         max: 25,
         speed: 400,
-        scale: isMobile.value ? 1 : 1.125,
+        scale: isMobileDevice.value() ? 1 : 1.125,
         // glare: !isMobile.value && !isSafari.value,
-        glare: !isMobile.value,
-        gyroscope: isMobile.value,
+        glare: !isMobileDevice.value(),
+        gyroscope: isMobileDevice.value(),
       });
     });
   }
@@ -34,13 +34,13 @@ watch(loading, (isLoading) => {
 </script>
 
 <template>
-  <cursor v-if="!isMobile && !loading"></cursor>
+  <cursor v-if="!isMobileDevice() && !loading"></cursor>
   <Transition>
     <loading
       @grant-permission="(e) => (permissionGranted = !e)"
-      :is-mobile="isMobile"
+      :is-mobile="isMobileDevice()"
       :is-loading="loading"
-      v-show="loading || (isMobile && permissionGranted)"
+      v-show="loading || (isMobileDevice() && permissionGranted)"
     ></loading>
   </Transition>
   <!-- <navigation v-if="!loading" :is-mobile="isMobile"></navigation> -->

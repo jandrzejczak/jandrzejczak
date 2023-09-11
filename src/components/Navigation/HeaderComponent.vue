@@ -11,7 +11,7 @@ import { vOnClickOutside } from "@vueuse/components";
 
 const deviceStore = useDeviceStore();
 const { setCurrentColor } = deviceStore;
-const { isMobileDevice, isBottomNav } = storeToRefs(deviceStore);
+const { isMobileDevice, isBottomNav, currentColor } = storeToRefs(deviceStore);
 const { space, escape, enter } = useMagicKeys();
 const colorMode = useColorMode({
   emitAuto: true,
@@ -28,7 +28,6 @@ const header = ref<HTMLElement | null>(null);
 const menuButton = ref<HTMLElement | null>(null);
 const logoAnimation = ref();
 const backgroundAnimation = ref();
-const activeColor = ref("");
 const isMenuOpen = ref(false);
 const isAnimationFinished = ref(false);
 
@@ -212,7 +211,7 @@ onMounted(() => {
         {
           className: styleClasses.value[0].className,
           onUpdate: () => {
-            activeColor.value = styleClasses.value[0].color;
+            setCurrentColor(styleClasses.value[0].color);
           },
         },
         "+=0.05",
@@ -222,7 +221,7 @@ onMounted(() => {
         {
           className: styleClasses.value[1].className,
           onUpdate: () => {
-            activeColor.value = styleClasses.value[1].color;
+            setCurrentColor(styleClasses.value[1].color);
           },
         },
         "+=0.10",
@@ -232,7 +231,7 @@ onMounted(() => {
         {
           className: styleClasses.value[2].className,
           onUpdate: () => {
-            activeColor.value = styleClasses.value[2].color;
+            setCurrentColor(styleClasses.value[2].color);
           },
         },
         "+=0.15",
@@ -242,7 +241,7 @@ onMounted(() => {
         {
           className: styleClasses.value[3].className,
           onUpdate: () => {
-            activeColor.value = styleClasses.value[3].color;
+            setCurrentColor(styleClasses.value[3].color);
           },
         },
         "+=0.20",
@@ -252,7 +251,7 @@ onMounted(() => {
         {
           className: styleClasses.value[4].className,
           onUpdate: () => {
-            activeColor.value = styleClasses.value[4].color;
+            setCurrentColor(styleClasses.value[4].color);
           },
         },
         "+=0.25",
@@ -262,7 +261,7 @@ onMounted(() => {
         {
           className: styleClasses.value[5].className,
           onUpdate: () => {
-            activeColor.value = styleClasses.value[5].color;
+            setCurrentColor(styleClasses.value[5].color);
           },
         },
         "+=0.50",
@@ -275,7 +274,6 @@ onMounted(() => {
             const result = styleClasses.value.find((obj) => {
               return obj.className === document.body.className;
             });
-            activeColor.value = result?.color || "";
             setCurrentColor(result?.color || "");
           },
         },
@@ -286,7 +284,7 @@ onMounted(() => {
 </script>
 
 <template>
-  <meta name="theme-color" :content="activeColor" />
+  <meta name="theme-color" :content="currentColor" />
   <div
     ref="header"
     :class="[

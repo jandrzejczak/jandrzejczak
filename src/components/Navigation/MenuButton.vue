@@ -33,9 +33,9 @@ const handleMenuToggle = () => {
   display: block;
   position: relative;
   width: 2.5rem;
-  height: 2.5rem;
+  height: 2.125rem;
   border-radius: 3px;
-  padding-top: 0.65rem;
+  padding-top: 0.5rem;
   cursor: pointer;
   transition: all 500ms cubic-bezier(1, 0, 0.645, 0.65);
 }
