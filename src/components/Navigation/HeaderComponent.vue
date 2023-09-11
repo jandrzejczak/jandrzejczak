@@ -174,12 +174,12 @@ const handleRouterGoBack = () => {
   router.go(-1);
 };
 
-const closeMenu = (event) => {
+const closeMenu = () => {
   if (isMenuOpen.value) isMenuOpen.value = false;
 };
 
 const closeMenuHandler = [
-  (ev) => {
+  () => {
     isMenuOpen.value = false;
   },
   { ignore: [menuButton] },
