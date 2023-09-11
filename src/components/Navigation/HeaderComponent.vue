@@ -348,8 +348,8 @@ onMounted(() => {
           <RouterLink @click="closeMenu" class="pb-6 opacity-50" to="/head">
             <span class="font-header text-5xl font-bold">andrzejczak</span>
           </RouterLink>
-          <RouterLink @click="closeMenu" class="pb-6 opacity-50" to="/about">
-            <span class="font-header text-5xl font-bold">about</span>
+          <RouterLink @click="closeMenu" class="pb-6 opacity-50" to="/flower">
+            <span class="font-header text-5xl font-bold">flowers</span>
           </RouterLink>
           <RouterLink @click="closeMenu" class="pb-6 opacity-50" to="/hmm">
             <span class="font-header text-5xl font-bold">???</span>
