@@ -89,7 +89,7 @@ onMounted(() => {
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  z-index: 999;
+  z-index: 50;
   &::after {
     content: "";
     position: fixed;
@@ -98,6 +98,7 @@ onMounted(() => {
     width: 100vw;
     height: 100vh;
     transform: translate(-50%, -50%);
+    background-color: var(--bg-color);
     z-index: -1;
   }
   > div {

@@ -10,7 +10,8 @@ import MenuButton from "@/components/Navigation/MenuButton.vue";
 import { vOnClickOutside } from "@vueuse/components";
 
 const deviceStore = useDeviceStore();
-const { isMobileDevice } = storeToRefs(deviceStore);
+const { setCurrentColor } = deviceStore;
+const { isMobileDevice, isBottomNav } = storeToRefs(deviceStore);
 const { space, escape, enter } = useMagicKeys();
 const colorMode = useColorMode({
   emitAuto: true,
@@ -24,6 +25,7 @@ gsap.registerPlugin(Draggable);
 
 const necuroLogo = ref<HTMLElement | null>(null);
 const header = ref<HTMLElement | null>(null);
+const menuButton = ref<HTMLElement | null>(null);
 const logoAnimation = ref();
 const backgroundAnimation = ref();
 const activeColor = ref("");
@@ -172,9 +174,16 @@ const handleRouterGoBack = () => {
   router.go(-1);
 };
 
-const closeMenu = () => {
-  isMenuOpen.value = false;
+const closeMenu = (event) => {
+  if (isMenuOpen.value) isMenuOpen.value = false;
 };
+
+const closeMenuHandler = [
+  (ev) => {
+    isMenuOpen.value = false;
+  },
+  { ignore: [menuButton] },
+];
 
 const shuffleArray = (array: any) => {
   for (let i = array.length - 1; i > 0; i--) {
@@ -267,6 +276,7 @@ onMounted(() => {
               return obj.className === document.body.className;
             });
             activeColor.value = result?.color || "";
+            setCurrentColor(result?.color || "");
           },
         },
         "+=1.25",
@@ -281,8 +291,7 @@ onMounted(() => {
     ref="header"
     :class="[
       'height--screen fixed z-[999] flex max-h-screen w-full items-start justify-center pt-4 backdrop-blur-md pb-safe-offset-4',
-      { 'bottom-0': isMobileDevice() },
-      { 'top-0': !isMobileDevice() },
+      isBottomNav ? 'bottom-0' : 'top-0',
     ]"
   >
     <div class="flex h-full w-full items-center justify-between leading-none">
@@ -312,6 +321,7 @@ onMounted(() => {
         ]"
       >
         <MenuButton
+          ref="menuButton"
           :class="[
             'transition-opacity duration-700',
             isAnimationFinished ? 'opacity-100' : 'opacity-0',
@@ -321,32 +331,32 @@ onMounted(() => {
         </MenuButton>
       </div>
       <div
-        v-on-click-outside="closeMenu"
+        v-on-click-outside="closeMenuHandler"
         :class="[
           `height--screen fixed right-0 -z-10 flex w-full justify-end overflow-hidden transition-transform duration-500 after:absolute after:top-0 after:h-full after:w-full after:bg-background after:opacity-75 after:content-[''] sm:w-[24rem]`,
           isMenuOpen ? 'translate-x-0' : 'translate-x-full',
-          isMobileDevice() ? 'bottom-0' : 'top-0',
+          isBottomNav ? 'bottom-0' : 'top-0',
         ]"
       >
         <div
           :class="[
             'relative z-10 flex h-full flex-col items-end px-6 ',
-            isMobileDevice() ? 'justify-end pb-32' : 'pt-32',
+            isBottomNav ? 'justify-end pb-32' : 'pt-32',
           ]"
         >
-          <RouterLink @click="closeMenu" class="pb-4" to="/">
+          <RouterLink @click="closeMenu" class="pb-6 opacity-50" to="/">
             <span class="font-header text-5xl font-bold">home page</span>
           </RouterLink>
-          <RouterLink @click="closeMenu" class="pb-4" to="/head">
+          <RouterLink @click="closeMenu" class="pb-6 opacity-50" to="/head">
             <span class="font-header text-5xl font-bold">andrzejczak</span>
           </RouterLink>
-          <RouterLink @click="closeMenu" class="pb-4" to="/">
+          <RouterLink @click="closeMenu" class="pb-6 opacity-50" to="/about">
             <span class="font-header text-5xl font-bold">about</span>
           </RouterLink>
-          <RouterLink @click="closeMenu" class="pb-4" to="/">
+          <RouterLink @click="closeMenu" class="pb-6 opacity-50" to="/hmm">
             <span class="font-header text-5xl font-bold">???</span>
           </RouterLink>
-          <RouterLink @click="closeMenu" class="pb-4" to="/">
+          <RouterLink @click="closeMenu" class="pb-6 opacity-50" to="/profit">
             <span class="font-header text-5xl font-bold">profit</span>
           </RouterLink>
         </div>
@@ -431,5 +441,11 @@ onMounted(() => {
     .necuro__logo {
     }
   }
+}
+</style>
+
+<style lang="scss" scoped>
+.router-link-active {
+  @apply opacity-100;
 }
 </style>

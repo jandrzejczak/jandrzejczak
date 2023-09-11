@@ -16,11 +16,6 @@ const { isMobile } = storeToRefs(store);
 const loading = ref(true);
 const permissionGranted = ref(true);
 
-const appHeight = () => {
-  const doc = document.documentElement;
-  doc.style.setProperty(`--app-height`, `${window.innerHeight}px`);
-};
-
 watch(loading, (isLoading) => {
   if (!isLoading) {
     nextTick(() => {
@@ -35,11 +30,6 @@ watch(loading, (isLoading) => {
       });
     });
   }
-});
-
-onMounted(() => {
-  window.addEventListener("resize", appHeight);
-  appHeight();
 });
 </script>
 
@@ -58,17 +48,7 @@ onMounted(() => {
   <face-background @scene-ready="(e) => (loading = !e)"></face-background>
 </template>
 
-<style>
-:root {
-  --app-height: 100%;
-}
-</style>
-
 <style scoped lang="scss">
-.layout {
-  max-height: var(--app-height);
-  overflow: auto;
-}
 
 .logo {
   display: block;

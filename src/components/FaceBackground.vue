@@ -9,19 +9,26 @@ import { GLTFLoader } from "three/addons/loaders/GLTFLoader.js";
 import { DRACOLoader } from "three/addons/loaders/DRACOLoader.js";
 // @ts-ignore
 import { RGBELoader } from "three/addons/loaders/RGBELoader.js";
-import { onMounted, ref, computed } from "vue";
+import { onMounted, ref, computed, watch } from "vue";
 import { useOrientationStore, useDeviceStore } from "@/stores/globalStore";
-import { useColorMode } from "@vueuse/core";
-
-const { system, store } = useColorMode();
-const myColorMode = computed(() =>
-  store.value === "auto" ? system.value : store.value
-);
 
 const orientationStore = useOrientationStore();
 const deviceStore = useDeviceStore();
 const { orientation } = storeToRefs(orientationStore);
-const { isMobile } = storeToRefs(deviceStore);
+const { isMobileDevice, getCurrentColor } = storeToRefs(deviceStore);
+
+watch(getCurrentColor, (newVal) => {
+  model.traverse(function (child: any) {
+    if (child.isMesh) {
+      // child.material = material;
+      console.log(Number("0x" + newVal.slice(1)));
+      child.material.color.set(Number("0x" + newVal.slice(1)));
+    }
+    if (child.isGeometry) {
+      child.geometry.computeVertexNormals(true);
+    }
+  });
+});
 
 const emit = defineEmits(["scene-ready"]);
 
@@ -52,7 +59,7 @@ function init() {
     60,
     window.innerWidth / window.innerHeight,
     0.01,
-    100
+    100,
   );
   camera.position.z = 1;
   camera.focalLength = 3;
@@ -89,7 +96,7 @@ function init() {
         model.traverse(function (child: any) {
           if (child.isMesh) {
             // child.material = material;
-            child.material.color.set(0x000000);
+            child.material.color.set("0x000000");
           }
           if (child.isGeometry) {
             child.geometry.computeVertexNormals(true);
@@ -111,7 +118,7 @@ function init() {
           0.12,
           0.07,
           100,
-          26
+          26,
         ).toNonIndexed();
 
         // const material = new THREE.MeshPhysicalMaterial({
@@ -149,28 +156,28 @@ function init() {
 
   animate();
   function animate() {
-    if (model && !isMobile.value) {
+    if (model && !isMobileDevice.value()) {
       model.rotation.x = ease(
         model.rotation.x,
         mousePosition.y / (3 * window.innerWidth),
-        0.075
+        0.075,
       );
       model.rotation.y = ease(
         model.rotation.y,
         mousePosition.x / (3 * window.innerHeight),
-        0.075
+        0.075,
       );
     }
-    if (model && isMobile.value) {
+    if (model && isMobileDevice.value()) {
       model.rotation.x = ease(
         model.rotation.x,
         (orientation.value.b ?? 0) / 300 - 0.1,
-        0.075
+        0.075,
       );
       model.rotation.y = ease(
         model.rotation.y,
         (orientation.value.g ?? 0) / 300,
-        0.075
+        0.075,
       );
     }
     requestAnimationFrame(animate);
@@ -198,7 +205,7 @@ function render() {
 </script>
 
 <template>
-  <div id="face" :class="['face-bg']"></div>
+  <div id="face" :class="['face-bg', { 'mobile-overlay': isMobileDevice() }]"></div>
 </template>
 
 <style scoped lang="scss">
@@ -225,7 +232,8 @@ function render() {
     position: absolute;
     top: 0;
     left: 0;
-    background-color: rgba(0, 0, 0, 0.5);
+    background-color: var(--bg-color);
+    opacity: 0.5;
   }
 }
 </style>

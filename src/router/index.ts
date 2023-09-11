@@ -11,6 +11,11 @@ const router = createRouter({
       component: HomeView,
     },
     {
+      path: "/about",
+      name: "About",
+      component: HomeView,
+    },
+    {
       path: "/head",
       name: "Head",
       component: HeadView,

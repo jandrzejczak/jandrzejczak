@@ -1,10 +1,18 @@
 <script setup lang="ts">
-import { defineProps, defineEmits, ref } from "vue";
+import { defineProps, defineEmits, ref, watch } from "vue";
 
-const { modelValue } = defineProps(["modelValue"]);
+const props = defineProps(["modelValue"]);
 const emits = defineEmits(["update:modelValue"]);
 
-const internalValue = ref(modelValue);
+const internalValue = ref(props.modelValue);
+
+watch(
+  () => props.modelValue,
+  (newValue) => {
+    console.log(newValue);
+    internalValue.value = newValue;
+  },
+);
 
 const handleMenuToggle = () => {
   internalValue.value = !internalValue.value;
