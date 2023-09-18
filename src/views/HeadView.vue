@@ -40,7 +40,7 @@ watch(loading, (isLoading) => {
       @grant-permission="(e) => (permissionGranted = !e)"
       :is-mobile="isMobileDevice()"
       :is-loading="loading"
-      v-show="(loading && isMobileDevice()) || permissionGranted"
+      v-show="(loading && isMobileDevice()) || (permissionGranted && isMobileDevice())"
     ></loading>
   </Transition>
   <!-- <navigation v-if="!loading" :is-mobile="isMobile"></navigation> -->
