@@ -174,6 +174,11 @@ const closeMenu = () => {
   if (isMenuOpen.value) isMenuOpen.value = false;
 };
 
+const handleMenuClick = (route: string) => {
+  navTo(route);
+  closeMenu();
+}
+
 const closeMenuHandler = [
   () => {
     isMenuOpen.value = false;
@@ -341,7 +346,7 @@ onMounted(() => {
           ]"
         >
           <a
-            @click="navTo('/')"
+            @click="handleMenuClick('/')"
             :class="[
               'cursor-pointer pb-6',
               isCurrentRoute('/') ? 'opacity-100' : 'opacity-50',
@@ -350,7 +355,7 @@ onMounted(() => {
             <span class="font-header text-5xl">home page</span>
           </a>
           <a
-            @click="navTo('/head')"
+            @click="handleMenuClick('/head')"
             :class="[
               'cursor-pointer pb-6',
               isCurrentRoute('/head') ? 'opacity-100' : 'opacity-50',
@@ -359,7 +364,7 @@ onMounted(() => {
             <span class="font-header text-5xl">andrzejczak</span>
           </a>
           <a
-            @click="navTo('/flower')"
+            @click="handleMenuClick('/flower')"
             :class="[
               'cursor-pointer pb-6',
               isCurrentRoute('/flower') ? 'opacity-100' : 'opacity-50',
@@ -368,7 +373,7 @@ onMounted(() => {
             <span class="font-header text-5xl">flower</span>
           </a>
           <a
-            @click="navTo('/')"
+            @click="handleMenuClick('/')"
             :class="[
               'cursor-pointer pb-6',
               isCurrentRoute('/') ? 'opacity-100' : 'opacity-50',
@@ -377,7 +382,7 @@ onMounted(() => {
             <span class="font-header text-5xl">???</span>
           </a>
           <a
-            @click="navTo('/')"
+            @click="handleMenuClick('/')"
             :class="[
               'cursor-pointer pb-6',
               isCurrentRoute('/') ? 'opacity-100' : 'opacity-50',
