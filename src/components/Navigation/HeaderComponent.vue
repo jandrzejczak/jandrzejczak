@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { RouterLink, RouterView, useRouter } from "vue-router";
-import { onMounted, ref, computed, watchEffect } from "vue";
+import { onMounted, ref, computed, watchEffect, nextTick } from "vue";
 import gsap from "gsap";
 import Draggable from "gsap/Draggable";
 import { useColorMode, useMagicKeys } from "@vueuse/core";
@@ -8,6 +8,7 @@ import { useDeviceStore } from "@/stores/globalStore";
 import { storeToRefs } from "pinia";
 import MenuButton from "@/components/Navigation/MenuButton.vue";
 import { vOnClickOutside } from "@vueuse/components";
+import { navTo, isCurrentRoute } from "@/utils";
 
 const deviceStore = useDeviceStore();
 const { setCurrentColor } = deviceStore;
@@ -169,10 +170,6 @@ const getRandomStyleClass = () => {
   return "necuro--default";
 };
 
-const handleRouterGoBack = () => {
-  router.push("/");
-};
-
 const closeMenu = () => {
   if (isMenuOpen.value) isMenuOpen.value = false;
 };
@@ -295,7 +292,7 @@ onMounted(() => {
     <div class="flex h-full w-full items-center justify-between leading-none">
       <div class="flex justify-center px-4">
         <v-icon
-          @click="handleRouterGoBack()"
+          @click="navTo('/')"
           :class="[
             'h-12 w-12 cursor-pointer transition-opacity duration-700',
             isAnimationFinished && routePath !== '/'
@@ -342,21 +339,51 @@ onMounted(() => {
             isBottomNav ? 'justify-end pb-32' : 'pt-32',
           ]"
         >
-          <RouterLink @click="closeMenu" class="pb-6 opacity-50" to="/">
+          <a
+            @click="navTo('/')"
+            :class="[
+              'cursor-pointer pb-6',
+              isCurrentRoute('/') ? 'opacity-100' : 'opacity-50',
+            ]"
+          >
             <span class="font-header text-5xl">home page</span>
-          </RouterLink>
-          <RouterLink @click="closeMenu" class="pb-6 opacity-50" to="/head">
+          </a>
+          <a
+            @click="navTo('/head')"
+            :class="[
+              'cursor-pointer pb-6',
+              isCurrentRoute('/head') ? 'opacity-100' : 'opacity-50',
+            ]"
+          >
             <span class="font-header text-5xl">andrzejczak</span>
-          </RouterLink>
-          <RouterLink @click="closeMenu" class="pb-6 opacity-50" to="/flower">
-            <span class="font-header text-5xl">flowers</span>
-          </RouterLink>
-          <RouterLink @click="closeMenu" class="pb-6 opacity-50" to="/">
+          </a>
+          <a
+            @click="navTo('/flower')"
+            :class="[
+              'cursor-pointer pb-6',
+              isCurrentRoute('/flower') ? 'opacity-100' : 'opacity-50',
+            ]"
+          >
+            <span class="font-header text-5xl">flower</span>
+          </a>
+          <a
+            @click="navTo('/')"
+            :class="[
+              'cursor-pointer pb-6',
+              isCurrentRoute('/') ? 'opacity-100' : 'opacity-50',
+            ]"
+          >
             <span class="font-header text-5xl">???</span>
-          </RouterLink>
-          <RouterLink @click="closeMenu" class="pb-6 opacity-50" to="/">
+          </a>
+          <a
+            @click="navTo('/')"
+            :class="[
+              'cursor-pointer pb-6',
+              isCurrentRoute('/') ? 'opacity-100' : 'opacity-50',
+            ]"
+          >
             <span class="font-header text-5xl">profit</span>
-          </RouterLink>
+          </a>
         </div>
       </div>
     </div>

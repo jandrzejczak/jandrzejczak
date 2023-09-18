@@ -10,8 +10,7 @@ const openDialog = () => {
     async updateDOM() {
       router.push({ path: `/head` });
       await nextTick();
-    },
-    cleanup() {},
+    }
   });
 };
 </script>

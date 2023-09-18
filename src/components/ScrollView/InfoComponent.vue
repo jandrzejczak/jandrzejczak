@@ -18,15 +18,6 @@ onMounted(() => {
     ease: "power3.out",
   });
 
-  // gsap.from("#info .line>h1", {
-  //   scrollTrigger: "#info",
-  //   duration: 1,
-  //   y: "150%",
-  //   autoAlpha: 0,
-  //   delay: 0.5,
-  //   ease: "power3.out",
-  // });
-
   gsap.from("#info .line>h4", {
     scrollTrigger: "#info",
     duration: 1,
@@ -52,7 +43,7 @@ onMounted(() => {
 </script>
 
 <template>
-  <section id="info" class="info">
+  <section ref="infoSection" class="info">
     <div class="section__body-wrapper">
       <div class="section__body">
         <div class="line">
