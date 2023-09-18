@@ -23,7 +23,7 @@
 <script lang="ts" setup>
 import type { Item } from "@/types/Item";
 import CardHeadline from "./CardHeadline.vue";
-import { viewTransitionHelper } from "../utils";
+import { viewTransitionHelper } from "@/utils";
 import { defineProps } from "vue";
 import { items } from "@/data/items";
 import router from "../router";

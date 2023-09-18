@@ -4,12 +4,12 @@ import { storeToRefs } from "pinia";
 import { useDeviceStore } from "@/stores/globalStore";
 
 const deviceStore = useDeviceStore();
-const { isMobile } = storeToRefs(deviceStore);
+const { isMobileDevice } = storeToRefs(deviceStore);
 
 function initExpandCards() {
   var toggleExpand = document.querySelectorAll(".timeline__element");
   toggleExpand.forEach((e) => {
-    if (isMobile.value) {
+    if (isMobileDevice.value()) {
       e.addEventListener("click", (event) => {
         event.preventDefault();
         var container = e.querySelector(".expandable") as HTMLElement;

@@ -47,47 +47,6 @@ function initAnimations() {
     scroller: ".container",
   });
 
-  // Info
-  gsap.from("#info .line>h3", {
-    scrollTrigger: "#info",
-    duration: 1,
-    y: "150%",
-    autoAlpha: 0,
-    delay: 0.25,
-    ease: "power3.out",
-  });
-
-  gsap.from("#info .line>h1", {
-    scrollTrigger: "#info",
-    duration: 1,
-    y: "150%",
-    autoAlpha: 0,
-    delay: 0.5,
-    ease: "power3.out",
-  });
-
-  gsap.from("#info .line>h4", {
-    scrollTrigger: "#info",
-    duration: 1,
-    y: "150%",
-    autoAlpha: 0,
-    delay: 0.75,
-    ease: "power3.out",
-  });
-
-  gsap.from("#info .info__card-wrapper>.info__card", {
-    scrollTrigger: "#info",
-    duration: 1,
-    y: "150%",
-    autoAlpha: 0,
-    delay: 1,
-    ease: "power3.out",
-    stagger: {
-      each: 0.75,
-      amount: 0.5,
-    },
-  });
-
   // Experience
   gsap.from("#timeline .timeline__wrapper>.timeline__line", {
     scrollTrigger: "#timeline",

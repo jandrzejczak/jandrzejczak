@@ -34,17 +34,17 @@ watch(loading, (isLoading) => {
 </script>
 
 <template>
-  <cursor v-if="!isMobileDevice() && !loading"></cursor>
+  <!-- <cursor v-if="!isMobileDevice() && !loading"></cursor> -->
   <Transition>
     <loading
       @grant-permission="(e) => (permissionGranted = !e)"
       :is-mobile="isMobileDevice()"
       :is-loading="loading"
-      v-show="loading || (isMobileDevice() && permissionGranted)"
+      v-show="loading && (isMobileDevice() && permissionGranted)"
     ></loading>
   </Transition>
   <!-- <navigation v-if="!loading" :is-mobile="isMobile"></navigation> -->
-  <ScrollSection v-if="!loading" id="scroll-section"></ScrollSection>
+  <ScrollSection id="scroll-section"></ScrollSection>
   <face-background @scene-ready="(e) => (loading = !e)"></face-background>
 </template>
 

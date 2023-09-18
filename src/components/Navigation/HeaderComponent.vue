@@ -170,7 +170,7 @@ const getRandomStyleClass = () => {
 };
 
 const handleRouterGoBack = () => {
-  router.go(-1);
+  router.push("/");
 };
 
 const closeMenu = () => {
@@ -343,19 +343,19 @@ onMounted(() => {
           ]"
         >
           <RouterLink @click="closeMenu" class="pb-6 opacity-50" to="/">
-            <span class="font-header text-5xl font-bold">home page</span>
+            <span class="font-header text-5xl">home page</span>
           </RouterLink>
           <RouterLink @click="closeMenu" class="pb-6 opacity-50" to="/head">
-            <span class="font-header text-5xl font-bold">andrzejczak</span>
+            <span class="font-header text-5xl">andrzejczak</span>
           </RouterLink>
           <RouterLink @click="closeMenu" class="pb-6 opacity-50" to="/flower">
-            <span class="font-header text-5xl font-bold">flowers</span>
+            <span class="font-header text-5xl">flowers</span>
           </RouterLink>
-          <RouterLink @click="closeMenu" class="pb-6 opacity-50" to="/hmm">
-            <span class="font-header text-5xl font-bold">???</span>
+          <RouterLink @click="closeMenu" class="pb-6 opacity-50" to="/">
+            <span class="font-header text-5xl">???</span>
           </RouterLink>
-          <RouterLink @click="closeMenu" class="pb-6 opacity-50" to="/profit">
-            <span class="font-header text-5xl font-bold">profit</span>
+          <RouterLink @click="closeMenu" class="pb-6 opacity-50" to="/">
+            <span class="font-header text-5xl">profit</span>
           </RouterLink>
         </div>
       </div>

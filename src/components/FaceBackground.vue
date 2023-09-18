@@ -9,7 +9,7 @@ import { GLTFLoader } from "three/addons/loaders/GLTFLoader.js";
 import { DRACOLoader } from "three/addons/loaders/DRACOLoader.js";
 // @ts-ignore
 import { RGBELoader } from "three/addons/loaders/RGBELoader.js";
-import { onMounted, ref, computed, watch } from "vue";
+import { onMounted, ref, computed, watch, onUnmounted, toRaw } from "vue";
 import { useOrientationStore, useDeviceStore } from "@/stores/globalStore";
 
 const orientationStore = useOrientationStore();
@@ -17,195 +17,240 @@ const deviceStore = useDeviceStore();
 const { orientation } = storeToRefs(orientationStore);
 const { isMobileDevice, getCurrentColor } = storeToRefs(deviceStore);
 
-watch(getCurrentColor, (newVal) => {
-  model.traverse(function (child: any) {
-    if (child.isMesh) {
-      child.material.color.set(Number("0x" + newVal.slice(1)));
-    }
-    if (child.isGeometry) {
-      child.geometry.computeVertexNormals(true);
-    }
-  });
-});
-
 const emit = defineEmits(["scene-ready"]);
 
-function ease(start: number, end: number, amt: number): number {
-  return (1 - amt) * start + amt * end;
-}
+const faceBackground = ref<null | HTMLElement>(null);
+const camera = ref();
+const scene = ref();
+const renderer = ref();
+const model = ref();
+const controls = ref();
 
-let camera: any, scene: any, renderer: any, model: any, boxMesh: any;
-
-let mousePosition = {
+const mousePosition = ref({
   x: 0,
   y: 0,
-};
-
-onMounted(() => {
-  init();
-  render();
-
-  window.addEventListener("mousemove", (e) => {
-    mousePosition.x = e.pageX - window.innerWidth / 2;
-    mousePosition.y = e.pageY - window.innerHeight / 2;
-  });
 });
 
-function init() {
-  var container = document.getElementById("face") as HTMLElement;
-  camera = new THREE.PerspectiveCamera(
+const updateMousePosition = (e: MouseEvent) => {
+  mousePosition.value.x = e.pageX - window.innerWidth / 2;
+  mousePosition.value.y = e.pageY - window.innerHeight / 2;
+};
+
+const init = () => {
+  camera.value = new THREE.PerspectiveCamera(
     60,
     window.innerWidth / window.innerHeight,
     0.01,
     100,
   );
-  camera.position.z = 1;
-  camera.focalLength = 3;
+  camera.value.position.z = 1;
+  camera.value.focalLength = 3;
 
-  scene = new THREE.Scene();
+  scene.value = new THREE.Scene();
 
   const dracoLoader = new DRACOLoader();
   dracoLoader.setDecoderPath("/libs/draco/");
 
   new RGBELoader()
     .setPath("/images/")
-    .load("empty_warehouse_01_1k.hdr", function (texture: any) {
+    .load("empty_warehouse_01_1k.hdr", (texture: any) => {
       texture.mapping = THREE.EquirectangularReflectionMapping;
 
-      scene.environment = texture;
+      scene.value.environment = texture;
 
       render();
 
       // model
       const loader = new GLTFLoader().setPath("/models/");
       loader.setDRACOLoader(dracoLoader);
-      loader.load("face4DRACO.glb", function (gltf: any) {
+      loader.load("face5.glb", (gltf: any) => {
         emit("scene-ready", true);
-        model = gltf.scene;
+        model.value = gltf.scene;
 
-        const material = new THREE.MeshPhysicalMaterial({
-          // color: 0x000000,
-          // transmission: 0.8,
-          //@ts-ignore
-          roughness: 0.4,
-          envMap: texture,
-        });
-
-        model.traverse(function (child: any) {
+        model.value.traverse((child: any) => {
           if (child.isMesh) {
             child.material.color.set(
               Number("0x" + getCurrentColor.value.slice(1)),
             );
+            child.material.roughness = 0.1;
           }
           if (child.isGeometry) {
             child.geometry.computeVertexNormals(true);
           }
         });
 
-        model.scale.set(20, 20, 20);
-        model.position.set(1, -0.5, 0);
-        model.rotation.x = -1;
+        model.value.scale.set(20, 20, 20);
+        model.value.position.set(1, -0.5, 0);
+        model.value.rotation.x = -1;
 
         const light = new THREE.PointLight(0xfffff, 1, 1);
         light.position.set(5, 0, 1);
 
-        scene.add(light);
+        scene.value.add(light);
 
-        // Glass models
-
-        const roundedBox = new THREE.TorusKnotGeometry(
-          0.12,
-          0.07,
-          100,
-          26,
-        ).toNonIndexed();
-
-        // const material = new THREE.MeshPhysicalMaterial({
-        //   color: 0x000000,
-        //   // transmission: 0.8,
-        //   //@ts-ignore
-        //   roughness: 0,
-        //   envMap: texture,
-        // });
-
-        boxMesh = new THREE.Mesh(roundedBox, material);
-
-        scene.add(model);
+        scene.value.add(model.value);
 
         render();
       });
     });
 
-  renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
-  renderer.setClearColor(0x000000, 0); // the default
-  renderer.setPixelRatio(window.devicePixelRatio);
-  renderer.setSize(window.innerWidth, window.innerHeight);
-  // renderer.toneMapping = THREE.ACESFilmicToneMapping;
-  // renderer.toneMappingExposure = 1;
-  renderer.outputEncoding = THREE.sRGBEncoding;
-  container.appendChild(renderer.domElement);
+  renderer.value = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+  renderer.value.setClearColor(0x000000, 0); // the default
+  renderer.value.setPixelRatio(window.devicePixelRatio);
+  renderer.value.setSize(window.innerWidth, window.innerHeight);
+  renderer.value.outputEncoding = THREE.sRGBEncoding;
+  faceBackground.value?.appendChild(renderer.value.domElement);
 
-  const controls = new OrbitControls(camera, renderer.domElement);
-  controls.addEventListener("change", render); // use if there is no animation loop
-  // controls.autoRotate = true;
-  controls.minDistance = 0;
-  controls.maxDistance = 10;
-  controls.target.set(1, 0, 0);
-  controls.update();
+  controls.value = new OrbitControls(camera.value, renderer.value.domElement);
+  controls.value.addEventListener("change", render); // use if there is no animation loop
+  controls.value.minDistance = 0;
+  controls.value.maxDistance = 10;
+  controls.value.target.set(1, 0, 0);
+  controls.value.update();
+
+  const animate = () => {
+    if (model.value) {
+      if (isMobileDevice.value()) {
+        model.value.rotation.x = ease(
+          model.value.rotation.x,
+          (orientation.value.b ?? 0) / 300 - 0.1,
+          0.075,
+        );
+        model.value.rotation.y = ease(
+          model.value.rotation.y,
+          (orientation.value.g ?? 0) / 300,
+          0.075,
+        );
+      } else {
+        model.value.rotation.x = ease(
+          model.value.rotation.x,
+          mousePosition.value.y / (3 * window.innerWidth),
+          0.075,
+        );
+        model.value.rotation.y = ease(
+          model.value.rotation.y,
+          mousePosition.value.x / (3 * window.innerHeight),
+          0.075,
+        );
+      }
+    }
+    if (scene.value && camera.value) {
+      requestAnimationFrame(animate);
+      renderer.value.render(toRaw(scene.value), camera.value);
+      controls.value.update();
+    }
+  };
 
   animate();
-  function animate() {
-    if (model && !isMobileDevice.value()) {
-      model.rotation.x = ease(
-        model.rotation.x,
-        mousePosition.y / (3 * window.innerWidth),
-        0.075,
-      );
-      model.rotation.y = ease(
-        model.rotation.y,
-        mousePosition.x / (3 * window.innerHeight),
-        0.075,
-      );
-    }
-    if (model && isMobileDevice.value()) {
-      model.rotation.x = ease(
-        model.rotation.x,
-        (orientation.value.b ?? 0) / 300 - 0.1,
-        0.075,
-      );
-      model.rotation.y = ease(
-        model.rotation.y,
-        (orientation.value.g ?? 0) / 300,
-        0.075,
-      );
-    }
-    requestAnimationFrame(animate);
-    renderer.render(scene, camera);
-    controls.update();
-  }
 
   window.addEventListener("resize", onWindowResize);
-}
+};
 
-function onWindowResize() {
-  camera.aspect = window.innerWidth / window.innerHeight;
-  camera.updateProjectionMatrix();
+const render = () => {
+  camera.value.lookAt(scene.value.position);
 
-  renderer.setSize(window.innerWidth, window.innerHeight);
+  renderer.value.render(toRaw(scene.value), camera.value);
+};
+
+const onWindowResize = () => {
+  camera.value.aspect = window.innerWidth / window.innerHeight;
+  camera.value.updateProjectionMatrix();
+
+  renderer.value.setSize(window.innerWidth, window.innerHeight);
 
   render();
-}
+};
 
-function render() {
-  camera.lookAt(scene.position);
+const ease = (start: number, end: number, amt: number): number => {
+  return (1 - amt) * start + amt * end;
+};
 
-  renderer.render(scene, camera);
-}
+watch(getCurrentColor, (newVal) => {
+  if (model.value) {
+    model.value.traverse((child: any) => {
+      if (child.isMesh) {
+        child.material.color.set(Number("0x" + newVal.slice(1)));
+      }
+      if (child.isGeometry) {
+        child.geometry.computeVertexNormals(true);
+      }
+    });
+  }
+});
+
+onMounted(() => {
+  init();
+  render();
+  window.addEventListener("mousemove", updateMousePosition);
+});
+
+onUnmounted(() => {
+  window.removeEventListener("mousemove", updateMousePosition);
+  window.removeEventListener("resize", onWindowResize);
+  controls.value.removeEventListener("change", render); // use if there is no animation loop
+
+  // Dispose of camera
+  if (camera.value) {
+    camera.value = null;
+  }
+
+  // Dispose of scene
+  if (scene.value) {
+    // Remove all objects from the scene
+    scene.value.traverse((obj: THREE.Object3D) => {
+      if (obj instanceof THREE.Mesh) {
+        // Dispose of any materials and geometries associated with objects
+        if (obj.material) {
+          obj.material.dispose();
+        }
+        if (obj.geometry) {
+          obj.geometry.dispose();
+        }
+      }
+    });
+
+    // Remove the scene itself
+    scene.value = null;
+  }
+
+  // Dispose of renderer
+  if (renderer.value) {
+    // Clean up the DOM element
+    const domElement = renderer.value.domElement;
+    domElement.parentNode?.removeChild(domElement);
+
+    // Dispose of the renderer
+    renderer.value.dispose();
+    renderer.value = null;
+  }
+
+  // Dispose of model
+  if (model.value) {
+    // Traverse the model and dispose of materials and geometries if needed
+    model.value.traverse((obj: THREE.Object3D) => {
+      if (obj instanceof THREE.Mesh) {
+        if (obj.material) {
+          obj.material.dispose();
+        }
+        if (obj.geometry) {
+          obj.geometry.dispose();
+        }
+      }
+    });
+
+    // Remove the model from the scene
+    if (scene.value) {
+      scene.value.remove(model.value);
+    }
+
+    model.value = null;
+  }
+});
 </script>
 
 <template>
   <div
-    id="face"
+    ref="faceBackground"
     :class="['face-bg', { 'mobile-overlay': isMobileDevice() }]"
   ></div>
 </template>

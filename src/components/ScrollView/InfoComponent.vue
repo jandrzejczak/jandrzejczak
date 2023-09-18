@@ -1,9 +1,54 @@
 <script setup lang="ts">
 import { storeToRefs } from "pinia";
 import { useDeviceStore } from "@/stores/globalStore";
+import gsap from "gsap";
+import { onMounted } from "vue";
 
 const deviceStore = useDeviceStore();
 const { isMobile } = storeToRefs(deviceStore);
+
+onMounted(() => {
+  // Info
+  gsap.from("#info .line>h3", {
+    scrollTrigger: "#info",
+    duration: 1,
+    y: "150%",
+    autoAlpha: 0,
+    delay: 0.25,
+    ease: "power3.out",
+  });
+
+  // gsap.from("#info .line>h1", {
+  //   scrollTrigger: "#info",
+  //   duration: 1,
+  //   y: "150%",
+  //   autoAlpha: 0,
+  //   delay: 0.5,
+  //   ease: "power3.out",
+  // });
+
+  gsap.from("#info .line>h4", {
+    scrollTrigger: "#info",
+    duration: 1,
+    y: "150%",
+    autoAlpha: 0,
+    delay: 0.75,
+    ease: "power3.out",
+  });
+
+  gsap.from("#info .info__card-wrapper>.info__card", {
+    scrollTrigger: "#info",
+    duration: 1,
+    y: "150%",
+    autoAlpha: 0,
+    delay: 1,
+    ease: "power3.out",
+    stagger: {
+      each: 0.75,
+      amount: 0.5,
+    },
+  });
+});
 </script>
 
 <template>
@@ -13,7 +58,7 @@ const { isMobile } = storeToRefs(deviceStore);
         <div class="line">
           <h3>my name is</h3>
         </div>
-        <div class="line">
+        <div style="view-transition-name: head-title" class="line">
           <h1>jordan andrzejczak</h1>
         </div>
         <div class="info__body">
