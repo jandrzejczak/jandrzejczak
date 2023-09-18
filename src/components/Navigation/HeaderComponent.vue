@@ -90,7 +90,7 @@ const flattenText = (element: HTMLElement) => {
 const collapseHeader = (element: HTMLElement) => {
   gsap.to(element, {
     ease: "power3.inOut",
-    maxHeight: isMobileDevice.value() ? "7rem" : "5rem",
+    maxHeight: "5rem",
     duration: 1.75,
     onComplete: () => {
       //   element.classList.remove("max-h-screen", "height--screen");
@@ -282,10 +282,11 @@ onMounted(() => {
 
 <template>
   <meta name="theme-color" :content="currentColor" />
+  <div class="sticky top-0 py-4 w-full h-[5rem]"></div>
   <div
     ref="header"
     :class="[
-      'height--screen fixed z-[999] flex max-h-screen w-full items-start justify-center pt-4 backdrop-blur-md pb-safe-offset-4',
+      'height--screen fixed z-[999] flex max-h-screen w-full items-start justify-center py-4 backdrop-blur-md',
       isBottomNav ? 'bottom-0' : 'top-0',
     ]"
   >

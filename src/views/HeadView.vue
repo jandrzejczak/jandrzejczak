@@ -40,7 +40,7 @@ watch(loading, (isLoading) => {
       @grant-permission="(e) => (permissionGranted = !e)"
       :is-mobile="isMobileDevice()"
       :is-loading="loading"
-      v-show="loading && (isMobileDevice() && permissionGranted)"
+      v-show="(loading && isMobileDevice()) || permissionGranted"
     ></loading>
   </Transition>
   <!-- <navigation v-if="!loading" :is-mobile="isMobile"></navigation> -->
@@ -49,7 +49,6 @@ watch(loading, (isLoading) => {
 </template>
 
 <style scoped lang="scss">
-
 .logo {
   display: block;
   margin: 0 auto 2rem;
