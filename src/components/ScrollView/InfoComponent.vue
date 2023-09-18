@@ -43,7 +43,7 @@ onMounted(() => {
 </script>
 
 <template>
-  <section ref="infoSection" class="info">
+  <section id="info" class="info">
     <div class="section__body-wrapper">
       <div class="section__body">
         <div class="line">
