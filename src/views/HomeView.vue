@@ -4,6 +4,9 @@ import { RouterLink, RouterView, useRouter } from "vue-router";
 import { viewTransitionHelper } from "@/utils";
 import { GridLayout, GridItem } from "vue3-grid-layout-next";
 import Directory from "@/components/Desktop/Directory.vue";
+import { useBattery } from "@vueuse/core";
+
+const { charging, chargingTime, dischargingTime, level } = useBattery();
 
 const router = useRouter();
 
@@ -65,6 +68,17 @@ const openDialog = () => {
           <div>whoami</div>
         </div>
         <Directory v-else-if="item.i === '1'"></Directory>
+        <div
+          v-else-if="item.i === '2'"
+          class="flex h-full w-full cursor-pointer flex-col items-center justify-center gap-1"
+        >
+          <div
+            class="flex w-full flex-1 select-none items-center justify-center rounded-3xl bg-background p-2 text-center font-header text-xl"
+          >
+            Battery: {{ level * 100 }}%
+          </div>
+          <div>whoami</div>
+        </div>
         <div v-else>
           {{ item.i }}
         </div>
