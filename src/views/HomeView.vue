@@ -3,12 +3,13 @@ import { onMounted, ref, Transition, watchEffect, nextTick } from "vue";
 import { RouterLink, RouterView, useRouter } from "vue-router";
 import { viewTransitionHelper } from "@/utils";
 import { GridLayout, GridItem } from "vue3-grid-layout-next";
+import Directory from "@/components/Desktop/Directory.vue";
 
 const router = useRouter();
 
 const layout = ref([
-  { x: 0, y: 0, w: 1, h: 1, i: "0", static: false },
-  { x: 1, y: 0, w: 1, h: 1, i: "1", static: false },
+  { x: 0, y: 4, w: 1, h: 1, i: "0", static: false },
+  { x: 1, y: 2, w: 1, h: 1, i: "1", static: false },
   { x: 2, y: 0, w: 1, h: 1, i: "2", static: false },
   { x: 3, y: 0, w: 1, h: 1, i: "3", static: false },
 ]);
@@ -26,10 +27,10 @@ const openDialog = () => {
 </script>
 
 <template>
-  <div class="w-full flex-1 p-4 icons-container">
+  <div class="icons-container w-full flex-1 p-4">
     <grid-layout
       v-model:layout="layout"
-      :col-num="8"
+      :cols="{ lg: 8, md: 6, sm: 4, xs: 4, xxs: 2 }"
       :row-height="150"
       :is-draggable="draggable"
       :is-resizable="resizable"
@@ -37,6 +38,7 @@ const openDialog = () => {
       :responsive="true"
       :auto-size="false"
       :vertical-compact="false"
+      :prevent-collision="true"
       :use-css-transforms="true"
     >
       <grid-item
@@ -49,26 +51,28 @@ const openDialog = () => {
         :i="item.i"
       >
         <div
-        @dblclick="openDialog"
-        v-if="item.i === '0'"
-        class="flex cursor-pointer rounded-lg bg-zinc-400/10 p-6"
-      >
-        <div
-          style="view-transition-name: head-title"
-          class="font-header text-2xl select-none"
+          @dblclick="openDialog"
+          v-if="item.i === '0'"
+          class="flex h-full w-full cursor-pointer flex-col items-center justify-center gap-1"
         >
-          jordan andrzejczak
+          <div
+            style="view-transition-name: head-title"
+            class="flex w-full flex-1 select-none items-center justify-center rounded-3xl bg-background p-2 text-center font-header text-xl"
+          >
+            jordan andrzejczak
+          </div>
+          <div>whoami</div>
         </div>
-      </div>
-      <div v-else>
-        {{ item.i }}
-      </div>
+        <Directory v-else-if="item.i === '1'"></Directory>
+        <div v-else>
+          {{ item.i }}
+        </div>
       </grid-item>
     </grid-layout>
   </div>
 </template>
 
-<style>
+<style lang="scss">
 .vue-grid-layout {
   height: 100% !important;
 }
@@ -81,6 +85,19 @@ const openDialog = () => {
     background: rgba(255, 255, 255, 0.5) !important;
     border-radius: 2rem;
 } */
+
+.vue-grid-item {
+  border-radius: 2rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer !important;
+  user-select: none;
+  padding: 0.5rem;
+  &:hover {
+    background-color: rgba(127, 127, 127, 0.15);
+  }
+}
 
 .vue-grid-item .resizing {
   opacity: 0.9;
@@ -133,7 +150,7 @@ const openDialog = () => {
 }
 
 .icons-container .vue-grid-item.vue-grid-placeholder {
-    background: rgba(255, 255, 255, 0.5);
-    border-radius: 2rem;
+  background-color: rgba(127, 127, 127, 0.5);
+  border-radius: 2rem;
 }
 </style>

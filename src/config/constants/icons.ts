@@ -18,6 +18,7 @@ import {
   BiLinkedin,
   BiInstagram,
   HiArrowSmLeft,
+  OiFileDirectoryFill,
 } from "oh-vue-icons/icons";
 
 addIcons(
@@ -39,6 +40,7 @@ addIcons(
   BiLinkedin,
   BiInstagram,
   HiArrowSmLeft,
+  OiFileDirectoryFill,
 );
 
 export default OhVueIcon;
