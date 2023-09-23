@@ -8,7 +8,7 @@ import Directory from "@/components/Desktop/Directory.vue";
 const router = useRouter();
 
 const layout = ref([
-  { x: 0, y: 4, w: 1, h: 1, i: "0", static: false },
+  { x: 0, y: 3, w: 1, h: 1, i: "0", static: false },
   { x: 1, y: 2, w: 1, h: 1, i: "1", static: false },
   { x: 2, y: 0, w: 1, h: 1, i: "2", static: false },
   { x: 3, y: 0, w: 1, h: 1, i: "3", static: false },
@@ -42,6 +42,7 @@ const openDialog = () => {
       :use-css-transforms="true"
     >
       <grid-item
+        @touchmove.prevent
         v-for="item in layout"
         :static="item.static"
         :x="item.x"
