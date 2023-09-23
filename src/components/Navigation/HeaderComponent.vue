@@ -177,7 +177,7 @@ const closeMenu = () => {
 const handleMenuClick = (route: string) => {
   navTo(route);
   closeMenu();
-}
+};
 
 const closeMenuHandler = [
   () => {
@@ -287,7 +287,6 @@ onMounted(() => {
 
 <template>
   <meta name="theme-color" :content="currentColor" />
-  <div class="sticky top-0 py-4 w-full h-[5rem]"></div>
   <div
     ref="header"
     :class="[
@@ -321,7 +320,7 @@ onMounted(() => {
           isMenuOpen ? 'w-1/2' : 'w-20',
         ]"
       >
-        <MenuButton
+        <!-- <MenuButton
           ref="menuButton"
           :class="[
             'transition-opacity duration-700',
@@ -329,9 +328,9 @@ onMounted(() => {
           ]"
           v-model="isMenuOpen"
         >
-        </MenuButton>
+        </MenuButton> -->
       </div>
-      <div
+      <!-- <div
         v-on-click-outside="closeMenuHandler"
         :class="[
           `height--screen fixed right-0 -z-10 flex w-full justify-end overflow-hidden transition-transform duration-500 after:absolute after:top-0 after:h-full after:w-full after:bg-background after:opacity-75 after:content-[''] sm:w-[24rem]`,
@@ -391,7 +390,7 @@ onMounted(() => {
             <span class="font-header text-5xl">profit</span>
           </a>
         </div>
-      </div>
+      </div> -->
     </div>
   </div>
 </template>

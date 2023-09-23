@@ -15,7 +15,7 @@ onMounted(() => {
 
 <template>
   <main class="height--screen flex w-full flex-col">
-    <!-- <slot name="header"></slot> -->
+    <div class="sticky top-0 min-h-[5rem] w-full py-4"></div>
     <slot />
   </main>
 </template>
