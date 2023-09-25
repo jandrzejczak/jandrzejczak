@@ -23,14 +23,6 @@ const detachWindow = ref(false);
 
 const directoryWindow = ref<HTMLElement | null>(null);
 
-const checkEvent = (elem, event) => {
-  if (elem.y < 80) {
-    console.log(event);
-    event.preventDefault();
-    event.stopImmediatePropagation();
-  }
-};
-
 const isElementOutsideViewport = (element: HTMLElement) => {
   const elementRect = element.getBoundingClientRect();
 

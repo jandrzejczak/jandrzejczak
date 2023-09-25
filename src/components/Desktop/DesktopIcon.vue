@@ -23,14 +23,6 @@ const detachWindow = ref(false);
 
 const directoryWindow = ref<HTMLElement | null>(null);
 
-const checkEvent = (elem, event) => {
-  if (elem.y < 80) {
-    console.log(event);
-    event.preventDefault();
-    event.stopImmediatePropagation();
-  }
-};
-
 const isElementOutsideViewport = (element: HTMLElement) => {
   const elementRect = element.getBoundingClientRect();
 
@@ -46,23 +38,30 @@ const isElementOutsideViewport = (element: HTMLElement) => {
   return !isInViewport;
 };
 
-
+const openDialog = () => {
+  viewTransitionHelper({
+    async updateDOM() {
+      router.push({ path: `/head` });
+      await nextTick();
+    },
+  });
+};
 </script>
 
 <template>
   <div
-    @dblclick="isActive = !openDirectory"
+    @dblclick="openDirectory = !openDirectory"
     class="flex h-full w-full cursor-pointer flex-col items-center justify-center gap-1"
   >
     <div class="flex w-full flex-1 select-none items-center justify-center">
       <v-icon
-        v-if="isActive"
+        v-if="openDirectory"
         class="h-16 w-16"
         name="oi-file-directory-open-fill"
       />
       <v-icon v-else class="h-16 w-16" name="oi-file-directory-fill" />
     </div>
-    <div class="font-header">{{ iconName }}</div>
+    <div class="font-header">name</div>
   </div>
 </template>
 
