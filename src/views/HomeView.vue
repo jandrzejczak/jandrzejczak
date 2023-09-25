@@ -4,17 +4,19 @@ import { RouterLink, RouterView, useRouter } from "vue-router";
 import { viewTransitionHelper } from "@/utils";
 import { GridLayout, GridItem } from "vue3-grid-layout-next";
 import Directory from "@/components/Desktop/Directory.vue";
+import File from "@/components/Desktop/File.vue";
 import { useBattery } from "@vueuse/core";
+import { useStorage } from "@vueuse/core";
 
-const { charging, chargingTime, dischargingTime, level } = useBattery();
+const { isSupported, charging, chargingTime, dischargingTime, level } =
+  useBattery();
 
 const router = useRouter();
 
-const layout = ref([
+const layout = useStorage("desktop-layout", [
   { x: 0, y: 3, w: 1, h: 1, i: "0", static: false },
   { x: 1, y: 2, w: 1, h: 1, i: "1", static: false },
   { x: 2, y: 0, w: 1, h: 1, i: "2", static: false },
-  { x: 3, y: 0, w: 1, h: 1, i: "3", static: false },
 ]);
 const draggable = ref(true);
 const resizable = ref(false);
@@ -30,11 +32,11 @@ const openDialog = () => {
 </script>
 
 <template>
-  <div class="icons-container w-full flex-1 p-4">
+  <div id="testing" class="icons-container w-full flex-1 p-4">
     <grid-layout
       v-model:layout="layout"
       :cols="{ lg: 8, md: 6, sm: 4, xs: 4, xxs: 2 }"
-      :row-height="150"
+      :row-height="120"
       :is-draggable="draggable"
       :is-resizable="resizable"
       :is-bounded="true"
@@ -54,33 +56,42 @@ const openDialog = () => {
         :h="item.h"
         :i="item.i"
       >
-        <div
-          @dblclick="openDialog"
+        <File
           v-if="item.i === '0'"
-          class="flex h-full w-full cursor-pointer flex-col items-center justify-center gap-1"
+          :file-name="'hello.txt'"
+          :icon-name="'oi-file-code'"
         >
-          <div
-            style="view-transition-name: head-title"
-            class="flex w-full flex-1 select-none items-center justify-center rounded-3xl bg-background p-2 text-center font-header text-xl"
-          >
-            jordan andrzejczak
-          </div>
-          <div>whoami</div>
-        </div>
+          <textarea class="bg-transparent w-full h-full p-2 resize-none active:border-none active:outline-none" name="" id="" cols="30" rows="10">Hello there</textarea>
+        </File>
         <Directory v-else-if="item.i === '1'"></Directory>
         <div
-          v-else-if="item.i === '2'"
-          class="flex h-full w-full cursor-pointer flex-col items-center justify-center gap-1"
+          v-else-if="item.i === '2' && isSupported"
+          class="flex h-full w-full cursor-pointer"
         >
           <div
-            class="flex w-full flex-1 select-none items-center justify-center rounded-3xl bg-background p-2 text-center font-header text-xl"
+            class="flex min-h-0 w-full flex-1 select-none flex-col items-center justify-center rounded-3xl border-2 border-primary bg-background p-2 text-center font-header text-xl"
           >
-            Battery: {{ level * 100 }}%
+            <v-icon
+              v-if="charging"
+              class="color h-16 w-16"
+              name="bi-battery-charging"
+            />
+            <v-icon
+              v-else-if="level * 100 > 50"
+              class="color h-16 w-16"
+              name="bi-battery-full"
+            />
+            <v-icon
+              v-else-if="level * 100 <= 15"
+              class="color h-16 w-16"
+              name="bi-battery"
+            />
+            <v-icon
+              v-else="level * 100 <= 15"
+              class="color h-16 w-16"
+              name="bi-battery-half"
+            />
           </div>
-          <div>whoami</div>
-        </div>
-        <div v-else>
-          {{ item.i }}
         </div>
       </grid-item>
     </grid-layout>

@@ -19,6 +19,12 @@ import {
   BiInstagram,
   HiArrowSmLeft,
   OiFileDirectoryFill,
+  OiFileDirectoryOpenFill,
+  OiFileCode,
+  BiBatteryCharging,
+  BiBatteryFull,
+  BiBatteryHalf,
+  BiBattery,
 } from "oh-vue-icons/icons";
 
 addIcons(
@@ -41,6 +47,12 @@ addIcons(
   BiInstagram,
   HiArrowSmLeft,
   OiFileDirectoryFill,
+  OiFileDirectoryOpenFill,
+  OiFileCode,
+  BiBatteryCharging,
+  BiBatteryFull,
+  BiBatteryHalf,
+  BiBattery,
 );
 
 export default OhVueIcon;

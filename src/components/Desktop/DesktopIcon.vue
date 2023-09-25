@@ -46,74 +46,24 @@ const isElementOutsideViewport = (element: HTMLElement) => {
   return !isInViewport;
 };
 
-const openDialog = () => {
-  viewTransitionHelper({
-    async updateDOM() {
-      router.push({ path: `/head` });
-      await nextTick();
-    },
-  });
-};
+
 </script>
 
 <template>
   <div
-    @dblclick="openDirectory = !openDirectory"
+    @dblclick="isActive = !openDirectory"
     class="flex h-full w-full cursor-pointer flex-col items-center justify-center gap-1"
   >
     <div class="flex w-full flex-1 select-none items-center justify-center">
       <v-icon
-        v-if="openDirectory"
+        v-if="isActive"
         class="h-16 w-16"
         name="oi-file-directory-open-fill"
       />
       <v-icon v-else class="h-16 w-16" name="oi-file-directory-fill" />
     </div>
-    <div class="font-header">whoami</div>
+    <div class="font-header">{{ iconName }}</div>
   </div>
-  <Window :window-id="'whoami'" v-model:open="openDirectory">
-    <grid-layout
-      v-model:layout="layout"
-      :cols="{ lg: 8, md: 6, sm: 4, xs: 4, xxs: 2 }"
-      :row-height="150"
-      :is-draggable="draggable"
-      :is-resizable="resizable"
-      :is-bounded="true"
-      :responsive="true"
-      :auto-size="false"
-      :vertical-compact="false"
-      :prevent-collision="true"
-      :use-css-transforms="true"
-    >
-      <grid-item
-        @touchmove.prevent
-        v-for="item in layout"
-        :static="item.static"
-        :x="item.x"
-        :y="item.y"
-        :w="item.w"
-        :h="item.h"
-        :i="item.i"
-      >
-        <div
-          @dblclick="openDialog"
-          v-if="item.i === '0'"
-          class="flex h-full w-full cursor-pointer flex-col items-center justify-center gap-1"
-        >
-          <div
-            style="view-transition-name: head-title"
-            class="flex w-full flex-1 select-none items-center justify-center rounded-3xl bg-background p-2 text-center font-header text-xl leading-6"
-          >
-            jordan andrzejczak
-          </div>
-          <div class="font-header">me.html</div>
-        </div>
-        <div v-else>
-          {{ item.i }}
-        </div>
-      </grid-item>
-    </grid-layout>
-  </Window>
 </template>
 
 <style scoped lang="scss">
