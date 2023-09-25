@@ -5,34 +5,38 @@ import { viewTransitionHelper } from "@/utils";
 import { GridLayout, GridItem } from "vue3-grid-layout-next";
 import VueMarkdown from "vue-markdown-wasm";
 
-const input = ref(`### hello.md
+const input = ref(`### roadmap.txt
 
-> What is necuro.com?
-
-My initial idea behind *necuro* was creating an **integrated space** where I could materialize my ideas into small components.
-
-> Why?
-
-Short answer? For fun. I love to read about new web standards showing up on the horizon and try to implement them in a interesting way. I believe this playground could potentially be a great portfolio.
-
-> Can I see the code?
-
-Sure! Even steal it, I would be flattered.
-
-> WhO aRe yOu??
-
-necuro author is [Jordan Andrzejczak](https://pl.linkedin.com/in/andrzejczak)
-
-> What's next?
-
-I don't know, try to click around, think outside the box. Maybe start with **double-clicking** some icons?
+> General file for tracking progress and current issues.
 
 <br/>
 
---- 
-\`\`\`javascript
-console.log('necuro playground!')
-\`\`\`
+#### **TODO:**
+
+- [x] About me page,
+- [x] necuro animation,
+- [x] Desktop view,
+- [ ] Refactor components,
+- [ ] Support mobile
+
+<br/>
+
+#### **Known issues:**
+
+* Floating windows can overflow the screen,
+* Floating windows are not set active, z-index issue,
+* Animations in HeadView are sometimes missing,
+* ...
+
+<br/>
+
+#### **Ideas:**
+
+* Resize windows in all directions,
+* Some kind of dock on the bottom?
+* Minigamnes,
+* Terminal emulator,
+
 `);
 </script>
 
@@ -47,6 +51,12 @@ console.log('necuro playground!')
     padding-left: 1rem;
     li {
       line-height: 1.2;
+    }
+    .task-list-item {
+      list-style: none;
+      .task-list-item-checkbox {
+        margin-right: 0.5rem;
+      }
     }
   }
   a {

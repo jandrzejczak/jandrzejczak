@@ -8,6 +8,7 @@ import File from "@/components/Desktop/File.vue";
 import { useBattery } from "@vueuse/core";
 import { useStorage } from "@vueuse/core";
 import HelloTxt from "@/components/Desktop/HelloTxt.vue";
+import RoadMap from "@/components/Desktop/RoadMap.vue";
 
 const { isSupported, charging, chargingTime, dischargingTime, level } =
   useBattery();
@@ -18,6 +19,7 @@ const layout = useStorage("desktop-layout", [
   { x: 2, y: 4, w: 1, h: 1, i: "0", static: false },
   { x: 0, y: 3, w: 1, h: 1, i: "1", static: false },
   { x: 1, y: 0, w: 1, h: 1, i: "2", static: false },
+  { x: 1, y: 2, w: 1, h: 1, i: "3", static: false },
 ]);
 const draggable = ref(true);
 const resizable = ref(false);
@@ -62,7 +64,7 @@ const openDialog = () => {
           :file-name="'hello.md'"
           :icon-name="'oi-file-code'"
         >
-          <HelloTxt></HelloTxt>
+          <HelloTxt />
         </File>
         <Directory v-else-if="item.i === '1'"></Directory>
         <div
@@ -94,6 +96,13 @@ const openDialog = () => {
             />
           </div>
         </div>
+        <File
+          v-else-if="item.i === '3'"
+          :file-name="'roadmap.txt'"
+          :icon-name="'md-route'"
+        >
+          <RoadMap />
+        </File>
       </grid-item>
     </grid-layout>
   </div>
