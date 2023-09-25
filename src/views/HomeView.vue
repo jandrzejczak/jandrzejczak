@@ -9,6 +9,7 @@ import { useBattery } from "@vueuse/core";
 import { useStorage } from "@vueuse/core";
 import HelloTxt from "@/components/Desktop/HelloTxt.vue";
 import RoadMap from "@/components/Desktop/RoadMap.vue";
+import ListingTable from "@/components/ListingTable.vue";
 
 const { isSupported, charging, chargingTime, dischargingTime, level } =
   useBattery();

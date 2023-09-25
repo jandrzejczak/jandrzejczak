@@ -17,7 +17,8 @@ const input = ref(`### roadmap.txt
 - [x] necuro animation,
 - [x] Desktop view,
 - [ ] Refactor components,
-- [ ] Support mobile
+- [ ] Support mobile,
+- [ ] Music player (Spotify or Apple Music API?)
 
 <br/>
 
