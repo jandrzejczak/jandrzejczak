@@ -125,7 +125,7 @@ export default defineComponent({
 <style lang="scss" scoped>
 .detachable__window {
   position: relative;
-  display: flex;
+  display: contents;
   height: 100%;
 
   &-icon {

@@ -31,7 +31,7 @@ const layout = ref([
 const draggable = ref(true);
 const resizable = ref(false);
 
-const openFile = useStorage("file-open", false);
+const openFile = useStorage("file-open", true);
 const detachWindow = ref(false);
 
 const directoryWindow = ref<HTMLElement | null>(null);

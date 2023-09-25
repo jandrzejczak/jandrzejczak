@@ -6,6 +6,9 @@ import { UseDraggable } from "@vueuse/components";
 import { useStorage } from "@vueuse/core";
 import WindowPortal from "@/components/WindowPortal.vue";
 
+const innerWidth = window.innerWidth;
+const innerHeight = window.innerHeight;
+
 const props = defineProps({
   windowId: {
     type: String,
@@ -32,10 +35,11 @@ const closeDirectory = () => {
     <Transition name="bounce">
       <UseDraggable
         v-show="open && !detachWindow"
-       :storage-key="windowId"
+        :initial-value="{ x: innerWidth / 2, y: innerHeight / 5 }"
+        :storage-key="windowId"
         storage-type="session"
         :handle="directoryWindow"
-        class="icons-container fixed flex h-96 w-96 flex-1 flex-col overflow-hidden rounded-xl border border-primary border-opacity-25 backdrop-blur-md"
+        class="icons-container fixed flex h-[35rem] max-h-[50rem] min-h-[12rem] w-[43rem] min-w-[24rem] max-w-3xl flex-1 resize flex-col overflow-hidden rounded-xl border border-primary border-opacity-25 backdrop-blur-md"
       >
         <div
           ref="directoryWindow"
@@ -55,7 +59,7 @@ const closeDirectory = () => {
           ></button>
         </div>
         <WindowPortal v-model:open="detachWindow">
-          <div class="flex-1 bg-zinc-200/20">
+          <div class="flex-1 overflow-auto bg-zinc-200/20">
             <slot></slot>
           </div>
         </WindowPortal>

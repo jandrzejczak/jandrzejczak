@@ -7,6 +7,7 @@ import Directory from "@/components/Desktop/Directory.vue";
 import File from "@/components/Desktop/File.vue";
 import { useBattery } from "@vueuse/core";
 import { useStorage } from "@vueuse/core";
+import HelloTxt from "@/components/Desktop/HelloTxt.vue";
 
 const { isSupported, charging, chargingTime, dischargingTime, level } =
   useBattery();
@@ -14,9 +15,9 @@ const { isSupported, charging, chargingTime, dischargingTime, level } =
 const router = useRouter();
 
 const layout = useStorage("desktop-layout", [
-  { x: 0, y: 3, w: 1, h: 1, i: "0", static: false },
-  { x: 1, y: 2, w: 1, h: 1, i: "1", static: false },
-  { x: 2, y: 0, w: 1, h: 1, i: "2", static: false },
+  { x: 2, y: 4, w: 1, h: 1, i: "0", static: false },
+  { x: 0, y: 3, w: 1, h: 1, i: "1", static: false },
+  { x: 1, y: 0, w: 1, h: 1, i: "2", static: false },
 ]);
 const draggable = ref(true);
 const resizable = ref(false);
@@ -58,10 +59,10 @@ const openDialog = () => {
       >
         <File
           v-if="item.i === '0'"
-          :file-name="'hello.txt'"
+          :file-name="'hello.md'"
           :icon-name="'oi-file-code'"
         >
-          <textarea class="bg-transparent w-full h-full p-2 resize-none active:border-none active:outline-none" name="" id="" cols="30" rows="10">Hello there</textarea>
+          <HelloTxt></HelloTxt>
         </File>
         <Directory v-else-if="item.i === '1'"></Directory>
         <div
@@ -101,6 +102,7 @@ const openDialog = () => {
 <style lang="scss">
 .vue-grid-layout {
   height: 100% !important;
+  width: 100% !important;
 }
 
 /* .vue-grid-item:not(.vue-grid-placeholder) {
