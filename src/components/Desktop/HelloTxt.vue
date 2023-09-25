@@ -9,11 +9,11 @@ const input = ref(`### hello.md
 
 > What is necuro.com?
 
-My initial idea behind *necuro* was creating an **integrated space** where I could materialize my ideas into small components.
+My initial idea behind necuro was creating an integrated space where I could materialize my ideas into small components.
 
 > Why?
 
-Short answer? For fun. I love to read about new web standards showing up on the horizon and try to implement them in a interesting way. I believe this playground could potentially be a great portfolio.
+Short answer? For fun. I love to read about new web standards showing up on the horizon and try to implement them interestingly. I believe this playground could potentially be a great portfolio.
 
 > Can I see the code?
 
