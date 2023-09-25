@@ -18,6 +18,10 @@ const props = defineProps({
     type: String,
     required: true,
   },
+  opened: {
+    type: Boolean,
+    default: false,
+  },
 });
 
 const emit = defineEmits(["update:open"]);
@@ -31,7 +35,7 @@ const layout = ref([
 const draggable = ref(true);
 const resizable = ref(false);
 
-const openFile = useStorage(props.iconName, true);
+const openFile = useStorage(props.iconName, props.opened);
 const detachWindow = ref(false);
 
 const directoryWindow = ref<HTMLElement | null>(null);

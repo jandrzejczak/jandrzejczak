@@ -63,6 +63,7 @@ const openDialog = () => {
           v-if="item.i === '0'"
           :file-name="'hello.md'"
           :icon-name="'oi-file-code'"
+          :opened="true"
         >
           <HelloTxt />
         </File>
