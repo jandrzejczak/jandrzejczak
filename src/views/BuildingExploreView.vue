@@ -13,11 +13,8 @@ import { RGBELoader } from "three/addons/loaders/RGBELoader.js";
 import { TransformControls } from "three/addons/controls/TransformControls.js";
 import { onMounted, ref, computed, watch, onUnmounted, toRaw } from "vue";
 import { useOrientationStore, useDeviceStore } from "@/stores/globalStore";
-
-const orientationStore = useOrientationStore();
 const deviceStore = useDeviceStore();
-const { orientation } = storeToRefs(orientationStore);
-const { isMobileDevice, getCurrentColor } = storeToRefs(deviceStore);
+const { getCurrentColor } = storeToRefs(deviceStore);
 
 const emit = defineEmits(["scene-ready"]);
 
@@ -27,7 +24,6 @@ const scene = ref();
 const renderer = ref();
 const model = ref();
 const controls = ref();
-const transformControls = ref();
 
 const mousePosition = ref({
   x: 0,
@@ -78,7 +74,7 @@ const init = () => {
             const name = Number(child.name.charAt(child.name.length - 1));
             if (name === 1) {
               const newMaterial = new THREE.MeshStandardMaterial({
-                color: 0xff0000,
+                // color: 0xff0000,
                 transparent: true,
                 // opacity: 0.5,
               });
@@ -213,7 +209,7 @@ watch(getCurrentColor, (newVal) => {
 onMounted(() => {
   init();
   render();
-  window.addEventListener("mousemove", updateMousePosition);
+  // window.addEventListener("mousemove", updateMousePosition);
 });
 
 onUnmounted(() => {
@@ -281,7 +277,7 @@ onUnmounted(() => {
 </script>
 
 <template>
-  <div ref="bulding" :class="['face-bg']"></div>
+  <div ref="bulding" class="face-bg"></div>
 </template>
 
 <style scoped lang="scss">

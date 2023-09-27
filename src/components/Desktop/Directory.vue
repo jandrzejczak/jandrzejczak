@@ -89,6 +89,7 @@ const openDialog = (path: string) => {
       >
         <div
           @dblclick="openDialog('/head')"
+          @touchend="openDialog('/head')"
           v-if="item.i === '0'"
           class="flex h-full w-full cursor-pointer flex-col items-center justify-center gap-1"
         >
@@ -101,6 +102,7 @@ const openDialog = (path: string) => {
           <div class="font-header">me.html</div>
         </div>
         <div
+          @touchend="openDialog('/building')"
           @dblclick="openDialog('/building')"
           v-else-if="item.i === '1'"
           class="flex h-full w-full cursor-pointer flex-col items-center justify-center gap-1"
