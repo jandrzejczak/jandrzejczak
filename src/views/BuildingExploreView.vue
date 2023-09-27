@@ -99,7 +99,9 @@ const init = () => {
         light.position.set(5, 0, 1);
 
         const floorGeometry = new THREE.PlaneGeometry(10000, 10000, 1, 1);
-        const floorMaterial = new THREE.MeshBasicMaterial({ color: Number("0x" + getCurrentColor.value.slice(1)) });
+        const floorMaterial = new THREE.MeshBasicMaterial({
+          color: Number("0x" + getCurrentColor.value.slice(1)),
+        });
         const floor = new THREE.Mesh(floorGeometry, floorMaterial);
         floor.rotation.x = -Math.PI / 2;
         floor.position.y = -1;
@@ -279,10 +281,7 @@ onUnmounted(() => {
 </script>
 
 <template>
-  <div
-    ref="bulding"
-    :class="['face-bg', { 'mobile-overlay': isMobileDevice() }]"
-  ></div>
+  <div ref="bulding" :class="['face-bg']"></div>
 </template>
 
 <style scoped lang="scss">
