@@ -13,7 +13,7 @@ const router = useRouter();
 
 const layout = ref([
   { x: 0, y: 0, w: 1, h: 1, i: "0", static: false },
-  //   { x: 1, y: 0, w: 1, h: 1, i: "1", static: false },
+  { x: 1, y: 0, w: 1, h: 1, i: "1", static: false },
 ]);
 const draggable = ref(true);
 const resizable = ref(false);
@@ -38,10 +38,10 @@ const isElementOutsideViewport = (element: HTMLElement) => {
   return !isInViewport;
 };
 
-const openDialog = () => {
+const openDialog = (path: string) => {
   viewTransitionHelper({
     async updateDOM() {
-      router.push({ path: `/head` });
+      router.push({ path });
       await nextTick();
     },
   });
@@ -88,7 +88,7 @@ const openDialog = () => {
         :i="item.i"
       >
         <div
-          @dblclick="openDialog"
+          @dblclick="openDialog('/head')"
           v-if="item.i === '0'"
           class="flex h-full w-full cursor-pointer flex-col items-center justify-center gap-1"
         >
@@ -99,6 +99,19 @@ const openDialog = () => {
             jordan andrzejczak
           </div>
           <div class="font-header">me.html</div>
+        </div>
+        <div
+          @dblclick="openDialog('/building')"
+          v-else-if="item.i === '1'"
+          class="flex h-full w-full cursor-pointer flex-col items-center justify-center gap-1"
+        >
+          <div
+            style="view-transition-name: building"
+            class="flex w-full flex-1 select-none items-center justify-center rounded-3xl bg-background p-2 text-center font-header text-xl leading-6"
+          >
+            blender shit
+          </div>
+          <div class="font-header">building.gltf</div>
         </div>
         <div v-else>
           {{ item.i }}
