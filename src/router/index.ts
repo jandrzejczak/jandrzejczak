@@ -4,6 +4,7 @@ import HeadView from "@/views/HeadView.vue";
 import HomeView from "@/views/HomeView.vue";
 import CardPageView from "@/views/CardPageView.vue";
 import BuildingExploreView from "@/views/BuildingExploreView.vue";
+import CityExploreView from "@/views/CityExploreView.vue";
 import ModalDialog from "@/components/ModalDialog.vue";
 import { viewTransitionHelper } from "@/utils";
 
@@ -34,6 +35,11 @@ const router = createRouter({
       path: "/building/",
       name: "Explore Building",
       component: BuildingExploreView,
+    },
+    {
+      path: "/city/",
+      name: "Explore City",
+      component: CityExploreView,
     },
   ],
 });
