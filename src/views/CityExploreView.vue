@@ -48,7 +48,7 @@ const init = () => {
   );
   camera.value.position.z = 500;
   camera.value.position.x = 500;
-  camera.value.position.y = 500;
+  camera.value.position.y = 200;
 
   scene.value = new THREE.Scene();
 
@@ -67,7 +67,7 @@ const init = () => {
       // model
       const loader = new GLTFLoader().setPath("/models/");
       loader.setDRACOLoader(dracoLoader);
-      loader.load("building.glb", (gltf: any) => {
+      loader.load("cityWeb.glb", (gltf: any) => {
         emit("scene-ready", true);
         model.value = gltf.scene;
 
@@ -80,7 +80,7 @@ const init = () => {
               const newMaterial = new THREE.MeshStandardMaterial({
                 color: 0xff0000,
                 transparent: true,
-                // opacity: 0.5,
+                opacity: 0.5,
               });
               child.material = newMaterial;
               // child.material.color.set(0x000000);
@@ -91,7 +91,7 @@ const init = () => {
           }
         });
 
-        model.value.scale.set(20, 20, 20);
+        // model.value.scale.set(20, 20, 20);
         // model.value.position.set(1, -0.5, 0);
         // model.value.rotation.x = -1;
 
@@ -145,14 +145,13 @@ const init = () => {
 
   controls.value = new OrbitControls(camera.value, renderer.value.domElement);
   controls.value.update();
-  controls.value.enablePan = false;
+  controls.value.enablePan = true;
   controls.value.enableDamping = true;
   controls.value.dampingFactor = 0.05;
   // controls.value.addEventListener("change", render); // use if there is no animation loop
   controls.value.minDistance = 200;
   controls.value.maxDistance = 1000;
-  controls.value.maxPolarAngle = Math.PI / 3 - 0.1;
-  controls.value.minPolarAngle = Math.PI / 3 - 0.1;
+  controls.value.maxPolarAngle = Math.PI / 2 - 0.1;
   // controls.value.autoRotate = true;
   // controls.value.target.set(1, 0, 0);
   // controls.value.update();
@@ -162,7 +161,7 @@ const init = () => {
       // Rotate the camera around the model
       // camera.value.position.x = 50 * Math.cos(Date.now() * 0.0001);
       // camera.value.position.z = 50 * Math.sin(Date.now() * 0.0001);
-      camera.value.lookAt(0, 40, 0);
+      // camera.value.lookAt(model.value.position);
     }
     if (scene.value && camera.value) {
       requestAnimationFrame(animate);
