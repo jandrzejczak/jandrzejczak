@@ -1,7 +1,7 @@
 {
-  "name": "andrzejczak jordan",
-  "short_name": "andrzejczak",
-  "start_url": "index.html",
+  "name": "necuro",
+  "short_name": "necuro",
+  "start_url": "/",
   "display": "standalone",
   "background_color": "#080808",
   "theme_color": "#080808",
