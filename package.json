@@ -23,6 +23,7 @@
     "pinia-plugin-persistedstate": "^3.2.0",
     "tailwindcss-safe-area": "^0.4.0",
     "three": "^0.149.0",
+    "three-mesh-bvh": "^0.5.23",
     "vanilla-tilt": "^1.8.0",
     "vue": "^3.2.45",
     "vue-markdown-wasm": "^0.3.12",
