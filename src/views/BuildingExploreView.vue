@@ -38,6 +38,8 @@ let controls: any = null;
 let raycaster: any = null;
 let pointer = new THREE.Vector2();
 const sceneReady = ref(false);
+const activeFloor = ref();
+const selectedFloor = ref();
 
 const onPointerMove = (event: MouseEvent) => {
   pointer.x = (event.clientX / window.innerWidth) * 2 - 1;
@@ -52,21 +54,60 @@ const onPointerMove = (event: MouseEvent) => {
   const intersectObjects = scene.children[1].children.filter((el: any) =>
     el.name.startsWith("floor_0"),
   );
+
   raycaster.firstHitOnly = true;
   const intersects = raycaster.intersectObjects(intersectObjects);
 
-  if (intersects.length > 0 && intersects[0].object.name) {
-    const newMaterial = new THREE.MeshStandardMaterial({
-      color: 0xff0000,
-      transparent: true,
-      // opacity: 0.5,
-    });
-    intersects[0].object.material = newMaterial;
+  if (intersects.length > 0) {
+    if (activeFloor.value != intersects[0].object) {
+      document.documentElement.style.cursor = "pointer";
+      if (activeFloor.value)
+        activeFloor.value.material.emissive.setHex(
+          activeFloor.value.currentHex,
+        );
+      activeFloor.value = intersects[0].object;
+      activeFloor.value.currentHex =
+        activeFloor.value.material.emissive.getHex();
+      activeFloor.value.material.emissive.setHex(0xff0000);
+      // const newMaterial = new THREE.MeshStandardMaterial({
+      //   color: 0xff0000,
+      //   transparent: true,
+      //   // opacity: 0.5,
+      // });
+      // intersects[0].object.material = newMaterial;
+    }
   } else {
-    // if (INTERSECTED)
-    //   INTERSECTED.material.emissive.setHex(INTERSECTED.currentHex);
-    // INTERSECTED = null;
+    document.documentElement.style.cursor = "default";
+    if (activeFloor.value)
+      activeFloor.value.material.emissive.setHex(activeFloor.value.currentHex);
+
+    // activeFloor.value = null;
   }
+};
+
+const onPointerClick = (event: MouseEvent) => {
+  if (!activeFloor.value) {
+    return;
+  }
+  selectedFloor.value = activeFloor.value;
+  console.log(scene.children[1].children)
+  // Remove floors over the current one
+
+
+  // if (model) {
+  //   model.traverse((child: any) => {
+  //     if (child.isMesh) {
+  //       child.material.color.set(Number("0x" + newVal.slice(1)));
+  //       if (
+  //         child instanceof THREE.Mesh &&
+  //         (child.name.includes("left_") || child.name.includes("right_"))
+  //       ) {
+  //         child.visible = false;
+  //       }
+  //     }
+  //   });
+  // }
+  // camera.lookAt(0);
 };
 
 const init = () => {
@@ -97,7 +138,7 @@ const init = () => {
       // model
       const loader = new GLTFLoader().setPath("/models/");
       loader.setDRACOLoader(dracoLoader);
-      loader.load("FinalBuildingInterior2.glb", (gltf: any) => {
+      loader.load("FinalBuildingInterior.glb", (gltf: any) => {
         model = gltf.scene;
         model.traverse((child: any) => {
           if (child.isMesh) {
@@ -109,10 +150,9 @@ const init = () => {
               (child.name.includes("left_") || child.name.includes("right_"))
             ) {
               child.visible = false;
-            }
-            if (name === 1) {
+            } else {
               const newMaterial = new THREE.MeshStandardMaterial({
-                // color: 0xff0000,
+                color: Math.random() * 0xffffff,
                 transparent: true,
                 // opacity: 0.5,
               });
@@ -184,6 +224,7 @@ const init = () => {
 
   bulding.value?.appendChild(renderer.domElement);
   renderer.domElement.addEventListener("mousemove", onPointerMove, true);
+  renderer.domElement.addEventListener("click", onPointerClick, true);
 
   controls = new OrbitControls(camera, renderer.domElement);
   controls.update();
@@ -201,10 +242,11 @@ const init = () => {
 
   const animate = () => {
     if (model) {
-      // Rotate the camera around the model
-      // camera.value.position.x = 50 * Math.cos(Date.now() * 0.0001);
-      // camera.value.position.z = 50 * Math.sin(Date.now() * 0.0001);
-      camera.lookAt(0, 40, 0);
+      if (selectedFloor.value) {
+        camera.lookAt(0, selectedFloor.value.position.y * 1.5, 0);
+      } else {
+        camera.lookAt(0, 40, 0);
+      }
     }
     if (scene && camera) {
       requestAnimationFrame(animate);
