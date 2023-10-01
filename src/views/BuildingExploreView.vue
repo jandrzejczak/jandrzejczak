@@ -11,6 +11,14 @@ import { DRACOLoader } from "three/addons/loaders/DRACOLoader.js";
 import { RGBELoader } from "three/addons/loaders/RGBELoader.js";
 // @ts-ignore
 import { TransformControls } from "three/addons/controls/TransformControls.js";
+// @ts-ignore
+import { EffectComposer } from "three/addons/postprocessing/EffectComposer.js";
+// @ts-ignore
+import { RenderPass } from "three/addons/postprocessing/RenderPass.js";
+// @ts-ignore
+import { SSAOPass } from "three/addons/postprocessing/SSAOPass.js";
+// @ts-ignore
+// import { OutputPass } from "three/addons/postprocessing/OutputPass.js";
 import {
   computeBoundsTree,
   disposeBoundsTree,
@@ -36,10 +44,12 @@ let renderer: any = null;
 let model: any = null;
 let controls: any = null;
 let raycaster: any = null;
+let composer: any = null;
 let pointer = new THREE.Vector2();
 const sceneReady = ref(false);
 const activeFloor = ref();
 const selectedFloor = ref();
+const animatingCamera = ref(false);
 
 const onPointerMove = (event: MouseEvent) => {
   pointer.x = (event.clientX / window.innerWidth) * 2 - 1;
@@ -81,7 +91,7 @@ const onPointerMove = (event: MouseEvent) => {
     if (activeFloor.value)
       activeFloor.value.material.emissive.setHex(activeFloor.value.currentHex);
 
-    // activeFloor.value = null;
+    activeFloor.value = null;
   }
 };
 
@@ -90,23 +100,25 @@ const onPointerClick = (event: MouseEvent) => {
     return;
   }
   selectedFloor.value = activeFloor.value;
-  console.log(scene.children[1].children)
+  animatingCamera.value = true;
+  const selectedFloorNumber = +activeFloor.value.name.split("_")[1];
+  const hiddenFloors = scene.children[1].children.filter((element: any) => {
+    return +element.name.split("_")[1] > selectedFloorNumber;
+  });
   // Remove floors over the current one
 
-
-  // if (model) {
-  //   model.traverse((child: any) => {
-  //     if (child.isMesh) {
-  //       child.material.color.set(Number("0x" + newVal.slice(1)));
-  //       if (
-  //         child instanceof THREE.Mesh &&
-  //         (child.name.includes("left_") || child.name.includes("right_"))
-  //       ) {
-  //         child.visible = false;
-  //       }
-  //     }
-  //   });
-  // }
+  if (hiddenFloors) {
+    scene.children[1].children.forEach((child: any) => {
+      if (child.isMesh) {
+        child.visible = true;
+      }
+    });
+    hiddenFloors.forEach((child: any) => {
+      if (child.isMesh) {
+        child.visible = false;
+      }
+    });
+  }
   // camera.lookAt(0);
 };
 
@@ -118,7 +130,7 @@ const init = () => {
     10000,
   );
   camera.position.z = 500;
-  camera.position.x = 500;
+  camera.position.x = -500;
   camera.position.y = 500;
 
   scene = new THREE.Scene();
@@ -138,23 +150,23 @@ const init = () => {
       // model
       const loader = new GLTFLoader().setPath("/models/");
       loader.setDRACOLoader(dracoLoader);
-      loader.load("FinalBuildingInterior.glb", (gltf: any) => {
+      loader.load("FinalBuildingInterior3.glb", (gltf: any) => {
         model = gltf.scene;
         model.traverse((child: any) => {
           if (child.isMesh) {
             child.material.transparent = true;
             child.material.roughness = 1;
-            const name = Number(child.name.charAt(child.name.length - 1));
+            // const name = Number(child.name.charAt(child.name.length - 1));
+            child.castShadow = true;
+            child.receiveShadow = true;
             if (
               child instanceof THREE.Mesh &&
               (child.name.includes("left_") || child.name.includes("right_"))
             ) {
               child.visible = false;
             } else {
-              const newMaterial = new THREE.MeshStandardMaterial({
-                color: Math.random() * 0xffffff,
-                transparent: true,
-                // opacity: 0.5,
+              const newMaterial = new THREE.MeshPhongMaterial({
+                // color: Math.random() * 0xffffff,
               });
               child.material = newMaterial;
               // child.material.color.set(0x000000);
@@ -162,7 +174,7 @@ const init = () => {
           }
           if (child.isGeometry) {
             child.geometry.computeVertexNormals(true);
-            child.geometry.boundsTree = new MeshBVH(child.geometry);
+            // child.geometry.boundsTree = new MeshBVH(child.geometry);
           }
         });
 
@@ -174,12 +186,13 @@ const init = () => {
         // light.position.set(1, 1, 1).normalize();
 
         const floorGeometry = new THREE.PlaneGeometry(10000, 10000, 1, 1);
-        const floorMaterial = new THREE.MeshBasicMaterial({
+        const floorMaterial = new THREE.MeshPhongMaterial({
           color: Number("0x" + getCurrentColor.value.slice(1)),
+          depthWrite: false,
         });
         const floor = new THREE.Mesh(floorGeometry, floorMaterial);
         floor.rotation.x = -Math.PI / 2;
-        floor.position.y = -1;
+        floor.receiveShadow = true;
         scene.add(floor);
 
         const fogColor = new THREE.Color(0x000000);
@@ -193,6 +206,41 @@ const init = () => {
         // scene.value.add(light);
 
         scene.add(model);
+
+        const hemiLight = new THREE.HemisphereLight(0xffffff, 0x8d8d8d, 1);
+        hemiLight.position.set(0, 20, 0);
+        scene.add(hemiLight);
+
+        const dirLight = new THREE.DirectionalLight(0xffffff, 3);
+        dirLight.position.set(80, 150, 50);
+        let t = new THREE.Object3D();
+        t.translateX(0);
+        t.translateY(50);
+        t.translateZ(0);
+        dirLight.target = t;
+        dirLight.castShadow = true;
+        dirLight.shadow.camera.top = 40;
+        dirLight.shadow.camera.bottom = -40;
+        dirLight.shadow.camera.left = -50;
+        dirLight.shadow.camera.right = 50;
+        dirLight.shadow.camera.near = 0.1;
+        dirLight.shadow.camera.far = 1000000;
+        dirLight.shadow.mapSize.width = 1024;
+        dirLight.shadow.mapSize.height = 1024;
+        scene.add(dirLight);
+        scene.add(dirLight.target);
+
+        // composer = new EffectComposer(renderer);
+
+        // const renderPass = new RenderPass(scene, camera);
+        // composer.addPass(renderPass);
+
+        // const ssaoPass = new SSAOPass(scene, camera, window.innerWidth, window.innerHeight);
+        // composer.addPass(ssaoPass);
+
+        // const outputPass = new OutputPass();
+        // composer.addPass(outputPass);
+
         emit("scene-ready", true);
         sceneReady.value = true;
         render();
@@ -209,6 +257,8 @@ const init = () => {
   renderer.setClearColor(0x000000, 0); // the default
   renderer.setPixelRatio(window.devicePixelRatio);
   renderer.setSize(window.innerWidth, window.innerHeight);
+  renderer.shadowMap.enabled = true;
+  renderer.shadowMap.type = THREE.PCFSoftShadowMap;
   renderer.outputEncoding = THREE.sRGBEncoding;
 
   //
@@ -228,7 +278,7 @@ const init = () => {
 
   controls = new OrbitControls(camera, renderer.domElement);
   controls.update();
-  controls.enablePan = false;
+  controls.enablePan = true;
   controls.enableDamping = true;
   controls.dampingFactor = 0.05;
   // controls.value.addEventListener("change", render); // use if there is no animation loop
@@ -236,16 +286,23 @@ const init = () => {
   controls.maxDistance = 1000;
   controls.maxPolarAngle = Math.PI / 3 - 0.1;
   controls.minPolarAngle = Math.PI / 3 - 0.1;
+  controls.target.set(0, 50, 0);
   // controls.value.autoRotate = true;
   // controls.value.target.set(1, 0, 0);
   // controls.value.update();
 
   const animate = () => {
     if (model) {
-      if (selectedFloor.value) {
-        camera.lookAt(0, selectedFloor.value.position.y * 1.5, 0);
-      } else {
-        camera.lookAt(0, 40, 0);
+      if (animatingCamera.value) {
+        // camera.lookAt(0, selectedFloor.value.position.y * 1.5, 0);
+        controls.target.set(0, selectedFloor.value.position.y * 1.5, 0);
+        // camera.position.y = 500 + selectedFloor.value.position.y * 1.5;
+        console.log(camera.position);
+        controls.update();
+        camera.updateMatrix();
+        camera.updateMatrixWorld();
+
+        animatingCamera.value = false;
       }
     }
     if (scene && camera) {
@@ -256,15 +313,13 @@ const init = () => {
   };
 
   animate();
-
   window.addEventListener("resize", onWindowResize);
   // document.addEventListener("mousemove", onPointerMove);
 };
 
 const render = () => {
   camera.lookAt(scene.position);
-
-  renderer.render(toRaw(scene), camera);
+  renderer.render(scene, camera);
 };
 
 const onWindowResize = () => {
