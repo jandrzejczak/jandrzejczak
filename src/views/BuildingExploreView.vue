@@ -110,10 +110,12 @@ const onPointerClick = (event: MouseEvent) => {
   selectedFloor.value = activeFloor.value;
   const cube = selectedFloor.value;
   const coords = { x: camera.position.x, y: camera.position.y };
-  camera.position.set(cube.position.x, cube.position.y, camera.position.z);
   new TWEEN.Tween(coords)
     .to({ x: cube.position.x, y: cube.position.y })
-    .onUpdate(() => camera.position.set(coords.x, coords.y, camera.position.z))
+    .onUpdate(() => {
+      camera.position.set(camera.position.x, coords.y, camera.position.z);
+      // controls.target.set(coords.x, coords.y, 0);
+    })
     .start();
 };
 
@@ -288,27 +290,27 @@ const init = () => {
   // controls.value.update();
 
   animate((time: number) => {
-    if (model) {
-      if (animatingCamera.value) {
-        // camera.lookAt(0, selectedFloor.value.position.y * 1.5, 0);
-        // controls.target.set(
-        //   selectedFloor.value.position.x * 1.5,
-        //   selectedFloor.value.position.y * 1.5,
-        //   0,
-        // );
-        // camera.position.set(
-        //   selectedFloor.value.position.x * 1.5,
-        //   selectedFloor.value.position.y * 1.5,
-        //   camera.position.z,
-        // );
+    // if (model) {
+    //   if (animatingCamera.value) {
+    //     // camera.lookAt(0, selectedFloor.value.position.y * 1.5, 0);
+    //     // controls.target.set(
+    //     //   selectedFloor.value.position.x * 1.5,
+    //     //   selectedFloor.value.position.y * 1.5,
+    //     //   0,
+    //     // );
+    //     // camera.position.set(
+    //     //   selectedFloor.value.position.x * 1.5,
+    //     //   selectedFloor.value.position.y * 1.5,
+    //     //   camera.position.z,
+    //     // );
 
-        // controls.position.y = 700;
-        console.log(camera.position);
-        // controls.update();
+    //     // controls.position.y = 700;
+    //     console.log(camera.position);
+    //     // controls.update();
 
-        animatingCamera.value = false;
-      }
-    }
+    //     animatingCamera.value = false;
+    //   }
+    // }
 
     camera.updateMatrix();
     camera.updateMatrixWorld();
