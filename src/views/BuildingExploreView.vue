@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { storeToRefs } from "pinia";
+import * as TWEEN from "@tweenjs/tween.js";
 import * as THREE from "three";
 // @ts-ignore
 import { OrbitControls } from "three/addons/controls/OrbitControls.js";
@@ -52,8 +53,12 @@ const selectedFloor = ref();
 const animatingCamera = ref(false);
 
 const onPointerMove = (event: MouseEvent) => {
-  pointer.x = (event.clientX / window.innerWidth) * 2 - 1;
-  pointer.y = -(event.clientY / window.innerHeight) * 2 + 1;
+  const wrapperElement = bulding.value?.getBoundingClientRect();
+  if (!wrapperElement) {
+    return;
+  }
+  pointer.x = (event.clientX / wrapperElement.width) * 2 - 1;
+  pointer.y = -(event.clientY / wrapperElement.height) * 2 + 1;
 
   if (!sceneReady.value) {
     return;
@@ -100,32 +105,12 @@ const onPointerClick = (event: MouseEvent) => {
     return;
   }
   selectedFloor.value = activeFloor.value;
-  animatingCamera.value = true;
-  const selectedFloorNumber = +activeFloor.value.name.split("_")[1];
-  const hiddenFloors = scene.children[1].children.filter((element: any) => {
-    return +element.name.split("_")[1] > selectedFloorNumber;
-  });
-  // Remove floors over the current one
-
-  if (hiddenFloors) {
-    scene.children[1].children.forEach((child: any) => {
-      if (child.isMesh) {
-        child.visible = true;
-      }
-    });
-    hiddenFloors.forEach((child: any) => {
-      if (child.isMesh) {
-        child.visible = false;
-      }
-    });
-  }
-  // camera.lookAt(0);
 };
 
 const init = () => {
   camera = new THREE.PerspectiveCamera(
     10,
-    window.innerWidth / window.innerHeight,
+    window.innerWidth / 2 / window.innerHeight,
     0.1,
     10000,
   );
@@ -161,7 +146,9 @@ const init = () => {
             child.receiveShadow = true;
             if (
               child instanceof THREE.Mesh &&
-              (child.name.includes("left_") || child.name.includes("right_"))
+              (child.name.includes("left_") ||
+                child.name.includes("right_") ||
+                child.name.includes("apartment_"))
             ) {
               child.visible = false;
             } else {
@@ -186,22 +173,21 @@ const init = () => {
         // light.position.set(1, 1, 1).normalize();
 
         const floorGeometry = new THREE.PlaneGeometry(10000, 10000, 1, 1);
-        const floorMaterial = new THREE.MeshPhongMaterial({
-          color: Number("0x" + getCurrentColor.value.slice(1)),
-          depthWrite: false,
-        });
+        const floorMaterial = new THREE.ShadowMaterial();
+        floorMaterial.opacity = 0.5;
         const floor = new THREE.Mesh(floorGeometry, floorMaterial);
         floor.rotation.x = -Math.PI / 2;
         floor.receiveShadow = true;
+
         scene.add(floor);
 
-        const fogColor = new THREE.Color(0x000000);
-        const near = 1;
-        const far = 3500;
+        // const fogColor = new THREE.Color(0x000000);
+        // const near = 1;
+        // const far = 3500;
 
-        scene.fog = new THREE.Fog(fogColor, near, far);
+        // scene.fog = new THREE.Fog(fogColor, near, far);
 
-        scene.background = fogColor;
+        // scene.background = fogColor;
 
         // scene.value.add(light);
 
@@ -251,12 +237,12 @@ const init = () => {
 
   renderer = new THREE.WebGLRenderer({
     antialias: true,
-    // alpha: true,
+    alpha: true,
     logarithmicDepthBuffer: true,
   });
   renderer.setClearColor(0x000000, 0); // the default
   renderer.setPixelRatio(window.devicePixelRatio);
-  renderer.setSize(window.innerWidth, window.innerHeight);
+  renderer.setSize(window.innerWidth / 2, window.innerHeight);
   renderer.shadowMap.enabled = true;
   renderer.shadowMap.type = THREE.PCFSoftShadowMap;
   renderer.outputEncoding = THREE.sRGBEncoding;
@@ -284,8 +270,8 @@ const init = () => {
   // controls.value.addEventListener("change", render); // use if there is no animation loop
   controls.minDistance = 200;
   controls.maxDistance = 1000;
-  controls.maxPolarAngle = Math.PI / 3 - 0.1;
-  controls.minPolarAngle = Math.PI / 3 - 0.1;
+  // controls.maxPolarAngle = Math.PI / 3 - 0.1;
+  // controls.minPolarAngle = Math.PI / 3 - 0.1;
   controls.target.set(0, 50, 0);
   // controls.value.autoRotate = true;
   // controls.value.target.set(1, 0, 0);
@@ -295,8 +281,19 @@ const init = () => {
     if (model) {
       if (animatingCamera.value) {
         // camera.lookAt(0, selectedFloor.value.position.y * 1.5, 0);
-        controls.target.set(0, selectedFloor.value.position.y * 1.5, 0);
-        // camera.position.y = 500 + selectedFloor.value.position.y * 1.5;
+        controls.target.set(0, selectedFloor.value.position.y, 0);
+
+        // const cube = selectedFloor.value;
+        // const coords = { x: camera.position.x, y: camera.position.y };
+        // camera.position.set(cube.position.x, cube.position.y, camera.position.z);
+        // new TWEEN.Tween(coords)
+        //   .to({ x: cube.position.x, y: cube.position.y })
+        //   .onUpdate(() =>
+        //     camera.position.set(coords.x, coords.y, camera.position.z),
+        //   )
+        //   .start();
+
+        // controls.position.y = 700;
         console.log(camera.position);
         controls.update();
         camera.updateMatrix();
@@ -323,10 +320,10 @@ const render = () => {
 };
 
 const onWindowResize = () => {
-  camera.aspect = window.innerWidth / window.innerHeight;
+  camera.aspect = window.innerWidth / 2 / window.innerHeight;
   camera.updateProjectionMatrix();
 
-  renderer.setSize(window.innerWidth, window.innerHeight);
+  renderer.setSize(window.innerWidth / 2, window.innerHeight);
 
   render();
 };
@@ -343,6 +340,36 @@ watch(getCurrentColor, (newVal) => {
       }
       if (child.isGeometry) {
         child.geometry.computeVertexNormals(true);
+      }
+    });
+  }
+});
+
+watch(selectedFloor, () => {
+  animatingCamera.value = true;
+  const selectedFloorNumber = +activeFloor.value.name.split("_").pop();
+  const visibleFloors = scene.children[1].children.filter((element: any) => {
+    console.log(element.name);
+    const splitName = element.name.split("_");
+    return splitName[0] === "apartment" ||
+      splitName[0] === "left" ||
+      splitName[0] === "right"
+      ? +splitName.pop() === selectedFloorNumber
+      : +splitName.pop() <= selectedFloorNumber;
+  });
+  // Remove floors over the current one
+
+  if (visibleFloors) {
+    scene.children[1].children.forEach((child: any) => {
+      if (child.isMesh) {
+        if (child.name !== "building_base") {
+          child.visible = false;
+        }
+      }
+    });
+    visibleFloors.forEach((child: any) => {
+      if (child.isMesh) {
+        child.visible = true;
       }
     });
   }
@@ -418,7 +445,18 @@ onUnmounted(() => {
 </script>
 
 <template>
-  <div ref="bulding" class="face-bg"></div>
+  <div class="grid flex-1 grid-cols-2">
+    <div>
+      <div ref="bulding" class="fixed left-0 top-0 w-[50vw]" />
+    </div>
+
+    <div class="flex flex-col p-8">
+      <div
+        class="h-32 w-full rounded-2xl bg-zinc-500/50 backdrop-blur-md"
+      ></div>
+      <div></div>
+    </div>
+  </div>
 </template>
 
 <style scoped lang="scss">
@@ -427,15 +465,6 @@ onUnmounted(() => {
   position: fixed;
   top: 0;
   left: 0;
-}
-.face-bg {
-  // z-index: -1;
-  position: fixed;
-  top: 0;
-  left: 0;
-  height: 100vh;
-  width: 100vw;
-  overflow: hidden;
 }
 .mobile-overlay {
   &::after {

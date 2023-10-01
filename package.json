@@ -13,6 +13,7 @@
   },
   "dependencies": {
     "@grcmichael/gscroll": "^1.0.15",
+    "@tweenjs/tween.js": "^21.0.0",
     "@vitejs/plugin-basic-ssl": "^1.0.1",
     "@vueuse/components": "^10.4.1",
     "@vueuse/core": "^10.4.1",
