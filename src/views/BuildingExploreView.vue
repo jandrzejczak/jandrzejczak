@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { storeToRefs } from "pinia";
+import animate from "@/utils/animate";
 import * as TWEEN from "@tweenjs/tween.js";
 import * as THREE from "three";
 // @ts-ignore
@@ -101,10 +102,19 @@ const onPointerMove = (event: MouseEvent) => {
 };
 
 const onPointerClick = (event: MouseEvent) => {
+  // Change to three.interactive
+  // https://dev.to/pahund/animating-camera-movement-in-three-js-17e9
   if (!activeFloor.value) {
     return;
   }
   selectedFloor.value = activeFloor.value;
+  const cube = selectedFloor.value;
+  const coords = { x: camera.position.x, y: camera.position.y };
+  camera.position.set(cube.position.x, cube.position.y, camera.position.z);
+  new TWEEN.Tween(coords)
+    .to({ x: cube.position.x, y: cube.position.y })
+    .onUpdate(() => camera.position.set(coords.x, coords.y, camera.position.z))
+    .start();
 };
 
 const init = () => {
@@ -277,39 +287,36 @@ const init = () => {
   // controls.value.target.set(1, 0, 0);
   // controls.value.update();
 
-  const animate = () => {
+  animate((time: number) => {
     if (model) {
       if (animatingCamera.value) {
         // camera.lookAt(0, selectedFloor.value.position.y * 1.5, 0);
-        controls.target.set(0, selectedFloor.value.position.y, 0);
-
-        // const cube = selectedFloor.value;
-        // const coords = { x: camera.position.x, y: camera.position.y };
-        // camera.position.set(cube.position.x, cube.position.y, camera.position.z);
-        // new TWEEN.Tween(coords)
-        //   .to({ x: cube.position.x, y: cube.position.y })
-        //   .onUpdate(() =>
-        //     camera.position.set(coords.x, coords.y, camera.position.z),
-        //   )
-        //   .start();
+        // controls.target.set(
+        //   selectedFloor.value.position.x * 1.5,
+        //   selectedFloor.value.position.y * 1.5,
+        //   0,
+        // );
+        // camera.position.set(
+        //   selectedFloor.value.position.x * 1.5,
+        //   selectedFloor.value.position.y * 1.5,
+        //   camera.position.z,
+        // );
 
         // controls.position.y = 700;
         console.log(camera.position);
-        controls.update();
-        camera.updateMatrix();
-        camera.updateMatrixWorld();
+        // controls.update();
 
         animatingCamera.value = false;
       }
     }
-    if (scene && camera) {
-      requestAnimationFrame(animate);
-      renderer.render(scene, camera);
-      controls.update();
-    }
-  };
 
-  animate();
+    camera.updateMatrix();
+    camera.updateMatrixWorld();
+    controls.update();
+    renderer.render(scene, camera);
+    TWEEN.update(time);
+  });
+
   window.addEventListener("resize", onWindowResize);
   // document.addEventListener("mousemove", onPointerMove);
 };
@@ -349,7 +356,6 @@ watch(selectedFloor, () => {
   animatingCamera.value = true;
   const selectedFloorNumber = +activeFloor.value.name.split("_").pop();
   const visibleFloors = scene.children[1].children.filter((element: any) => {
-    console.log(element.name);
     const splitName = element.name.split("_");
     return splitName[0] === "apartment" ||
       splitName[0] === "left" ||
