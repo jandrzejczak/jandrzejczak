@@ -153,7 +153,7 @@ const init = () => {
       // model
       const loader = new GLTFLoader().setPath("/models/");
       loader.setDRACOLoader(dracoLoader);
-      loader.load("FinalBuildingInterior3.glb", (gltf: any) => {
+      loader.load("FinalBuildingInterior.glb", (gltf: any) => {
         model = gltf.scene;
         model.traverse((child: any) => {
           if (child.isMesh) {
@@ -347,12 +347,11 @@ watch(selectedFloor, () => {
       splitName[0] === "left" ||
       splitName[0] === "right"
       ? +splitName.pop() === selectedFloorNumber
-      : +splitName.pop() < selectedFloorNumber;
+      : +splitName.pop() <= selectedFloorNumber;
   });
   // Remove floors over the current one
 
   if (visibleFloors) {
-    console.log(visibleFloors.map((el) => el.name));
     scene.children[1].children.forEach((child: any) => {
       if (child.isMesh) {
         if (visibleFloors.includes(child) && child.material.opacity === 0) {
