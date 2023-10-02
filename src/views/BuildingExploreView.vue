@@ -352,7 +352,6 @@ watch(selectedFloor, () => {
   // Remove floors over the current one
 
   if (visibleFloors) {
-    console.log(visibleFloors.map((el) => el.name));
     scene.children[1].children.forEach((child: any) => {
       if (child.isMesh) {
         if (visibleFloors.includes(child) && child.material.opacity === 0) {
