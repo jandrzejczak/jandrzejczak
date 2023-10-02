@@ -32,8 +32,8 @@ const router = createRouter({
       component: ModalDialog,
     },
     {
-      path: "/building/",
-      name: "Explore Building",
+      path: "/building/:floor?/:apartment?",
+      name: "ExploreBuilding",
       component: BuildingExploreView,
     },
     {

@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { storeToRefs } from "pinia";
+import { useRouter } from "vue-router";
 import animate from "@/utils/animate";
 import * as TWEEN from "@tweenjs/tween.js";
 import * as THREE from "three";
@@ -33,6 +34,8 @@ import { useDeviceStore } from "@/stores/globalStore";
 THREE.Mesh.prototype.raycast = acceleratedRaycast;
 THREE.BufferGeometry.prototype.computeBoundsTree = computeBoundsTree;
 THREE.BufferGeometry.prototype.disposeBoundsTree = disposeBoundsTree;
+
+const router = useRouter();
 
 const deviceStore = useDeviceStore();
 const { getCurrentColor } = storeToRefs(deviceStore);
@@ -112,6 +115,11 @@ const onPointerClick = (event: MouseEvent) => {
     return;
   }
   selectedFloor.value = activeFloor.value;
+  const floorName = activeFloor.value.name;
+  router.push({
+    name: "ExploreBuilding",
+    params: { floor: floorName },
+  });
   const cube = selectedFloor.value;
   console.log(+selectedFloor.value.name.split("_").pop());
   const coords = {
@@ -492,6 +500,7 @@ onUnmounted(() => {
 
     <div class="flex flex-col p-8">
       <div
+        style="view-transition-name: building"
         class="h-32 w-full rounded-2xl bg-zinc-500/50 backdrop-blur-md"
       ></div>
       <div></div>

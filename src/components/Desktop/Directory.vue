@@ -123,7 +123,7 @@ const openDialog = (path: string) => {
           class="flex h-full w-full cursor-pointer flex-col items-center justify-center gap-1"
         >
           <div
-            style="view-transition-name: building"
+            style="view-transition-name: city"
             class="flex w-full flex-1 select-none items-center justify-center rounded-3xl bg-background p-2 text-center font-header text-xl leading-6"
           >
             city boiiii
