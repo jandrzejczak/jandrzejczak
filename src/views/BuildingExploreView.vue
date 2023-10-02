@@ -55,6 +55,7 @@ const sceneReady = ref(false);
 const activeFloor = ref();
 const selectedFloor = ref();
 const animatingCamera = ref(false);
+const sceneFloors = ref();
 
 const onPointerMove = (event: MouseEvent) => {
   const wrapperElement = bulding.value?.getBoundingClientRect();
@@ -115,34 +116,6 @@ const onPointerClick = (event: MouseEvent) => {
     return;
   }
   selectedFloor.value = activeFloor.value;
-  const floorName = activeFloor.value.name;
-  router.push({
-    name: "ExploreBuilding",
-    params: { floor: floorName },
-  });
-  const cube = selectedFloor.value;
-  console.log(+selectedFloor.value.name.split("_").pop());
-  const coords = {
-    x: controls.target.x,
-    y: controls.target.y,
-    cameraX: camera.position.x,
-    cameraY: camera.position.y,
-    cameraZ: camera.position.z,
-  };
-  new TWEEN.Tween(coords)
-    .to({
-      x: cube.position.x,
-      y: cube.position.y + selectedFloor.value.name.split("_").pop() * 4,
-      cameraX: -200,
-      cameraY: 250,
-      cameraZ: 200,
-    })
-    .easing(TWEEN.Easing.Quadratic.InOut)
-    .onUpdate(() => {
-      camera.position.set(coords.cameraX, coords.cameraY, coords.cameraZ);
-      controls.target.set(coords.x, coords.y, 0);
-    })
-    .start();
 };
 
 const init = () => {
@@ -239,6 +212,9 @@ const init = () => {
         // scene.value.add(light);
 
         scene.add(model);
+
+        console.log(model.children);
+        sceneFloors.value = model.children;
 
         const hemiLight = new THREE.HemisphereLight(0xffffff, 0x8d8d8d, 1);
         hemiLight.position.set(0, 20, 0);
@@ -338,7 +314,6 @@ const init = () => {
 };
 
 const render = () => {
-  // camera.lookAt(scene.position);
   renderer.render(scene, camera);
 };
 
@@ -368,9 +343,81 @@ watch(getCurrentColor, (newVal) => {
   }
 });
 
-watch(selectedFloor, () => {
-  animatingCamera.value = true;
-  const selectedFloorNumber = +activeFloor.value.name.split("_").pop();
+watch(selectedFloor, (value) => {
+  if (!value) {
+    const coords = {
+      y: controls.target.y,
+      cameraX: camera.position.x,
+      cameraY: camera.position.y,
+      cameraZ: camera.position.z,
+    };
+    new TWEEN.Tween(coords)
+      .to({
+        x: 0,
+        y: 50,
+        cameraX: -400,
+        cameraY: 400,
+        cameraZ: 400,
+      })
+      .easing(TWEEN.Easing.Quadratic.InOut)
+      .onUpdate(() => {
+        camera.position.set(coords.cameraX, coords.cameraY, coords.cameraZ);
+        controls.target.set(0, coords.y, 0);
+      })
+      .start();
+
+    scene.children[1].children.forEach((child: any) => {
+      if (child.isMesh) {
+        if (
+          (child.name.startsWith("floor_") ||
+            child.name === "building_base" ||
+            child.name === "building_roof") &&
+          child.material.opacity === 0
+        ) {
+          const opacity = { opacity: 0 };
+          new TWEEN.Tween(opacity)
+            .to({
+              opacity: 1,
+            })
+            .easing(TWEEN.Easing.Quadratic.InOut)
+            .onUpdate(() => {
+              child.material.opacity = opacity.opacity;
+              child.visible = true;
+            })
+            .start();
+        }
+      }
+    });
+    return;
+  }
+  const floorName = selectedFloor.value.name;
+  router.push({
+    name: "ExploreBuilding",
+    params: { floor: floorName },
+  });
+  const cube = selectedFloor.value;
+  const coords = {
+    x: controls.target.x,
+    y: controls.target.y,
+    cameraX: camera.position.x,
+    cameraY: camera.position.y,
+    cameraZ: camera.position.z,
+  };
+  new TWEEN.Tween(coords)
+    .to({
+      x: cube.position.x,
+      y: cube.position.y + selectedFloor.value.name.split("_").pop() * 4,
+      cameraX: -200,
+      cameraY: 250,
+      cameraZ: 200,
+    })
+    .easing(TWEEN.Easing.Quadratic.InOut)
+    .onUpdate(() => {
+      camera.position.set(coords.cameraX, coords.cameraY, coords.cameraZ);
+      controls.target.set(coords.x, coords.y, 0);
+    })
+    .start();
+  const selectedFloorNumber = +selectedFloor.value.name.split("_").pop();
   const visibleFloors = scene.children[1].children.filter((element: any) => {
     const splitName = element.name.split("_");
     return splitName[0] === "apartment" ||
@@ -501,8 +548,26 @@ onUnmounted(() => {
     <div class="flex flex-col p-8">
       <div
         style="view-transition-name: building"
-        class="h-32 w-full rounded-2xl bg-zinc-500/50 backdrop-blur-md"
-      ></div>
+        class="flex w-full flex-col gap-2 rounded-2xl bg-zinc-500/50 p-4 backdrop-blur-md"
+      >
+        <template v-if="sceneFloors">
+          <div
+            @click="selectedFloor = item"
+            v-for="item in sceneFloors.filter((el: any) =>
+              el.name.startsWith('floor_0'),
+            )"
+            :class="['cursor-pointer rounded-sm bg-background p-2']"
+          >
+            {{ item.name }}
+          </div>
+          <div
+            class="p-2 cursor-pointer rounded-sm bg-background"
+            @click="selectedFloor = null"
+          >
+            deselect
+          </div>
+        </template>
+      </div>
       <div></div>
     </div>
   </div>
