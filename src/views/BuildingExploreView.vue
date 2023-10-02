@@ -67,11 +67,14 @@ const onPointerMove = (event: MouseEvent) => {
 
   raycaster.setFromCamera(pointer, camera);
 
-  const intersectObjects = scene.children[1].children.filter((el: any) =>
-    el.name.startsWith("floor_0"),
+  const intersectObjects = scene.children[1].children.filter(
+    (el: any) =>
+      (el.name.startsWith("floor_0") ||
+        el.name.startsWith("left_") ||
+        el.name.startsWith("right_")) &&
+      el.visible,
   );
 
-  raycaster.firstHitOnly = true;
   const intersects = raycaster.intersectObjects(intersectObjects);
 
   if (intersects.length > 0) {
@@ -111,15 +114,24 @@ const onPointerClick = (event: MouseEvent) => {
   selectedFloor.value = activeFloor.value;
   const cube = selectedFloor.value;
   console.log(+selectedFloor.value.name.split("_").pop());
-  const coords = { x: controls.target.x, y: controls.target.y };
+  const coords = {
+    x: controls.target.x,
+    y: controls.target.y,
+    cameraX: camera.position.x,
+    cameraY: camera.position.y,
+    cameraZ: camera.position.z,
+  };
   new TWEEN.Tween(coords)
     .to({
       x: cube.position.x,
       y: cube.position.y + selectedFloor.value.name.split("_").pop() * 4,
+      cameraX: -200,
+      cameraY: 250,
+      cameraZ: 200,
     })
     .easing(TWEEN.Easing.Quadratic.InOut)
     .onUpdate(() => {
-      // camera.position.set(coords.x, coords.y, camera.position.z);
+      camera.position.set(coords.cameraX, coords.cameraY, coords.cameraZ);
       controls.target.set(coords.x, coords.y, 0);
     })
     .start();
@@ -153,26 +165,37 @@ const init = () => {
       // model
       const loader = new GLTFLoader().setPath("/models/");
       loader.setDRACOLoader(dracoLoader);
-      loader.load("FinalBuildingInterior3.glb", (gltf: any) => {
+      loader.load("FinalBuildingInterior4.glb", (gltf: any) => {
         model = gltf.scene;
         model.traverse((child: any) => {
           if (child.isMesh) {
             // const name = Number(child.name.charAt(child.name.length - 1));
             child.castShadow = true;
             child.receiveShadow = true;
-            const newMaterial = new THREE.MeshPhongMaterial({
-              // color: Math.random() * 0xffffff,
-              transparent: true,
-            });
-            child.material = newMaterial;
             if (
               child instanceof THREE.Mesh &&
               (child.name.includes("left_") ||
                 child.name.includes("right_") ||
                 child.name.includes("apartment_"))
             ) {
+              const newMaterial = new THREE.MeshStandardMaterial({
+                transparent: true,
+                color: 0x00ff00,
+                roughness: 0.5,
+                metalness: 1,
+                side: THREE.DoubleSide,
+              });
+              child.material = newMaterial;
               child.material.opacity = 0;
               child.visible = false;
+            } else {
+              const newMaterial = new THREE.MeshPhongMaterial({
+                // color: Math.random() * 0xffffff,
+                transparent: true,
+                depthWrite: true,
+                side: THREE.DoubleSide,
+              });
+              child.material = newMaterial;
             }
           }
           if (child.isGeometry) {
@@ -213,7 +236,7 @@ const init = () => {
         hemiLight.position.set(0, 20, 0);
         scene.add(hemiLight);
 
-        const dirLight = new THREE.DirectionalLight(0xffffff, 3);
+        const dirLight = new THREE.DirectionalLight(0xffff00, 3);
         dirLight.position.set(80, 150, 50);
         let t = new THREE.Object3D();
         t.translateX(0);
@@ -286,10 +309,8 @@ const init = () => {
   // controls.value.addEventListener("change", render); // use if there is no animation loop
   controls.minDistance = 200;
   controls.maxDistance = 1000;
-  // controls.maxPolarAngle = Math.PI / 3 - 0.1;
-  // controls.minPolarAngle = Math.PI / 3 - 0.1;
-  controls.minPolarAngle = Math.PI / 4; // Minimum angle (45 degrees)
-  controls.maxPolarAngle = Math.PI / 2; //
+  controls.maxPolarAngle = Math.PI / 3 - 0.1;
+  controls.minPolarAngle = Math.PI / 3 - 0.1;
   controls.target.set(0, 50, 0);
   // controls.value.autoRotate = true;
   // controls.value.target.set(1, 0, 0);
@@ -347,7 +368,7 @@ watch(selectedFloor, () => {
       splitName[0] === "left" ||
       splitName[0] === "right"
       ? +splitName.pop() === selectedFloorNumber
-      : +splitName.pop() < selectedFloorNumber;
+      : +splitName.pop() <= selectedFloorNumber;
   });
   // Remove floors over the current one
 
@@ -356,7 +377,7 @@ watch(selectedFloor, () => {
       if (child.isMesh) {
         if (visibleFloors.includes(child) && child.material.opacity === 0) {
           child.visible = true;
-          const opacity = { opacity: 0 };
+          const opacity = { opacity: 0, positionY: child.position.y };
           new TWEEN.Tween(opacity)
             .to({
               opacity: 1,
@@ -371,17 +392,20 @@ watch(selectedFloor, () => {
           child.name !== "building_base" &&
           child.material.opacity === 1
         ) {
-          const opacity = { opacity: 1 };
+          const opacity = { opacity: 1, positionY: child.position.y };
           new TWEEN.Tween(opacity)
             .to({
               opacity: 0,
+              positionY: child.position.y + 30,
             })
             .easing(TWEEN.Easing.Quadratic.InOut)
             .onUpdate(() => {
               child.material.opacity = opacity.opacity;
+              child.position.y = opacity.positionY;
             })
             .onComplete(() => {
               child.visible = false;
+              child.position.y = opacity.positionY - 30;
             })
             .start();
         }
