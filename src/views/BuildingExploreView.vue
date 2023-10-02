@@ -104,17 +104,23 @@ const onPointerMove = (event: MouseEvent) => {
 const onPointerClick = (event: MouseEvent) => {
   // Change to three.interactive
   // https://dev.to/pahund/animating-camera-movement-in-three-js-17e9
+
   if (!activeFloor.value) {
     return;
   }
   selectedFloor.value = activeFloor.value;
   const cube = selectedFloor.value;
-  const coords = { x: camera.position.x, y: camera.position.y };
+  console.log(+selectedFloor.value.name.split("_").pop());
+  const coords = { x: controls.target.x, y: controls.target.y };
   new TWEEN.Tween(coords)
-    .to({ x: cube.position.x, y: cube.position.y })
+    .to({
+      x: cube.position.x,
+      y: cube.position.y + selectedFloor.value.name.split("_").pop() * 4,
+    })
+    .easing(TWEEN.Easing.Quadratic.InOut)
     .onUpdate(() => {
-      camera.position.set(camera.position.x, coords.y, camera.position.z);
-      // controls.target.set(coords.x, coords.y, 0);
+      // camera.position.set(coords.x, coords.y, camera.position.z);
+      controls.target.set(coords.x, coords.y, 0);
     })
     .start();
 };
@@ -126,9 +132,9 @@ const init = () => {
     0.1,
     10000,
   );
-  camera.position.z = 500;
-  camera.position.x = -500;
-  camera.position.y = 500;
+  camera.position.z = 400;
+  camera.position.x = -400;
+  camera.position.y = 400;
 
   scene = new THREE.Scene();
 
@@ -151,24 +157,22 @@ const init = () => {
         model = gltf.scene;
         model.traverse((child: any) => {
           if (child.isMesh) {
-            child.material.transparent = true;
-            child.material.roughness = 1;
             // const name = Number(child.name.charAt(child.name.length - 1));
             child.castShadow = true;
             child.receiveShadow = true;
+            const newMaterial = new THREE.MeshPhongMaterial({
+              // color: Math.random() * 0xffffff,
+              transparent: true,
+            });
+            child.material = newMaterial;
             if (
               child instanceof THREE.Mesh &&
               (child.name.includes("left_") ||
                 child.name.includes("right_") ||
                 child.name.includes("apartment_"))
             ) {
+              child.material.opacity = 0;
               child.visible = false;
-            } else {
-              const newMaterial = new THREE.MeshPhongMaterial({
-                // color: Math.random() * 0xffffff,
-              });
-              child.material = newMaterial;
-              // child.material.color.set(0x000000);
             }
           }
           if (child.isGeometry) {
@@ -276,7 +280,7 @@ const init = () => {
 
   controls = new OrbitControls(camera, renderer.domElement);
   controls.update();
-  controls.enablePan = true;
+  controls.enablePan = false;
   controls.enableDamping = true;
   controls.dampingFactor = 0.05;
   // controls.value.addEventListener("change", render); // use if there is no animation loop
@@ -284,34 +288,14 @@ const init = () => {
   controls.maxDistance = 1000;
   // controls.maxPolarAngle = Math.PI / 3 - 0.1;
   // controls.minPolarAngle = Math.PI / 3 - 0.1;
+  controls.minPolarAngle = Math.PI / 4; // Minimum angle (45 degrees)
+  controls.maxPolarAngle = Math.PI / 2; //
   controls.target.set(0, 50, 0);
   // controls.value.autoRotate = true;
   // controls.value.target.set(1, 0, 0);
   // controls.value.update();
 
   animate((time: number) => {
-    // if (model) {
-    //   if (animatingCamera.value) {
-    //     // camera.lookAt(0, selectedFloor.value.position.y * 1.5, 0);
-    //     // controls.target.set(
-    //     //   selectedFloor.value.position.x * 1.5,
-    //     //   selectedFloor.value.position.y * 1.5,
-    //     //   0,
-    //     // );
-    //     // camera.position.set(
-    //     //   selectedFloor.value.position.x * 1.5,
-    //     //   selectedFloor.value.position.y * 1.5,
-    //     //   camera.position.z,
-    //     // );
-
-    //     // controls.position.y = 700;
-    //     console.log(camera.position);
-    //     // controls.update();
-
-    //     animatingCamera.value = false;
-    //   }
-    // }
-
     camera.updateMatrix();
     camera.updateMatrixWorld();
     controls.update();
@@ -324,7 +308,7 @@ const init = () => {
 };
 
 const render = () => {
-  camera.lookAt(scene.position);
+  // camera.lookAt(scene.position);
   renderer.render(scene, camera);
 };
 
@@ -363,21 +347,45 @@ watch(selectedFloor, () => {
       splitName[0] === "left" ||
       splitName[0] === "right"
       ? +splitName.pop() === selectedFloorNumber
-      : +splitName.pop() <= selectedFloorNumber;
+      : +splitName.pop() < selectedFloorNumber;
   });
   // Remove floors over the current one
 
   if (visibleFloors) {
+    console.log(visibleFloors.map((el) => el.name));
     scene.children[1].children.forEach((child: any) => {
       if (child.isMesh) {
-        if (child.name !== "building_base") {
-          child.visible = false;
+        if (visibleFloors.includes(child) && child.material.opacity === 0) {
+          child.visible = true;
+          const opacity = { opacity: 0 };
+          new TWEEN.Tween(opacity)
+            .to({
+              opacity: 1,
+            })
+            .easing(TWEEN.Easing.Quadratic.InOut)
+            .onUpdate(() => {
+              child.material.opacity = opacity.opacity;
+            })
+            .start();
+        } else if (
+          !visibleFloors.includes(child) &&
+          child.name !== "building_base" &&
+          child.material.opacity === 1
+        ) {
+          const opacity = { opacity: 1 };
+          new TWEEN.Tween(opacity)
+            .to({
+              opacity: 0,
+            })
+            .easing(TWEEN.Easing.Quadratic.InOut)
+            .onUpdate(() => {
+              child.material.opacity = opacity.opacity;
+            })
+            .onComplete(() => {
+              child.visible = false;
+            })
+            .start();
         }
-      }
-    });
-    visibleFloors.forEach((child: any) => {
-      if (child.isMesh) {
-        child.visible = true;
       }
     });
   }
