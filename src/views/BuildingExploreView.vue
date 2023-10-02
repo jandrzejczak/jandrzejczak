@@ -305,6 +305,7 @@ const init = () => {
   controls.update();
   controls.enablePan = false;
   controls.enableDamping = true;
+  controls.enableZoom = false;
   controls.dampingFactor = 0.05;
   // controls.value.addEventListener("change", render); // use if there is no animation loop
   controls.minDistance = 200;
