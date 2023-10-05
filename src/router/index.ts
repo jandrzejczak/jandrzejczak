@@ -6,6 +6,7 @@ import CardPageView from "@/views/CardPageView.vue";
 import BuildingExploreView from "@/views/BuildingExploreView.vue";
 import CityExploreView from "@/views/CityExploreView.vue";
 import ModalDialog from "@/components/ModalDialog.vue";
+import HelloMatyldzia from "@/views/HelloMatyldzia.vue";
 import { viewTransitionHelper } from "@/utils";
 
 const router = createRouter({
@@ -40,6 +41,11 @@ const router = createRouter({
       path: "/city/",
       name: "Explore City",
       component: CityExploreView,
+    },
+    {
+      path: "/hello_matyldzia/",
+      name: "Hello Matyldzia",
+      component: HelloMatyldzia,
     },
   ],
 });

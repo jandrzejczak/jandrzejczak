@@ -15,6 +15,7 @@ const layout = ref([
   { x: 0, y: 0, w: 1, h: 1, i: "0", static: false },
   { x: 1, y: 0, w: 1, h: 1, i: "1", static: false },
   { x: 1, y: 1, w: 1, h: 1, i: "2", static: false },
+  { x: 0, y: 1, w: 1, h: 1, i: "3", static: false },
 ]);
 const draggable = ref(true);
 const resizable = ref(false);
@@ -117,9 +118,23 @@ const openDialog = (path: string) => {
           <div class="font-header">building.gltf</div>
         </div>
         <div
+          @touchend="openDialog('/hello_matyldzia')"
+          @dblclick="openDialog('/hello_matyldzia')"
+          v-else-if="item.i === '2'"
+          class="flex h-full w-full cursor-pointer flex-col items-center justify-center gap-1"
+        >
+          <div
+            style="view-transition-name: matyldzia"
+            class="flex w-full flex-1 select-none items-center justify-center rounded-3xl bg-background p-2 text-center font-header text-xl leading-6"
+          >
+            Hello Matyldziu
+          </div>
+          <div class="font-header">matyldzia.txt</div>
+        </div>
+        <div
           @touchend="openDialog('/city')"
           @dblclick="openDialog('/city')"
-          v-else-if="item.i === '2'"
+          v-else-if="item.i === '3'"
           class="flex h-full w-full cursor-pointer flex-col items-center justify-center gap-1"
         >
           <div

@@ -26,6 +26,7 @@
     "three": "^0.149.0",
     "three-mesh-bvh": "^0.5.23",
     "three.interactive": "^1.7.0",
+    "typewriter-effect": "^2.21.0",
     "vanilla-tilt": "^1.8.0",
     "vue": "^3.2.45",
     "vue-markdown-wasm": "^0.3.12",

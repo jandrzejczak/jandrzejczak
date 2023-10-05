@@ -233,7 +233,7 @@ const init = () => {
         dirLight.shadow.camera.left = -50;
         dirLight.shadow.camera.right = 50;
         dirLight.shadow.camera.near = 0.1;
-        dirLight.shadow.camera.far = 1000000;
+        dirLight.shadow.camera.far = 100000;
         dirLight.shadow.mapSize.width = 1024;
         dirLight.shadow.mapSize.height = 1024;
         scene.add(dirLight);

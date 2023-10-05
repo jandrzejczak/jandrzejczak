@@ -9,6 +9,7 @@ import { storeToRefs } from "pinia";
 import MenuButton from "@/components/Navigation/MenuButton.vue";
 import { vOnClickOutside } from "@vueuse/components";
 import { navTo, isCurrentRoute } from "@/utils";
+import { isOctober5th } from "@/utils/isOctoberFifth";
 
 const deviceStore = useDeviceStore();
 const { setCurrentColor } = deviceStore;
@@ -312,7 +313,7 @@ onMounted(() => {
         ref="necuroLogo"
         class="necuro__logo flex grow items-center justify-center font-display text-8xl sm:text-9xl"
       >
-        necuro
+        {{ isOctober5th() ? "matylda" : "necuro" }}
       </div>
       <div
         :class="[
