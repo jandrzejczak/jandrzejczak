@@ -134,7 +134,7 @@ const handleClose = () => {
   background-color: rgba(0, 0, 0, 0.9);
 }
 
-::v-deep .headline {
+:deep(.headline) {
   view-transition-name: card-title;
 }
 </style>

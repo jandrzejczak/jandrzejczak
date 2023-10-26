@@ -1,5 +1,7 @@
 <script setup lang="ts">
-import { onMounted, ref, Transition, watchEffect, nextTick } from "vue";
+import { onMounted, ref, Transition, watch, nextTick } from "vue";
+import { useLayoutStore } from "@/stores/globalStore";
+import { storeToRefs } from "pinia";
 import { RouterLink, RouterView, useRouter } from "vue-router";
 import { viewTransitionHelper } from "@/utils";
 import { GridLayout, GridItem } from "vue3-grid-layout-next";
@@ -10,6 +12,9 @@ import { useStorage } from "@vueuse/core";
 import HelloTxt from "@/components/Desktop/HelloTxt.vue";
 import RoadMap from "@/components/Desktop/RoadMap.vue";
 import ListingTable from "@/components/ListingTable.vue";
+
+const layoutStore = useLayoutStore();
+const { layoutBounds } = storeToRefs(layoutStore);
 
 const { isSupported, charging, chargingTime, dischargingTime, level } =
   useBattery();
@@ -25,6 +30,12 @@ const layout = useStorage("desktop-layout", [
 const draggable = ref(true);
 const resizable = ref(false);
 
+const contentBounds = ref<HTMLElement | null>(null);
+
+watch(contentBounds, (newVal) => {
+  layoutBounds.value = newVal?.getBoundingClientRect();
+});
+
 const openDialog = () => {
   viewTransitionHelper({
     async updateDOM() {
@@ -36,7 +47,7 @@ const openDialog = () => {
 </script>
 
 <template>
-  <div id="testing" class="icons-container w-full flex-1 p-4">
+  <div ref="contentBounds" class="icons-container w-full flex-1 p-4">
     <grid-layout
       v-model:layout="layout"
       :cols="{ lg: 8, md: 6, sm: 4, xs: 4, xxs: 2 }"

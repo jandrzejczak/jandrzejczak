@@ -33,6 +33,8 @@ const backgroundAnimation = ref();
 const isMenuOpen = ref(false);
 const isAnimationFinished = ref(false);
 
+const october5th = isOctober5th();
+
 const styleClasses = ref([
   { className: "necuro--mocha", probability: 0.01, color: "#593d3b" },
   { className: "necuro--volt", probability: 0.05, color: "#7f0799" },
@@ -313,7 +315,7 @@ onMounted(() => {
         ref="necuroLogo"
         class="necuro__logo flex grow items-center justify-center font-display text-8xl sm:text-9xl"
       >
-        {{ isOctober5th() ? "matylda" : "necuro" }}
+        {{ october5th ? "matylda" : "necuro" }}
       </div>
       <div
         :class="[

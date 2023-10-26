@@ -4,10 +4,15 @@ import { GridLayout, GridItem } from "vue3-grid-layout-next";
 import { useDraggable } from "@vueuse/core";
 import { UseDraggable } from "@vueuse/components";
 import { useStorage } from "@vueuse/core";
+import { useLayoutStore } from "@/stores/globalStore";
+import { storeToRefs } from "pinia";
 import WindowPortal from "@/components/WindowPortal.vue";
 
 const innerWidth = window.innerWidth;
 const innerHeight = window.innerHeight;
+
+const layoutStore = useLayoutStore();
+const { layoutBounds } = storeToRefs(layoutStore);
 
 const props = defineProps({
   windowId: {
@@ -24,25 +29,115 @@ const emit = defineEmits(["update:open"]);
 
 const detachWindow = ref(false);
 const directoryWindow = ref<HTMLElement | null>(null);
+const initialPosition = ref({
+  x: innerWidth / 2,
+  y: innerHeight / 5,
+});
+const popupPosition = ref({
+  left: innerWidth / 2,
+  top: innerHeight / 5,
+});
+const dragging = ref(false);
 
 const closeDirectory = () => {
   emit("update:open", false);
 };
+
+// Drag functionality
+const startDragging = (event: MouseEvent | TouchEvent) => {
+  dragging.value = true;
+  initialPosition.value.x =
+    (event as MouseEvent).clientX - popupPosition.value.left;
+  initialPosition.value.y =
+    (event as MouseEvent).clientY - popupPosition.value.top;
+
+  window.addEventListener("mousemove", dragElement);
+  window.addEventListener("touchmove", dragElement);
+  window.addEventListener("mouseup", stopDragging);
+  window.addEventListener("touchend", stopDragging);
+};
+
+const dragElement = (event: MouseEvent | TouchEvent) => {
+  event.preventDefault();
+  if (dragging.value) {
+    const popupRect = (
+      directoryWindow.value as HTMLElement
+    ).getBoundingClientRect();
+    const clientX =
+      event instanceof MouseEvent ? event.clientX : event.touches[0].clientX;
+    const clientY =
+      event instanceof MouseEvent ? event.clientY : event.touches[0].clientY;
+
+    // Calculate the new position
+    let left = clientX - initialPosition.value.x;
+    let top = clientY - initialPosition.value.y;
+
+    // Check if the target is in bounds of the body
+    const bodyRect =
+      layoutBounds.value ?? document.body.getBoundingClientRect();
+
+    if (left < bodyRect.left) {
+      left = bodyRect.left;
+    } else if (left + popupRect.width > bodyRect.right) {
+      left = bodyRect.right - popupRect.width;
+    }
+
+    if (top < bodyRect.top) {
+      top = bodyRect.top;
+    } else if (top + popupRect.height > bodyRect.bottom) {
+      top = bodyRect.bottom - popupRect.height;
+    }
+
+    popupPosition.value.left = left;
+    popupPosition.value.top = top;
+  }
+};
+
+const stopDragging = () => {
+  dragging.value = false;
+  window.removeEventListener("mousemove", dragElement);
+  window.removeEventListener("touchmove", dragElement);
+  window.removeEventListener("mouseup", stopDragging);
+  window.removeEventListener("touchend", stopDragging);
+};
+
+onMounted(() => {
+  const popupRect = (
+    directoryWindow.value as HTMLElement
+  ).getBoundingClientRect();
+
+  let left = innerWidth / 2;
+  let top = innerHeight / 5;
+
+  const bodyRect = layoutBounds.value ?? document.body.getBoundingClientRect();
+  if (left < bodyRect.left) {
+    left = bodyRect.left;
+  } else if (left + popupRect.width > bodyRect.right) {
+    left = bodyRect.right - popupRect.width;
+  }
+
+  if (top < bodyRect.top) {
+    top = bodyRect.top;
+  } else if (top + popupRect.height > bodyRect.bottom) {
+    top = bodyRect.bottom - popupRect.height;
+  }
+
+  popupPosition.value.left = left;
+  popupPosition.value.top = top;
+});
 </script>
 
 <template>
   <Teleport to="body">
     <Transition name="bounce">
-      <UseDraggable
+      <div
+        ref="directoryWindow"
         v-show="open && !detachWindow"
-        :initial-value="{ x: innerWidth / 2, y: innerHeight / 5 }"
-        :storage-key="windowId"
-        storage-type="session"
-        :handle="directoryWindow"
         class="icons-container fixed flex h-[35rem] max-h-[50rem] min-h-[12rem] w-[43rem] min-w-[24rem] max-w-3xl flex-1 resize flex-col overflow-hidden rounded-xl border border-primary border-opacity-25 backdrop-blur-md"
+        :style="`top: ${popupPosition.top}px; left: ${popupPosition.left}px`"
       >
         <div
-          ref="directoryWindow"
+          @mousedown.prevent="startDragging"
           @touchmove.prevent
           class="flex w-full gap-1 bg-primary p-2"
         >
@@ -63,7 +158,7 @@ const closeDirectory = () => {
             <slot></slot>
           </div>
         </WindowPortal>
-      </UseDraggable>
+      </div>
     </Transition>
   </Teleport>
 </template>
