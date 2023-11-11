@@ -30,6 +30,7 @@ import {
 } from "three-mesh-bvh";
 import { onMounted, ref, computed, watch, onUnmounted, toRaw } from "vue";
 import { useDeviceStore } from "@/stores/globalStore";
+import mapboxgl from "mapbox-gl";
 
 THREE.Mesh.prototype.raycast = acceleratedRaycast;
 THREE.BufferGeometry.prototype.computeBoundsTree = computeBoundsTree;
@@ -473,6 +474,13 @@ watch(selectedFloor, (value) => {
 onMounted(() => {
   init();
   render();
+  mapboxgl.accessToken = import.meta.env.VITE_MAP_BOX_KEY;
+  const map = new mapboxgl.Map({
+    container: "map", // container ID
+    style: "mapbox://styles/mapbox/streets-v12", // style URL
+    center: [-74.5, 40], // starting position [lng, lat]
+    zoom: 9, // starting zoom
+  });
 });
 
 onUnmounted(() => {
@@ -550,6 +558,7 @@ onUnmounted(() => {
         style="view-transition-name: building"
         class="flex w-full flex-col gap-2 rounded-2xl bg-zinc-500/50 p-4 backdrop-blur-md"
       >
+        <div class="h-80" id="map"></div>
         <template v-if="sceneFloors">
           <div
             @click="selectedFloor = item"
@@ -561,7 +570,7 @@ onUnmounted(() => {
             {{ item.name }}
           </div>
           <div
-            class="p-2 cursor-pointer rounded-sm bg-background"
+            class="cursor-pointer rounded-sm bg-background p-2"
             @click="selectedFloor = null"
           >
             deselect
