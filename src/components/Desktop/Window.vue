@@ -4,15 +4,18 @@ import { GridLayout, GridItem } from "vue3-grid-layout-next";
 import { useDraggable } from "@vueuse/core";
 import { UseDraggable } from "@vueuse/components";
 import { useStorage } from "@vueuse/core";
-import { useLayoutStore } from "@/stores/globalStore";
+import { useLayoutStore, useDeviceStore } from "@/stores/globalStore";
 import { storeToRefs } from "pinia";
 import WindowPortal from "@/components/WindowPortal.vue";
 
 const innerWidth = window.innerWidth;
 const innerHeight = window.innerHeight;
 
+// Stores
 const layoutStore = useLayoutStore();
 const { layoutBounds } = storeToRefs(layoutStore);
+const deviceStore = useDeviceStore();
+const { isMobileDevice } = storeToRefs(deviceStore);
 
 const props = defineProps({
   windowId: {
@@ -40,6 +43,10 @@ const popupPosition = ref({
 const dragging = ref(false);
 
 const closeDirectory = () => {
+  emit("update:open", false);
+};
+
+const handleOutsideClick = () => {
   emit("update:open", false);
 };
 
@@ -131,15 +138,20 @@ onMounted(() => {
   <Teleport to="body">
     <Transition name="bounce">
       <div
-        ref="directoryWindow"
         v-show="open && !detachWindow"
-        class="icons-container fixed flex h-[35rem] max-h-[50rem] min-h-[12rem] w-[43rem] min-w-[24rem] max-w-3xl flex-1 resize flex-col overflow-hidden rounded-xl border border-primary border-opacity-25 backdrop-blur-md"
-        :style="`top: ${popupPosition.top}px; left: ${popupPosition.left}px`"
+        v-on-click-outside="handleOutsideClick"
+        class="icons-container fixed left-1/2 top-1/2 flex h-[35rem] max-h-[50rem] min-h-[12rem] w-[95vw] max-w-3xl flex-1 -translate-x-1/2 -translate-y-1/2 resize flex-col overflow-hidden rounded-3xl border-primary border-opacity-25 backdrop-blur-md sm:w-[43rem] sm:min-w-[24rem] sm:translate-x-0 sm:translate-y-0 sm:rounded-xl sm:border"
+        :style="
+          isMobileDevice()
+            ? ''
+            : `top: ${popupPosition.top}px; left: ${popupPosition.left}px`
+        "
       >
         <div
+          ref="directoryWindow"
           @mousedown.prevent="startDragging"
           @touchmove.prevent
-          class="flex w-full gap-1 bg-primary p-2"
+          class="hidden w-full gap-1 bg-primary p-2 sm:flex"
         >
           <button
             @click="closeDirectory"
@@ -156,6 +168,7 @@ onMounted(() => {
         <WindowPortal v-model:open="detachWindow">
           <div class="flex-1 overflow-auto bg-zinc-200/20">
             <slot></slot>
+            {{ isMobileDevice() }}
           </div>
         </WindowPortal>
       </div>
