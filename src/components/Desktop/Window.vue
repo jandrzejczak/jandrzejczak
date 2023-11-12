@@ -6,6 +6,7 @@ import { UseDraggable } from "@vueuse/components";
 import { useStorage } from "@vueuse/core";
 import { useLayoutStore, useDeviceStore } from "@/stores/globalStore";
 import { storeToRefs } from "pinia";
+import { vOnClickOutside } from "@vueuse/components";
 import WindowPortal from "@/components/WindowPortal.vue";
 
 const innerWidth = window.innerWidth;
