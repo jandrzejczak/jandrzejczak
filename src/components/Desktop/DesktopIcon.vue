@@ -64,18 +64,3 @@ const openDialog = () => {
     <div class="font-header">name</div>
   </div>
 </template>
-
-<style scoped lang="scss">
-.bounce-enter-active,
-.bounce-leave-active {
-  transition:
-    opacity 0.2s ease,
-    transform 0.4s cubic-bezier(0.47, 1.64, 0.41, 0.8);
-}
-
-.bounce-enter-from,
-.bounce-leave-to {
-  opacity: 0;
-  transform: scale(0.75);
-}
-</style>

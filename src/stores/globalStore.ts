@@ -62,11 +62,13 @@ export const useDeviceStore = defineStore("device", {
 
 interface LayoutState {
   layoutBounds: DOMRect | undefined;
+  activeWindow: string | undefined
 }
 
 export const useLayoutStore = defineStore("layout", {
   state: (): LayoutState => ({
     layoutBounds: undefined,
+    activeWindow: undefined,
   }),
   getters: {
     getContentBounds: (state) => state.layoutBounds,

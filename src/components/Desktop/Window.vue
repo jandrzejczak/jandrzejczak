@@ -14,7 +14,7 @@ const innerHeight = window.innerHeight;
 
 // Stores
 const layoutStore = useLayoutStore();
-const { layoutBounds } = storeToRefs(layoutStore);
+const { layoutBounds, activeWindow } = storeToRefs(layoutStore);
 const deviceStore = useDeviceStore();
 const { isMobileDevice } = storeToRefs(deviceStore);
 
@@ -48,7 +48,9 @@ const closeDirectory = () => {
 };
 
 const handleOutsideClick = () => {
-  emit("update:open", false);
+  if (isMobileDevice.value()) {
+    closeDirectory();
+  }
 };
 
 // Drag functionality
@@ -109,6 +111,16 @@ const stopDragging = () => {
   window.removeEventListener("touchend", stopDragging);
 };
 
+const setActiveWindow = () => {
+  activeWindow.value = props.windowId;
+};
+
+watchEffect(() => {
+  if (props.open) {
+    setActiveWindow();
+  }
+});
+
 onMounted(() => {
   const popupRect = (
     directoryWindow.value as HTMLElement
@@ -137,11 +149,22 @@ onMounted(() => {
 
 <template>
   <Teleport to="body">
-    <Transition name="bounce">
+    <Transition
+      enter-active-class="duration-300 ease-out"
+      enter-from-class="transform opacity-0 scale-75"
+      enter-to-class="opacity-100"
+      leave-active-class="duration-200 ease-in"
+      leave-from-class="opacity-100"
+      leave-to-class="transform opacity-0 scale-75"
+    >
       <div
+        @mousedown="setActiveWindow()"
         v-show="open && !detachWindow"
         v-on-click-outside="handleOutsideClick"
-        class="icons-container fixed left-1/2 top-1/2 flex h-[35rem] max-h-[50rem] min-h-[12rem] w-[95vw] max-w-3xl flex-1 -translate-x-1/2 -translate-y-1/2 resize flex-col overflow-hidden rounded-3xl border-primary border-opacity-25 backdrop-blur-md sm:w-[43rem] sm:min-w-[24rem] sm:translate-x-0 sm:translate-y-0 sm:rounded-xl sm:border"
+        :class="[
+          'icons-container fixed left-1/2 top-1/2 flex h-[35rem] max-h-[50rem] min-h-[12rem] w-[95vw] max-w-3xl flex-1 -translate-x-1/2 -translate-y-1/2 resize flex-col overflow-hidden rounded-3xl border-primary border-opacity-25 backdrop-blur-md sm:w-[43rem] sm:min-w-[24rem] sm:translate-x-0 sm:translate-y-0 sm:rounded-xl sm:border',
+          activeWindow === windowId ? 'z-50' : '',
+        ]"
         :style="
           isMobileDevice()
             ? ''
@@ -169,7 +192,6 @@ onMounted(() => {
         <WindowPortal v-model:open="detachWindow">
           <div class="flex-1 overflow-auto bg-zinc-200/20">
             <slot></slot>
-            {{ isMobileDevice() }}
           </div>
         </WindowPortal>
       </div>

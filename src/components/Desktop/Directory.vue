@@ -1,12 +1,9 @@
 <script setup lang="ts">
-import { onMounted, ref, Transition, watchEffect, nextTick } from "vue";
-import { RouterLink, RouterView, useRouter } from "vue-router";
+import { ref, nextTick } from "vue";
+import { useRouter } from "vue-router";
 import { viewTransitionHelper } from "@/utils";
 import { GridLayout, GridItem } from "vue3-grid-layout-next";
-import { useDraggable } from "@vueuse/core";
-import { UseDraggable } from "@vueuse/components";
 import { useStorage } from "@vueuse/core";
-import WindowPortal from "@/components/WindowPortal.vue";
 import Window from "@/components/Desktop/Window.vue";
 
 const router = useRouter();
@@ -21,24 +18,6 @@ const draggable = ref(true);
 const resizable = ref(false);
 
 const openDirectory = useStorage("directory-open", false);
-const detachWindow = ref(false);
-
-const directoryWindow = ref<HTMLElement | null>(null);
-
-const isElementOutsideViewport = (element: HTMLElement) => {
-  const elementRect = element.getBoundingClientRect();
-
-  // Check if any of the element's four corners is inside the viewport
-  const isInViewport =
-    elementRect.top >= 0 &&
-    elementRect.left >= 0 &&
-    elementRect.bottom <=
-      (window.innerHeight || document.documentElement.clientHeight) &&
-    elementRect.right <=
-      (window.innerWidth || document.documentElement.clientWidth);
-
-  return !isInViewport;
-};
 
 const openDialog = (path: string) => {
   viewTransitionHelper({
@@ -113,9 +92,9 @@ const openDialog = (path: string) => {
             style="view-transition-name: building"
             class="flex w-full flex-1 select-none items-center justify-center rounded-3xl bg-background p-2 text-center font-header text-xl leading-6"
           >
-            blender shit
+            Apartment Viewer
           </div>
-          <div class="font-header">building.gltf</div>
+          <div class="font-header">apartments.gltf</div>
         </div>
         <div
           @touchend="openDialog('/hello_matyldzia')"
@@ -141,12 +120,9 @@ const openDialog = (path: string) => {
             style="view-transition-name: city"
             class="flex w-full flex-1 select-none items-center justify-center rounded-3xl bg-background p-2 text-center font-header text-xl leading-6"
           >
-            city boiiii
+            City Map (unfinished)
           </div>
           <div class="font-header">city.gltf</div>
-        </div>
-        <div v-else>
-          {{ item.i }}
         </div>
       </grid-item>
     </grid-layout>
