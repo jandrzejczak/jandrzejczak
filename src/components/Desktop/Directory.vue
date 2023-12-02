@@ -21,7 +21,7 @@ const openDirectory = useStorage("directory-open", false);
 
 const openDialog = (path: string, external: boolean = false) => {
   if (external) {
-    window.location.replace(path);
+    window.location.href = path;
     return;
   }
   viewTransitionHelper({

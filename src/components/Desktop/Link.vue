@@ -32,7 +32,7 @@ const emit = defineEmits(["update:open"]);
 
 const openLink = (path: string, external: boolean = false) => {
   if (external) {
-    window.location.replace(path);
+    window.location.href = path;
     return;
   }
   viewTransitionHelper({
