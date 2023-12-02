@@ -37,7 +37,7 @@ console.log('necuro playground!')
 </script>
 
 <template>
-  <vue-markdown class="list-disc p-2 pt-4 font-header" v-model="input" />
+  <vue-markdown class="list-disc p-6 pt-8 sm:p-2 sm:pt-4 font-header" v-model="input" />
 </template>
 
 <style lang="scss">

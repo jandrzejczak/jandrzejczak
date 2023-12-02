@@ -36,6 +36,7 @@ const openDialog = (path: string, external: boolean = false) => {
 <template>
   <div
     @dblclick="openDirectory = !openDirectory"
+    @touchend="openDirectory = !openDirectory"
     class="flex h-full w-full cursor-pointer flex-col items-center justify-center gap-1"
   >
     <div class="flex w-full flex-1 select-none items-center justify-center">
