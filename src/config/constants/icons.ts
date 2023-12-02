@@ -26,6 +26,7 @@ import {
   BiBatteryHalf,
   BiBattery,
   MdRoute,
+  SiBloglovin,
 } from "oh-vue-icons/icons";
 
 addIcons(
@@ -55,6 +56,7 @@ addIcons(
   BiBatteryHalf,
   BiBattery,
   MdRoute,
+  SiBloglovin,
 );
 
 export default OhVueIcon;

@@ -7,11 +7,11 @@ import { viewTransitionHelper } from "@/utils";
 import { GridLayout, GridItem } from "vue3-grid-layout-next";
 import Directory from "@/components/Desktop/Directory.vue";
 import File from "@/components/Desktop/File.vue";
+import Link from "@/components/Desktop/Link.vue";
 import { useBattery } from "@vueuse/core";
 import { useStorage } from "@vueuse/core";
 import HelloTxt from "@/components/Desktop/HelloTxt.vue";
 import RoadMap from "@/components/Desktop/RoadMap.vue";
-import ListingTable from "@/components/ListingTable.vue";
 
 const layoutStore = useLayoutStore();
 const { layoutBounds } = storeToRefs(layoutStore);
@@ -26,6 +26,7 @@ const layout = useStorage("desktop-layout", [
   { x: 0, y: 3, w: 1, h: 1, i: "1", static: false },
   { x: 1, y: 0, w: 1, h: 1, i: "2", static: false },
   { x: 1, y: 2, w: 1, h: 1, i: "3", static: false },
+  { x: 1, y: 3, w: 1, h: 1, i: "4", static: false },
 ]);
 const draggable = ref(true);
 const resizable = ref(false);
@@ -116,6 +117,15 @@ const openDialog = () => {
         >
           <RoadMap />
         </File>
+        <Link
+          v-else-if="item.i === '4'"
+          :file-name="'blog.necuro.com'"
+          :icon-name="'si-bloglovin'"
+          :link="'https://blog.necuro.com'"
+          :external="true"
+        >
+          <RoadMap />
+        </Link>
       </grid-item>
     </grid-layout>
   </div>

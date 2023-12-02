@@ -1,6 +1,9 @@
 <script setup lang="ts">
-import { useStorage } from "@vueuse/core";
-import Window from "@/components/Desktop/Window.vue";
+import { nextTick, ref } from "vue";
+import { viewTransitionHelper } from "@/utils";
+import { useRouter } from "vue-router";
+
+const router = useRouter();
 
 const props = defineProps({
   iconName: {
@@ -11,6 +14,14 @@ const props = defineProps({
     type: String,
     required: true,
   },
+  link: {
+    type: String,
+    required: true,
+  },
+  external: {
+    type: Boolean,
+    default: false,
+  },
   opened: {
     type: Boolean,
     default: false,
@@ -18,13 +29,26 @@ const props = defineProps({
 });
 
 const emit = defineEmits(["update:open"]);
-const openFile = useStorage(props.iconName, props.opened);
+
+const openLink = (path: string, external: boolean = false) => {
+  if (external) {
+    window.location.replace(path);
+    return;
+  }
+  viewTransitionHelper({
+    async updateDOM() {
+      router.push({ path });
+      await nextTick();
+    },
+  });
+};
 
 </script>
 
 <template>
   <div
-    @dblclick="openFile = !openFile"
+    @dblclick="openLink(link, external)"
+    @touchend="openLink(link, external)"
     class="flex h-full w-full cursor-pointer flex-col items-center justify-center gap-1"
   >
     <div class="flex w-full flex-1 select-none items-center justify-center">
@@ -32,9 +56,6 @@ const openFile = useStorage(props.iconName, props.opened);
     </div>
     <div class="font-header">{{ fileName }}</div>
   </div>
-  <Window :window-id="fileName" v-model:open="openFile">
-    <slot></slot>
-  </Window>
 </template>
 
 <style scoped lang="scss">

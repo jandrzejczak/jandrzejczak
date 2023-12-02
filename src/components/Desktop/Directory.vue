@@ -19,7 +19,11 @@ const resizable = ref(false);
 
 const openDirectory = useStorage("directory-open", false);
 
-const openDialog = (path: string) => {
+const openDialog = (path: string, external: boolean = false) => {
+  if (external) {
+    window.location.replace(path);
+    return;
+  }
   viewTransitionHelper({
     async updateDOM() {
       router.push({ path });
