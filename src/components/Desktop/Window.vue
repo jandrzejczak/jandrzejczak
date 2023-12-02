@@ -162,7 +162,7 @@ onMounted(() => {
         v-show="open && !detachWindow"
         v-on-click-outside="handleOutsideClick"
         :class="[
-          'icons-container fixed left-1/2 top-1/2 flex h-[35rem] max-h-[50rem] min-h-[12rem] w-[95vw] max-w-3xl flex-1 -translate-x-1/2 -translate-y-1/2 resize flex-col overflow-hidden rounded-3xl border-primary border-opacity-25 backdrop-blur-md sm:w-[43rem] sm:min-w-[24rem] sm:translate-x-0 sm:translate-y-0 sm:rounded-3xl sm:border',
+          'icons-container fixed left-1/2 top-1/2 flex h-[35rem] max-h-[50rem] min-h-[12rem] w-[95vw] max-w-3xl flex-1 -translate-x-1/2 -translate-y-1/2 resize flex-col overflow-hidden rounded-3xl border-primary border-opacity-25 backdrop-blur-md sm:w-[43rem] sm:min-w-[24rem] sm:translate-x-0 sm:translate-y-0 sm:rounded-xl sm:border',
           activeWindow === windowId ? 'z-50' : '',
         ]"
         :style="
