@@ -25,6 +25,7 @@ const openFile = useStorage(props.iconName, props.opened);
 <template>
   <div
     @dblclick="openFile = !openFile"
+    @touchend="openFile = !openFile"
     class="flex h-full w-full cursor-pointer flex-col items-center justify-center gap-1"
   >
     <div class="flex w-full flex-1 select-none items-center justify-center">
